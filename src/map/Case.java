@@ -33,7 +33,11 @@ public class Case {
 		this.obstacle = obstacle;
 	}
 	
-	public boolean equals(Case caseGrille) {
-		return this.position.equals(caseGrille.getPosition());
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Case caseGrille = (Case) obj;
+	    return this.position.equals(caseGrille.getPosition());
 	}
 }

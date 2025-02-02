@@ -23,7 +23,11 @@ public abstract class Obstacle {
 		return bloqueDeplacement;
 	}
 	
-	public boolean equals(Obstacle obstacle) {
-		return this.type.equals(obstacle.getType());
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Obstacle obstacle = (Obstacle) obj;
+	    return this.type.equals(obstacle.getType());
 	}
 }

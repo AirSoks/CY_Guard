@@ -21,6 +21,8 @@ public class MapBuilder {
         return mapProbaCoordonnee.get(probabilite);
     }
 	
+	
+	// Faut que j'utilise ça
 	private void ajouterProbabilite(Double probabilite, List<Coordonnee> coordonnees) {
         if (probabilite != null && coordonnees != null && !coordonnees.isEmpty()) {
             mapProbaCoordonnee.put(probabilite, coordonnees);

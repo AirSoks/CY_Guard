@@ -18,19 +18,21 @@ public class GameConfiguration {
 	public static final int VITESSE_GARDIENS = 12;
 	
 	public static final int DIFFICULTE = 1;
-	public static final int NB_CASE_DENSITE = 1;
 	
 	public static final int NB_LIGNE = 27;
 	public static final int NB_COLONNE = 27;
 	
-	public static final int DENSITE_ROCHE = 150;
+	public static final int DENSITE_ROCHE = 25;
 	public static final int NB_ROCHE = (NB_LIGNE*NB_COLONNE)/(8*DIFFICULTE);
+	public static final int NB_CASE_DENSITE_ROCHE = 5;
 	
 	public static final int DENSITE_ARBRE = 5;
-	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(5*DIFFICULTE);	
+	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(5*DIFFICULTE);
+	public static final int NB_CASE_DENSITE_ARBRE = 1;	
 	
-	public static final int DENSITE_LAC = 500;
+	public static final int DENSITE_LAC = 400;
 	public static final int NB_LAC = (NB_LIGNE*NB_COLONNE)/(8*DIFFICULTE);	
+	public static final int NB_CASE_DENSITE_LAC = 1;
 	
 	public static final Plaine PLAINE = new Plaine();
 	public static final Arbre ARBRE = new Arbre();

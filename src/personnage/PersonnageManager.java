@@ -13,10 +13,6 @@ public class PersonnageManager {
 			this.grille = grille;
 		}
 		
-		public void set() {
-			this.gardien = gardien;
-		}
-		
 		public void moveLeftGardien() {
 			Case position = gardien.getCase();
 			

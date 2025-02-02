@@ -22,4 +22,8 @@ public abstract class Obstacle {
 	public boolean isBloqueDeplacement() {
 		return bloqueDeplacement;
 	}
+	
+	public boolean equals(Obstacle obstacle) {
+		return this.type.equals(obstacle.getType());
+	}
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapBuilder {
+public class GrilleBuilder {
 	private Grille grille;
 	private Map<Double, List<Coordonnee>> mapProbaCoordonnee = new HashMap<>();
 	
@@ -21,13 +21,15 @@ public class MapBuilder {
         return mapProbaCoordonnee.get(probabilite);
     }
 	
-	
-	// Faut que j'utilise ça
 	private void ajouterProbabilite(Double probabilite, List<Coordonnee> coordonnees) {
         if (probabilite != null && coordonnees != null && !coordonnees.isEmpty()) {
             mapProbaCoordonnee.put(probabilite, coordonnees);
         }
     }
+	
+	private void reinitialiserMap() {
+		mapProbaCoordonnee = new HashMap<>();
+	}
 	
 	private Double getProbabiliteFromCoordonnee(Coordonnee coordonnee) {
 	    for (Double probabilite : getListeProbabilites()) {
@@ -63,18 +65,18 @@ public class MapBuilder {
 	    return sommeProbabilite;
 	}
 	
-    public MapBuilder() {
+    public GrilleBuilder() {
         this.grille = new Grille(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
         genererCarte();
     }
 	
 	private void genererCarte() {
-		placerObstacles(GameConfiguration.LAC, GameConfiguration.NB_LAC, GameConfiguration.DENSITE_LAC);
-		placerObstacles(GameConfiguration.ROCHE, GameConfiguration.NB_ROCHE, GameConfiguration.DENSITE_ROCHE);
-		placerObstacles(GameConfiguration.ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.DENSITE_ARBRE);
+		placerObstacles(GameConfiguration.LAC, GameConfiguration.NB_LAC, GameConfiguration.DENSITE_LAC, GameConfiguration.NB_CASE_DENSITE_LAC);
+		placerObstacles(GameConfiguration.ROCHE, GameConfiguration.NB_ROCHE, GameConfiguration.DENSITE_ROCHE, GameConfiguration.NB_CASE_DENSITE_ROCHE);
+		placerObstacles(GameConfiguration.ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.DENSITE_ARBRE ,GameConfiguration.NB_CASE_DENSITE_ARBRE);
 	}
 	
-	private void placerObstacles(Obstacle obstacle, int nombreObstacles, int densite) {
+	private void placerObstacles(Obstacle obstacle, int nombreObstacles, int densite, int nbCaseDensiteObstacle) {
 		initProba();
 		int obstaclesPlaces = 0;
         while (obstaclesPlaces < nombreObstacles) {
@@ -84,7 +86,7 @@ public class MapBuilder {
         		if (coordonneeAleatoire != null) {
         			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
         			supprimerCoordonnee(coordonneeAleatoire);
-        			List<Coordonnee> coordonneeAdjacentes = getCasesAdjacentes(coordonneeAleatoire);
+        			List<Coordonnee> coordonneeAdjacentes = getCasesAdjacentes(coordonneeAleatoire, nbCaseDensiteObstacle);
         			augmenterProbabilite(coordonneeAdjacentes, densite);
 	                obstaclesPlaces++;
         		}
@@ -103,8 +105,8 @@ public class MapBuilder {
             }
         }
         double probaInitiale = 100.0 / coordonnees.size();
-        mapProbaCoordonnee = new HashMap<>();
-        mapProbaCoordonnee.put(probaInitiale, coordonnees);
+        reinitialiserMap();
+        ajouterProbabilite(probaInitiale, coordonnees);
     }
 
     private List<Coordonnee> getListeFromValeurAleatoire(double valeurAleatoire) {
@@ -127,9 +129,9 @@ public class MapBuilder {
 		return coordonnees.get(index);
 	}
     
-    private List<Coordonnee> getCasesAdjacentes(Coordonnee coordonnee) {
+    private List<Coordonnee> getCasesAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
 		List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-		int nbCaseDensite = GameConfiguration.NB_CASE_DENSITE;
+		int nbCaseDensite = nbCaseDensiteObstacle;
 
 		for (int i = -nbCaseDensite; i <= nbCaseDensite; i++) {
 			for (int j = -nbCaseDensite; j <= nbCaseDensite; j++) {
@@ -157,7 +159,7 @@ public class MapBuilder {
                 	listeNouvelleProbabilite = new ArrayList<>();
                 }
                 listeNouvelleProbabilite.add(coordonnee);
-                mapProbaCoordonnee.put(nouvelleProbabilite, listeNouvelleProbabilite);
+                ajouterProbabilite(nouvelleProbabilite, listeNouvelleProbabilite);
             }
         }
     }

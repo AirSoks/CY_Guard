@@ -31,9 +31,10 @@ public class MainGUI extends JFrame implements Runnable{
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		
-		dashboard = new GameDisplay(grille);
 		MapBuilder mapBuilder = new MapBuilder();
-		this.grille = mapBuilder.getGrille();
+	    this.grille = mapBuilder.getGrille();
+		
+		dashboard = new GameDisplay(this.grille);
 		
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);

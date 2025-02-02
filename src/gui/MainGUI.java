@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
 import map.Grille;
-import map.MapBuilder;
+import map.GrilleBuilder;
 
 public class MainGUI extends JFrame implements Runnable{
 	
@@ -31,7 +31,7 @@ public class MainGUI extends JFrame implements Runnable{
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		
-		MapBuilder mapBuilder = new MapBuilder();
+		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 		
 		dashboard = new GameDisplay(this.grille);

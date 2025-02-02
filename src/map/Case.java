@@ -1,5 +1,6 @@
 package map;
 
+import config.GameConfiguration;
 import map.obstacle.Obstacle;
 import map.obstacle.Plaine;
 import utilitaire.Coordonnee;
@@ -13,7 +14,7 @@ public class Case {
 	
 	public Case(Coordonnee position) {
 		this.position = position;
-		this.obstacle = new Plaine(); // On initialise les plaines comme obstacles par défaut, on les remplacera plus tard dans le code.
+		this.obstacle = GameConfiguration.PLAINE; // On initialise les plaines comme obstacles par défaut, on les remplacera plus tard dans le code.
 	}
 	
 	public Coordonnee getPosition() {

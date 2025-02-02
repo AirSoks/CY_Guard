@@ -28,10 +28,11 @@ public class Coordonnee {
 		this.colonne = colonne;
 	}
 	
-	public boolean equals(Coordonnee coordonnee) {
-		if (this.ligne == coordonnee.getLigne() && this.colonne == coordonnee.getColonne()) {
-			return true;
-		}
-		return false;
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Coordonnee coordonnee = (Coordonnee) obj;
+	    return ligne == coordonnee.ligne && colonne == coordonnee.colonne;
 	}
 }

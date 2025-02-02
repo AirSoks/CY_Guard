@@ -29,17 +29,6 @@ public class Grille {
 				grille[lineIndex][columnIndex] = new Case(position);	
 			}
 		}
-		// ca c'est pour tester les obstacles
-		addObstacle(new Coordonnee(1, 1), new Arbre());
-        addObstacle(new Coordonnee(1, 2), new Lac());
-        addObstacle(new Coordonnee(1, 3), new Roche());
-	}
-
-	public void addObstacle(Coordonnee position, Obstacle obstacle) {
-        Case cell = getCase(position);
-        if (cell != null) {
-            cell.setObstacle(obstacle);
-        }
 	}
 	
 	private void init(int nbLigne, int nbColonne) {

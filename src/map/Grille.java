@@ -78,6 +78,10 @@ public class Grille {
 		return this.grille;
 	}
 	
+	public Case getgrille(int line, int column) {
+		return grille [line][column];
+	}
+	
 	public void setgrille(Case[][] grille) {
 		this.grille = grille;
 	}

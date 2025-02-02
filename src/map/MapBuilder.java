@@ -72,21 +72,7 @@ public class MapBuilder {
 		placerObstacles(GameConfiguration.ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.DENSITE_ARBRE);
 	}
 	
-    private void initProba() {
-        List<Coordonnee> coordonnees = new ArrayList<>();
-        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
-            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
-                Coordonnee position = new Coordonnee(i, j);
-                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
-                    coordonnees.add(position);
-                }
-            }
-        }
-        double probaInitiale = 100.0 / coordonnees.size();
-        mapProbaCoordonnee.put(probaInitiale, coordonnees);
-    }
-	
-    private void placerObstacles(Obstacle obstacle, int nombreObstacles, int densite) {
+	private void placerObstacles(Obstacle obstacle, int nombreObstacles, int densite) {
 		initProba();
 		int obstaclesPlaces = 0;
         while (obstaclesPlaces < nombreObstacles) {
@@ -102,6 +88,21 @@ public class MapBuilder {
         		}
         	}
         }
+    }
+	
+    private void initProba() {
+        List<Coordonnee> coordonnees = new ArrayList<>();
+        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
+            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
+                Coordonnee position = new Coordonnee(i, j);
+                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
+                    coordonnees.add(position);
+                }
+            }
+        }
+        double probaInitiale = 100.0 / coordonnees.size();
+        mapProbaCoordonnee = new HashMap<>();
+        mapProbaCoordonnee.put(probaInitiale, coordonnees);
     }
 
     private List<Coordonnee> getListeFromValeurAleatoire(double valeurAleatoire) {

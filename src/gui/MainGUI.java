@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import config.GameConfiguration;
 import map.Grille;
 import map.GrilleBuilder;
+import personnage.PersonnageManager;
 
 public class MainGUI extends JFrame implements Runnable{
 	
@@ -20,6 +21,8 @@ public class MainGUI extends JFrame implements Runnable{
 	private Grille grille;
 	
 	private GameDisplay dashboard;
+	
+	private PersonnageManager manager;
 	
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
@@ -68,19 +71,19 @@ public class MainGUI extends JFrame implements Runnable{
 			switch (keychar) {
 			
 			case 'a':
-				//manager.moveleftGardien;
+				manager.moveLeftGardien();
 				break;
 			
 			case 'd':
-				//manager.moverightGardien;
+				manager.moveRightGardien();
 				break;
 				
 			case 'w':
-				//manager.moveupGardien;
+				manager.moveUpGardien();
 				break;
 				
 			case 's':
-				//manager.movedownGardien;
+				manager.moveDownGardien();
 				break;
 			default:
 				break;

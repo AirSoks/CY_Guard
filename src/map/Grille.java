@@ -74,15 +74,16 @@ public class Grille {
 		return null;
 	}
 	
-	public Case[][] getgrille() {
+	public Case getCase(int ligne, int colonne) {
+		Coordonnee position = new Coordonnee(ligne, colonne);
+		return getCase(position);
+	}
+	
+	public Case[][] getGrille() {
 		return this.grille;
 	}
 	
-	public Case getgrille(int line, int column) {
-		return grille [line][column];
-	}
-	
-	public void setgrille(Case[][] grille) {
+	public void setGrille(Case[][] grille) {
 		this.grille = grille;
 	}
 	

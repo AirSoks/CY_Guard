@@ -170,6 +170,37 @@ public class GrilleBuilder {
 		}
 		return coordonneeAdjacentes;
 	}
+    
+// Fonctionne pas
+//    private List<Coordonnee> getCoordonneesAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
+//    	int nbCase = nbCaseDensiteObstacle;
+//    	List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
+//    	List<Coordonnee> coordonneesToCheck = new ArrayList<>(List.of(coordonnee));
+//    	for (int i = 0; i <= nbCase; i++) {
+//    		List<Coordonnee> tempCoordonneesToCheck = new ArrayList<>();
+//    		for (Coordonnee coordonneeToCheck : coordonneesToCheck) {
+//    			tempCoordonneesToCheck.addAll(getCoordonneeAdjacentes(coordonneeToCheck));
+//    		}
+//    		coordonneeAdjacentes.addAll(coordonneesToCheck);
+//    		coordonneesToCheck.addAll(tempCoordonneesToCheck);
+//    		coordonneesToCheck.removeAll(coordonneeAdjacentes);
+//    	}
+//    	coordonneeAdjacentes.remove(coordonnee);
+//    	return coordonneeAdjacentes;
+//    }
+    
+    private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
+    	List<Coordonnee> coordonnees = new ArrayList<>();
+    	List<Coordonnee> directions = new ArrayList<>(List.of(new Coordonnee(0,1), new Coordonnee(-1,0), new Coordonnee(0,-1), new Coordonnee(1,0)));
+    	for (Coordonnee direction : directions) {
+    		Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + direction.getLigne(), coordonnee.getColonne() + direction.getColonne());
+    		Case caseAdjacente = grille.getCase(coordonneeAdjacente);
+			if (caseAdjacente != null && caseAdjacente.getObstacle().equals(GameConfiguration.PLAINE)){
+				coordonnees.add(coordonneeAdjacente);
+			}
+    	}
+    	return coordonnees;
+    }
 
     private void augmenterProbabilite(List<Coordonnee> coordonnees, int densite) {
         for (Coordonnee coordonnee : coordonnees) {

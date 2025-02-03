@@ -16,7 +16,7 @@ public class PaintStrategy {
 	public void paint(Grille grille, Graphics graphics) {
 		
 		int blocksize = GameConfiguration.BLOCK_SIZE;
-		Case[][] cases = grille.getgrille();
+		Case[][] cases = grille.getGrille();
 		int nbLigne = grille.getNbLigne();
 		int nbColonne = grille.getNbColonne();
 		

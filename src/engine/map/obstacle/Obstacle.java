@@ -1,5 +1,7 @@
 package engine.map.obstacle;
 
+import java.util.Objects;
+
 public abstract class Obstacle {
 	private String type;
 	private boolean bloqueVision;
@@ -22,12 +24,21 @@ public abstract class Obstacle {
 	public boolean isBloqueDeplacement() {
 		return bloqueDeplacement;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (obj == null || getClass() != obj.getClass()) return false;
-	    Obstacle obstacle = (Obstacle) obj;
-	    return this.type.equals(obstacle.getType());
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Obstacle other = (Obstacle) obj;
+		return Objects.equals(type, other.type);
 	}
 }

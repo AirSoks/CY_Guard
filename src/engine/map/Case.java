@@ -1,5 +1,7 @@
 package engine.map;
 
+import java.util.Objects;
+
 import config.GameConfiguration;
 import engine.map.obstacle.Obstacle;
 
@@ -30,12 +32,21 @@ public class Case {
 	public void setObstacle(Obstacle obstacle) {
 		this.obstacle = obstacle;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(position);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (obj == null || getClass() != obj.getClass()) return false;
-	    Case caseGrille = (Case) obj;
-	    return this.position.equals(caseGrille.getPosition());
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Case other = (Case) obj;
+		return Objects.equals(position, other.position);
 	}
 }

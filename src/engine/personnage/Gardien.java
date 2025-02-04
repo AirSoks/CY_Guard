@@ -1,7 +1,7 @@
-package personnage;
+package engine.personnage;
 
 import config.GameConfiguration;
-import map.Case;
+import engine.map.Case;
 
 import java.util.LinkedList;
 

@@ -1,7 +1,7 @@
-package personnage;
+package engine.personnage;
 
-import map.Case;
-import utilitaire.GenerateurNom;
+import engine.map.Case;
+import engine.utilitaire.GenerateurNom;
 
 public abstract class Personnage {
 	

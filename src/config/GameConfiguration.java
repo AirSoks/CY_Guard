@@ -1,9 +1,9 @@
 package config;
 
-import map.obstacle.Plaine;
-import map.obstacle.Arbre;
-import map.obstacle.Roche;
-import map.obstacle.Lac;
+import engine.map.obstacle.Arbre;
+import engine.map.obstacle.Lac;
+import engine.map.obstacle.Plaine;
+import engine.map.obstacle.Roche;
 
 public class GameConfiguration {
 	

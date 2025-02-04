@@ -1,11 +1,11 @@
-package map;
-
-import personnage.Personnage;
-import personnage.Gardien;
-import personnage.Intrus;
+package engine.map;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import engine.personnage.Gardien;
+import engine.personnage.Intrus;
+import engine.personnage.Personnage;
 
 public class Grille {
 	

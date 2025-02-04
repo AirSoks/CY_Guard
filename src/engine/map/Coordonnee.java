@@ -1,4 +1,4 @@
-package map;
+package engine.map;
 
 /**
  * Test

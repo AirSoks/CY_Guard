@@ -1,4 +1,4 @@
-package map.obstacle;
+package engine.map.obstacle;
 
 public class Plaine extends Obstacle {
 	

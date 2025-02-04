@@ -10,8 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
-import map.Grille;
-import map.GrilleBuilder;
+import engine.map.Grille;
+import engine.map.GrilleBuilder;
 
 public class MainGUI extends JFrame implements Runnable{
 	

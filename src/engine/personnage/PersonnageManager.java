@@ -1,8 +1,8 @@
-package personnage;
+package engine.personnage;
 
 import config.GameConfiguration;
-import map.Case;
-import map.Grille;
+import engine.map.Case;
+import engine.map.Grille;
 
 public class PersonnageManager {
 		private Grille grille;

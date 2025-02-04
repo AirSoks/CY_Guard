@@ -1,4 +1,4 @@
-package map.obstacle;
+package engine.map.obstacle;
 
 public abstract class Obstacle {
 	private String type;

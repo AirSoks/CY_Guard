@@ -1,7 +1,7 @@
-package map;
+package engine.map;
 
 import config.GameConfiguration;
-import map.obstacle.Obstacle;
+import engine.map.obstacle.Obstacle;
 
 /**
  * Représente une case de la grille.

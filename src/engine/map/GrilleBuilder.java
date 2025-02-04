@@ -1,7 +1,7 @@
-package map;
+package engine.map;
 
-import map.obstacle.Obstacle;
 import config.GameConfiguration;
+import engine.map.obstacle.Obstacle;
 
 import java.util.ArrayList;
 import java.util.List;

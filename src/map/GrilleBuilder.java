@@ -1,7 +1,6 @@
 package map;
 
 import map.obstacle.Obstacle;
-import utilitaire.Coordonnee;
 import config.GameConfiguration;
 
 import java.util.ArrayList;

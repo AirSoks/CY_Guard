@@ -2,7 +2,6 @@ package map;
 
 import config.GameConfiguration;
 import map.obstacle.Obstacle;
-import utilitaire.Coordonnee;
 
 /**
  * Représente une case de la grille.

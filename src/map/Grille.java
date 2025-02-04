@@ -3,7 +3,6 @@ package map;
 import personnage.Personnage;
 import personnage.Gardien;
 import personnage.Intrus;
-import utilitaire.Coordonnee;
 
 import java.util.ArrayList;
 import java.util.List;

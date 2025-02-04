@@ -86,6 +86,7 @@ public class GrilleBuilder {
 	private void genererCarte() {
 		placerObstacles(GameConfiguration.LAC, GameConfiguration.NB_LAC, GameConfiguration.DENSITE_LAC, GameConfiguration.NB_CASE_DENSITE_LAC);
 		placerObstacles(GameConfiguration.ROCHE, GameConfiguration.NB_ROCHE, GameConfiguration.DENSITE_ROCHE, GameConfiguration.NB_CASE_DENSITE_ROCHE);
+		remplissageTrou();
 		placerObstacles(GameConfiguration.ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.DENSITE_ARBRE ,GameConfiguration.NB_CASE_DENSITE_ARBRE);
 	}
 	
@@ -170,32 +171,32 @@ public class GrilleBuilder {
 		}
 		return coordonneeAdjacentes;
 	}
-    
-// Fonctionne pas
-//    private List<Coordonnee> getCoordonneesAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
-//    	int nbCase = nbCaseDensiteObstacle;
-//    	List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-//    	List<Coordonnee> coordonneesToCheck = new ArrayList<>(List.of(coordonnee));
-//    	for (int i = 0; i <= nbCase; i++) {
-//    		List<Coordonnee> tempCoordonneesToCheck = new ArrayList<>();
-//    		for (Coordonnee coordonneeToCheck : coordonneesToCheck) {
-//    			tempCoordonneesToCheck.addAll(getCoordonneeAdjacentes(coordonneeToCheck));
-//    		}
-//    		coordonneeAdjacentes.addAll(coordonneesToCheck);
-//    		coordonneesToCheck.addAll(tempCoordonneesToCheck);
-//    		coordonneesToCheck.removeAll(coordonneeAdjacentes);
-//    	}
-//    	coordonneeAdjacentes.remove(coordonnee);
-//    	return coordonneeAdjacentes;
-//    }
-    
+   
+    /* Fonctionne pas
+    private List<Coordonnee> getCoordonneesAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
+    	int nbCase = nbCaseDensiteObstacle;
+    	List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
+    	List<Coordonnee> coordonneesToCheck = new ArrayList<>(List.of(coordonnee));
+    	for (int i = 0; i <= nbCase; i++) {
+    		List<Coordonnee> tempCoordonneesToCheck = new ArrayList<>();
+    		for (Coordonnee coordonneeToCheck : coordonneesToCheck) {
+    			tempCoordonneesToCheck.addAll(getCoordonneeAdjacentes(coordonneeToCheck));
+    		}
+    		coordonneeAdjacentes.addAll(coordonneesToCheck);
+    		coordonneesToCheck.addAll(tempCoordonneesToCheck);
+    		coordonneesToCheck.removeAll(coordonneeAdjacentes);
+    	}
+    	coordonneeAdjacentes.remove(coordonnee);
+    	return coordonneeAdjacentes;
+	}
+	*/    
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
     	List<Coordonnee> coordonnees = new ArrayList<>();
     	List<Coordonnee> directions = new ArrayList<>(List.of(new Coordonnee(0,1), new Coordonnee(-1,0), new Coordonnee(0,-1), new Coordonnee(1,0)));
     	for (Coordonnee direction : directions) {
     		Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + direction.getLigne(), coordonnee.getColonne() + direction.getColonne());
     		Case caseAdjacente = grille.getCase(coordonneeAdjacente);
-			if (caseAdjacente != null && caseAdjacente.getObstacle().equals(GameConfiguration.PLAINE)){
+			if (caseAdjacente != null){
 				coordonnees.add(coordonneeAdjacente);
 			}
     	}
@@ -212,6 +213,51 @@ public class GrilleBuilder {
                 ajouterProbabilite(nouvelleProbabilite, coordonnee);
             }
         }
+    }
+    
+    private void remplissageTrou() {
+    	int nbLigne = getGrille().getNbLigne();
+    	int nbColonne = getGrille().getNbColonne();
+    	for (int i = 0; i < nbLigne ;i++) {
+    		for (int j = 0; j < nbColonne ;j++) {
+    			Coordonnee coordonnee = new Coordonnee(i,j);
+    			List<Coordonnee> Coordonnees = getCoordonneeAdjacentes(coordonnee);
+    			Case CaseActuel = grille.getCase(coordonnee);
+    			if ((CaseActuel.getObstacle().equals(GameConfiguration.PLAINE) || CaseActuel.getObstacle().equals(GameConfiguration.ARBRE))){
+	    			if (caseEntoure(Coordonnees)) {
+	    				if (caseEntoureLac(Coordonnees)) {
+	    					CaseActuel.setObstacle(GameConfiguration.LAC);
+	    				}else {
+	    					CaseActuel.setObstacle(GameConfiguration.ROCHE);
+	    				}
+	    			}
+    			}
+        	}
+    	}
+    }
+    
+    private boolean caseEntoure(List<Coordonnee> coordonneesAdjacentes){
+    	for (Coordonnee coordonnee : coordonneesAdjacentes) {
+    		Case caseAdjacente = grille.getCase(coordonnee);
+    		if (caseAdjacente != null && (caseAdjacente.getObstacle().equals(GameConfiguration.PLAINE) || caseAdjacente.getObstacle().equals(GameConfiguration.ARBRE))){
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    private boolean caseEntoureLac(List<Coordonnee> coordonneesAdjacentes){
+    	int nbLac = 0;
+    	for (Coordonnee coordonnee : coordonneesAdjacentes) {
+    		Case caseAdjacente = grille.getCase(coordonnee);
+    		if (caseAdjacente != null && caseAdjacente.getObstacle().equals(GameConfiguration.LAC)) {
+    			nbLac += 1;
+    		}
+    	}
+    	if (nbLac >= 2) {
+        	return true;
+    	}
+    	return false;
     }
 
 	private static double getValeurAleatoire(double value) {

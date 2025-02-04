@@ -157,6 +157,8 @@ public class GrilleBuilder {
     			Coordonnee coordonnee = new Coordonnee(i,j);
     			List<Coordonnee> Coordonnees = getCoordonneeAdjacentes(coordonnee);
     			Case CaseActuel = grille.getCase(coordonnee);
+    			
+    			// On pourrait enlever cette condition 
     			if ((CaseActuel.getObstacle().equals(GameConfiguration.PLAINE) || CaseActuel.getObstacle().equals(GameConfiguration.ARBRE))){
 	    			if (caseEntoure(Coordonnees)) {
 	    				if (caseEntoureLac(Coordonnees)) {

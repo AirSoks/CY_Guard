@@ -2,7 +2,6 @@ package map;
 
 import config.GameConfiguration;
 import map.obstacle.Obstacle;
-import map.obstacle.Plaine;
 import utilitaire.Coordonnee;
 
 /**

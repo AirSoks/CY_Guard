@@ -8,9 +8,6 @@ import utilitaire.Coordonnee;
 import java.util.ArrayList;
 import java.util.List;
 
-import map.obstacle.Obstacle;
-import map.obstacle.*;
-
 public class Grille {
 	
 	private Case[][] grille;

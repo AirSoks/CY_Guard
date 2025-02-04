@@ -22,15 +22,15 @@ public class GameConfiguration {
 	public static final int NB_LIGNE = 32;
 	public static final int NB_COLONNE = 32;
 	
-	public static final int DENSITE_ROCHE = 30;
+	public static final int DENSITE_ROCHE = 50;
 	public static final int NB_ROCHE = (NB_LIGNE*NB_COLONNE)/(12*(4 - DIFFICULTE));
-	public static final int NB_CASE_DENSITE_ROCHE = 5;
+	public static final int NB_CASE_DENSITE_ROCHE = 4;
 	
 	public static final int DENSITE_ARBRE = 5;
-	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(12*(4 - DIFFICULTE));
+	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(15*(4 - DIFFICULTE));
 	public static final int NB_CASE_DENSITE_ARBRE = 0;	
 	
-	public static final int DENSITE_LAC = 250;
+	public static final int DENSITE_LAC = 500;
 	public static final int NB_LAC = (NB_LIGNE*NB_COLONNE)/(8*(4 - DIFFICULTE));	
 	public static final int NB_CASE_DENSITE_LAC = 2;
 	

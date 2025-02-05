@@ -14,7 +14,7 @@ public class GrilleBuilder {
         this.grille = new Grille(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
         this.obstacleBuilders = new ArrayList<>();
         initObstacleBuilders();
-        genererGrille();
+        genererObsatcles();
     }
     
     private void initObstacleBuilders() {
@@ -23,7 +23,7 @@ public class GrilleBuilder {
         obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ARBRE, GameConfiguration.DENSITE_ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.NB_CASE_DENSITE_ARBRE));
     }
 	
-	private void genererGrille() {
+	private void genererObsatcles() {
 		for (ObstacleBuilder builder : obstacleBuilders) {
             placerObstacles(builder);
         }
@@ -32,68 +32,28 @@ public class GrilleBuilder {
 	
 	private void placerObstacles(ObstacleBuilder builder) {
 		MapProbaCoordonnee mapProbaCoordonnee = builder.getMapProbaCoordonnee();
-        initProba(mapProbaCoordonnee);
+		mapProbaCoordonnee.initProba(this.grille);
 		int obstaclesPlaces = 0;
-        while (obstaclesPlaces < builder.getNbObstacle()) {
-        	
-        	// On veut récupérer une valeur aléatoire entre 0 et la somme de toute les probas
-        	double valeurAleatoire = getValeurAleatoire(mapProbaCoordonnee.getSommeProbabilite());
-        	
-        	// On récupère une liste de coordonnées avec cette valeur
-        	List<Coordonnee> listeCoordonneeAleatoire = getListeFromValeurAleatoire(mapProbaCoordonnee, valeurAleatoire);
-        	if (listeCoordonneeAleatoire != null && !listeCoordonneeAleatoire.isEmpty()) {
-        		
-        		// On prend aléatoirement une valeur de cette liste
-        		Coordonnee coordonneeAleatoire = getCoordonneeAleatoire(listeCoordonneeAleatoire);
-        		if (coordonneeAleatoire != null) {
-        			
-        			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
-        			grille.getCase(coordonneeAleatoire).setObstacle(builder.getObstacle());
-        			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
-        			
-        			// On change la probabilité des cases adjacentes
-        			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, builder.getNbCaseDensiteObstacle());
-        			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, builder.getDensite());
-	                obstaclesPlaces++;
-        		}
+		int nbObstacle = builder.getNbObstacle();
+		Obstacle obstacle =  builder.getObstacle();
+		int densite = builder.getDensite();
+		
+        while (obstaclesPlaces < nbObstacle) {
+    		// On prend une valeur aléatoire
+    		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire();
+    		if (coordonneeAleatoire != null && grille.getCase(coordonneeAleatoire) != null) {
+    			
+    			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
+    			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
+    			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
+    			
+    			// On change la probabilité des cases adjacentes
+    			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, builder.getNbCaseDensiteObstacle());
+    			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
+                obstaclesPlaces++;
         	}
         }
     }
-	
-    private void initProba(MapProbaCoordonnee mapProbaCoordonnee) {
-    	mapProbaCoordonnee.reinitialiserMap();
-        List<Coordonnee> coordonnees = new ArrayList<>();
-        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
-            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
-                Coordonnee position = new Coordonnee(i, j);
-                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
-                    coordonnees.add(position);
-                }
-            }
-        }
-        double probaInitiale = 100.0 / coordonnees.size();
-        mapProbaCoordonnee.ajouterProbabilite(probaInitiale, coordonnees);
-    }
-
-    private List<Coordonnee> getListeFromValeurAleatoire(MapProbaCoordonnee mapProbaCoordonnee, double valeurAleatoire) {
-        double sommeProbabilite = 0.0;
-        for (Double probabilite : mapProbaCoordonnee.getListeProbabilites()) {
-            List<Coordonnee> coordonnees = mapProbaCoordonnee.getCoordonneesFromProbabilite(probabilite);
-            sommeProbabilite += probabilite * coordonnees.size();
-            if (valeurAleatoire <= sommeProbabilite) {
-                return coordonnees;
-            }
-        }
-        return null;
-    }
-    
-    private Coordonnee getCoordonneeAleatoire(List<Coordonnee> coordonnees) {
-		if (coordonnees == null || coordonnees.isEmpty()) {
-			return null;
-		}
-		int index = (int) getValeurAleatoire(coordonnees.size());
-		return coordonnees.get(index);
-	}
     
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
 		List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
@@ -112,25 +72,7 @@ public class GrilleBuilder {
 		}
 		return coordonneeAdjacentes;
 	}
-   
-    /* Fonctionne pas
-    private List<Coordonnee> getCoordonneesAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
-    	int nbCase = nbCaseDensiteObstacle;
-    	List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-    	List<Coordonnee> coordonneesToCheck = new ArrayList<>(List.of(coordonnee));
-    	for (int i = 0; i <= nbCase; i++) {
-    		List<Coordonnee> tempCoordonneesToCheck = new ArrayList<>();
-    		for (Coordonnee coordonneeToCheck : coordonneesToCheck) {
-    			tempCoordonneesToCheck.addAll(getCoordonneeAdjacentes(coordonneeToCheck));
-    		}
-    		coordonneeAdjacentes.addAll(coordonneesToCheck);
-    		coordonneesToCheck.addAll(tempCoordonneesToCheck);
-    		coordonneesToCheck.removeAll(coordonneeAdjacentes);
-    	}
-    	coordonneeAdjacentes.remove(coordonnee);
-    	return coordonneeAdjacentes;
-	}
-	*/    
+    
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
     	List<Coordonnee> coordonnees = new ArrayList<>();
     	List<Coordonnee> directions = new ArrayList<>(List.of(new Coordonnee(0,1), new Coordonnee(-1,0), new Coordonnee(0,-1), new Coordonnee(1,0)));
@@ -198,10 +140,6 @@ public class GrilleBuilder {
     	}
     	return false;
     }
-
-	private static double getValeurAleatoire(double value) {
-	    return (double) Math.random() * value;
-	}
 	
 	public Grille getGrille() {
 		return this.grille;

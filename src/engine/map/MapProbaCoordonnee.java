@@ -9,35 +9,35 @@ import config.GameConfiguration;
 
 public class MapProbaCoordonnee {
 	private Map<Double, List<Coordonnee>> mapProbaCoordonnee = new HashMap<>();
-	
-    public MapProbaCoordonnee() {
+
+	public MapProbaCoordonnee() {
         this.mapProbaCoordonnee = new HashMap<>();
     }
 	
-	private List<Double> getListeProbabilites() {
+	public List<Double> getListeProbabilites() {
         return new ArrayList<>(mapProbaCoordonnee.keySet());
     }
 	
-	private List<Coordonnee> getCoordonneesFromProbabilite(Double probabilite) {
+	public List<Coordonnee> getCoordonneesFromProbabilite(Double probabilite) {
         return mapProbaCoordonnee.get(probabilite);
     }
 	
-	public void ajouterProbabilite(Double probabilite, List<Coordonnee> nouvelleCoordonnees) {
-        if (probabilite != null && nouvelleCoordonnees != null && !nouvelleCoordonnees.isEmpty()) {
+	public void ajouterProbabilite(Double nouvelleProbabilite, List<Coordonnee> nouvelleCoordonnees) {
+        if (nouvelleProbabilite != null && nouvelleCoordonnees != null && !nouvelleCoordonnees.isEmpty()) {
 			for (Coordonnee coordonnee : nouvelleCoordonnees) {
-            	ajouterProbabilite(probabilite, coordonnee);
+            	ajouterProbabilite(nouvelleProbabilite, coordonnee);
             }
         }
     }
 	
-	public void ajouterProbabilite(Double probabilite, Coordonnee nouvelleCoordonnees) {
-        if (probabilite != null && nouvelleCoordonnees != null) {
-        	List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(probabilite);
+	public void ajouterProbabilite(Double nouvelleProbabilite, Coordonnee nouvelleCoordonnees) {
+        if (nouvelleProbabilite != null && nouvelleCoordonnees != null) {
+        	List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(nouvelleProbabilite);
             if (coordonnees == null) { 
             	coordonnees = new ArrayList<>();
             }
             coordonnees.add(nouvelleCoordonnees);
-            mapProbaCoordonnee.put(probabilite, coordonnees);
+            mapProbaCoordonnee.put(nouvelleProbabilite, coordonnees);
         }
     }
 	
@@ -69,7 +69,7 @@ public class MapProbaCoordonnee {
 	    }
 	}
 	
-	private double getSommeProbabilite() {
+	public double getSommeProbabilite() {
 	    double sommeProbabilite = 0.0;
 	    for (Double probabilite : getListeProbabilites()) {
 	        List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(probabilite);
@@ -78,25 +78,7 @@ public class MapProbaCoordonnee {
 	    return sommeProbabilite;
 	}
 	
-	public void initProba(Grille grille) {
-		if (grille == null) {
-			return;
-		}
-        List<Coordonnee> coordonnees = new ArrayList<>();
-        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
-            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
-                Coordonnee position = new Coordonnee(i, j);
-                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
-                    coordonnees.add(position);
-                }
-            }
-        }
-        double probaInitiale = 100.0 / coordonnees.size();
-        ajouterProbabilite(probaInitiale, coordonnees);
-    }
-	
-    public Coordonnee getCoordonneeAleatoire() {
-    	List<Coordonnee> coordonnees = getListeAleatoire();
+    public Coordonnee getCoordonneeAleatoire(List<Coordonnee> coordonnees) {
 		if (coordonnees == null || coordonnees.isEmpty()) {
 			return null;
 		}
@@ -104,7 +86,7 @@ public class MapProbaCoordonnee {
 		return coordonnees.get(index);
 	}
 	
-	private List<Coordonnee> getListeAleatoire() {
+	public List<Coordonnee> getListeAleatoire() {
 		double valeurAleatoire = getValeurAleatoire(getSommeProbabilite());
         double sommeProbabilite = 0.0;
         for (Double probabilite : getListeProbabilites()) {

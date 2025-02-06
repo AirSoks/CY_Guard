@@ -30,9 +30,9 @@ public class GameConfiguration {
 	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(15*(4 - DIFFICULTE));
 	public static final int NB_CASE_DENSITE_ARBRE = 0;	
 	
-	public static final int DENSITE_LAC = 500;
+	public static final int DENSITE_LAC = 200;
 	public static final int NB_LAC = (NB_LIGNE*NB_COLONNE)/(8*(4 - DIFFICULTE));	
-	public static final int NB_CASE_DENSITE_LAC = 2;
+	public static final int NB_CASE_DENSITE_LAC = 1;
 	
 	public static final Plaine PLAINE = new Plaine();
 	public static final Arbre ARBRE = new Arbre();

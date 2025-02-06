@@ -5,6 +5,7 @@ import engine.map.obstacle.Obstacle;
 public class ObstacleBuilder {
 	private Obstacle obstacle;
 	private int densite;
+	private int nbElement;
 	private int nbObstacle;
 	private int nbCaseDensiteObstacle;
 	private MapProbaCoordonnee mapProbaCoordonnee;
@@ -14,11 +15,16 @@ public class ObstacleBuilder {
 	}
 
     public ObstacleBuilder(Obstacle obstacle, int densite, int nbObstacle, int nbCaseDensiteObstacle) {
-		this.obstacle = obstacle;
+		this(obstacle, densite, nbObstacle, nbCaseDensiteObstacle, 0);
+	}
+    
+    public ObstacleBuilder(Obstacle obstacle, int densite, int nbObstacle, int nbCaseDensiteObstacle, int nbElement) {
+    	this.obstacle = obstacle;
 		this.densite = densite;
 		this.nbObstacle = nbObstacle;
 		this.nbCaseDensiteObstacle = nbCaseDensiteObstacle;
 		this.mapProbaCoordonnee = new MapProbaCoordonnee();
+    	this.nbElement = nbElement;
 	}
 
 	public void setObstacle(Obstacle obstacle) {
@@ -35,6 +41,14 @@ public class ObstacleBuilder {
     
     public int getDensite() {
 		return densite;
+	}
+    
+    public void setNbElement(int nbElement) {
+        this.nbElement = nbElement;
+    }
+    
+    public int getNbElement() {
+		return nbElement;
 	}
 
     public void setNbObstacle(int nbObstacle) {

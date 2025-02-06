@@ -14,16 +14,16 @@ public class GrilleBuilder {
         this.grille = new Grille(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
         this.obstacleBuilders = new ArrayList<>();
         initObstacleBuilders();
-        genererObsatcles();
+        genererObstacles();
     }
     
     private void initObstacleBuilders() {
-        obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.LAC, GameConfiguration.DENSITE_LAC, GameConfiguration.NB_LAC, GameConfiguration.NB_CASE_DENSITE_LAC));
-        obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ROCHE, GameConfiguration.DENSITE_ROCHE, GameConfiguration.NB_ROCHE, GameConfiguration.NB_CASE_DENSITE_ROCHE));
-        obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ARBRE, GameConfiguration.DENSITE_ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.NB_CASE_DENSITE_ARBRE));
+        obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.LAC, GameConfiguration.DENSITE_LAC, GameConfiguration.NB_LAC, GameConfiguration.NB_CASE_DENSITE_LAC,2));
+        //obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ROCHE, GameConfiguration.DENSITE_ROCHE, GameConfiguration.NB_ROCHE, GameConfiguration.NB_CASE_DENSITE_ROCHE));
+        //obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ARBRE, GameConfiguration.DENSITE_ARBRE, GameConfiguration.NB_ARBRE, GameConfiguration.NB_CASE_DENSITE_ARBRE));
     }
 	
-	private void genererObsatcles() {
+	private void genererObstacles() {
 		for (ObstacleBuilder builder : obstacleBuilders) {
             placerObstacles(builder);
         }
@@ -32,16 +32,55 @@ public class GrilleBuilder {
 	
 	private void placerObstacles(ObstacleBuilder builder) {
 		MapProbaCoordonnee mapProbaCoordonnee = builder.getMapProbaCoordonnee();
-		mapProbaCoordonnee.initProba(this.grille);
-		int obstaclesPlaces = 0;
+		int nbElement = builder.getNbElement();
+		List<Coordonnee> coordonnees = getListCoordonneeGrille();
+		if (nbElement == 0) {
+			mapProbaCoordonnee.ajouterProbabilite(100.0 / coordonnees.size(), coordonnees);
+        	System.out.println(mapProbaCoordonnee.getListeProbabilites());
+		} else {
+			mapProbaCoordonnee.ajouterProbabilite(0.0 , coordonnees);
+			initNbElement(builder);
+		}
+		
 		int nbObstacle = builder.getNbObstacle();
 		Obstacle obstacle =  builder.getObstacle();
 		int densite = builder.getDensite();
 		int nbCaseDensite = builder.getNbCaseDensiteObstacle();
+		int obstaclesPlaces = 0;
 		
-        while (obstaclesPlaces < nbObstacle) {
+        while (obstaclesPlaces < 50) {
     		// On prend une valeur aléatoire
-    		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire();
+    		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire(mapProbaCoordonnee.getListeAleatoire());
+    		if (coordonneeAleatoire != null && grille.getCase(coordonneeAleatoire) != null) {
+    			
+    			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
+    			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
+    			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
+    			
+    			// On change la probabilité des cases adjacentes
+    			if (nbElement == 0) {
+        			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
+    				augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
+    			}
+    			else {
+        			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire);
+    				augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
+    			}
+                obstaclesPlaces++;
+        	}
+        }
+    }
+	
+	private void initNbElement(ObstacleBuilder builder) {
+		MapProbaCoordonnee mapProbaCoordonnee = builder.getMapProbaCoordonnee();
+		int nbElement = builder.getNbElement();
+		Obstacle obstacle =  builder.getObstacle();
+		int nbCaseDensite = builder.getNbCaseDensiteObstacle();
+		
+		int nbElementPlaces = 0;
+		while (nbElementPlaces < nbElement) {
+    		// On prend une valeur aléatoire
+    		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire(mapProbaCoordonnee.getCoordonneesFromProbabilite(0.0));
     		if (coordonneeAleatoire != null && grille.getCase(coordonneeAleatoire) != null) {
     			
     			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
@@ -50,10 +89,26 @@ public class GrilleBuilder {
     			
     			// On change la probabilité des cases adjacentes
     			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
-    			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
-                obstaclesPlaces++;
+    			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, 1.0);
+    			nbElementPlaces++;
         	}
         }
+	}
+	
+	private List<Coordonnee> getListCoordonneeGrille() {
+        List<Coordonnee> coordonnees = new ArrayList<>();
+        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
+            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
+                Coordonnee position = new Coordonnee(i, j);
+                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
+                    coordonnees.add(position);
+                }
+            }
+        }
+        return coordonnees;
+        
+        //this.probabiliteDefaut = 100.0 / coordonnees.size();
+        //(this.probabiliteDefaut, coordonnees);
     }
     
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
@@ -91,11 +146,18 @@ public class GrilleBuilder {
         for (Coordonnee coordonnee : coordonnees) {
             Double probaActuelle = mapProbaCoordonnee.getProbabiliteFromCoordonnee(coordonnee);
             if (probaActuelle != null) {
-                double nouvelleProbabilite = probaActuelle * (1 + (densite / 100.0));
+                double nouvelleProbabilite = (probaActuelle + 1 ) * (densite / 100.0);
                 
                 mapProbaCoordonnee.supprimerCoordonnee(coordonnee);
                 mapProbaCoordonnee.ajouterProbabilite(nouvelleProbabilite, coordonnee);
             }
+        }
+    }
+    
+    private void augmenterProbabilite(MapProbaCoordonnee mapProbaCoordonnee, List<Coordonnee> coordonnees, double nouvelleProbabilite) {
+        for (Coordonnee coordonnee : coordonnees) {
+            mapProbaCoordonnee.supprimerCoordonnee(coordonnee);
+            mapProbaCoordonnee.ajouterProbabilite(nouvelleProbabilite, coordonnee);
         }
     }
     

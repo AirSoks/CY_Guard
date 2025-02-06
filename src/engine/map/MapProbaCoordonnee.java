@@ -14,11 +14,11 @@ public class MapProbaCoordonnee {
         this.mapProbaCoordonnee = new HashMap<>();
     }
 	
-	public List<Double> getListeProbabilites() {
+	private List<Double> getListeProbabilites() {
         return new ArrayList<>(mapProbaCoordonnee.keySet());
     }
 	
-	public List<Coordonnee> getCoordonneesFromProbabilite(Double probabilite) {
+	private List<Coordonnee> getCoordonneesFromProbabilite(Double probabilite) {
         return mapProbaCoordonnee.get(probabilite);
     }
 	
@@ -69,7 +69,7 @@ public class MapProbaCoordonnee {
 	    }
 	}
 	
-	public double getSommeProbabilite() {
+	private double getSommeProbabilite() {
 	    double sommeProbabilite = 0.0;
 	    for (Double probabilite : getListeProbabilites()) {
 	        List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(probabilite);
@@ -104,7 +104,7 @@ public class MapProbaCoordonnee {
 		return coordonnees.get(index);
 	}
 	
-	public List<Coordonnee> getListeAleatoire() {
+	private List<Coordonnee> getListeAleatoire() {
 		double valeurAleatoire = getValeurAleatoire(getSommeProbabilite());
         double sommeProbabilite = 0.0;
         for (Double probabilite : getListeProbabilites()) {
@@ -117,7 +117,7 @@ public class MapProbaCoordonnee {
         return null;
     }
     
-	public static double getValeurAleatoire(double value) {
+	private static double getValeurAleatoire(double value) {
 	    return (double) Math.random() * value;
 	}
 }

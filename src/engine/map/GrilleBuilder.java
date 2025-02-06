@@ -37,6 +37,7 @@ public class GrilleBuilder {
 		int nbObstacle = builder.getNbObstacle();
 		Obstacle obstacle =  builder.getObstacle();
 		int densite = builder.getDensite();
+		int nbCaseDensite = builder.getNbCaseDensiteObstacle();
 		
         while (obstaclesPlaces < nbObstacle) {
     		// On prend une valeur aléatoire
@@ -48,7 +49,7 @@ public class GrilleBuilder {
     			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
     			
     			// On change la probabilité des cases adjacentes
-    			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, builder.getNbCaseDensiteObstacle());
+    			List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
     			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
                 obstaclesPlaces++;
         	}

@@ -1,9 +1,11 @@
-package engine.map;
+package engine.map.generation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import engine.map.Coordonnee;
 
 public class MapProbaCoordonnee {
 	private Map<Double, List<Coordonnee>> mapProbaCoordonnee = new HashMap<>();

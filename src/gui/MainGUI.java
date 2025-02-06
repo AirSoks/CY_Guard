@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
 import engine.map.Grille;
-import engine.map.GrilleBuilder;
+import engine.map.generation.GrilleBuilder;
 
 public class MainGUI extends JFrame implements Runnable{
 	

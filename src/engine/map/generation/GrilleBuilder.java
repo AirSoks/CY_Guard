@@ -1,6 +1,9 @@
-package engine.map;
+package engine.map.generation;
 
 import config.GameConfiguration;
+import engine.map.Case;
+import engine.map.Coordonnee;
+import engine.map.Grille;
 import engine.map.obstacle.Obstacle;
 
 import java.util.ArrayList;

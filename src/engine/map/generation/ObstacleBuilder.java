@@ -1,4 +1,4 @@
-package engine.map;
+package engine.map.generation;
 
 import engine.map.obstacle.Obstacle;
 

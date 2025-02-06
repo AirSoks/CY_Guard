@@ -10,7 +10,7 @@ public class GameConfiguration {
 	public static final int WINDOW_WIDTH = 800;
 	public static final int WINDOW_HEIGHT = 800;
 	
-	public static final int BLOCK_SIZE = 1;
+	public static final int BLOCK_SIZE = 25;
 	
 	public static final int GAME_SPEED = 1000;
 
@@ -19,8 +19,8 @@ public class GameConfiguration {
 	
 	public static final int DIFFICULTE = 3; // Choisir entre 1 et 3 (3 étant le plus difficile)
 	
-	public static final int NB_LIGNE = 100;
-	public static final int NB_COLONNE = 100;
+	public static final int NB_LIGNE = 32;
+	public static final int NB_COLONNE = 32;
 	
 	public static final int NB_LAC = 2;
 	public static final int DENSITE_LAC = 5000;

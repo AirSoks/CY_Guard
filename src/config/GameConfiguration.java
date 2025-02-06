@@ -10,7 +10,7 @@ public class GameConfiguration {
 	public static final int WINDOW_WIDTH = 800;
 	public static final int WINDOW_HEIGHT = 800;
 	
-	public static final int BLOCK_SIZE = 25;
+	public static final int BLOCK_SIZE = 1;
 	
 	public static final int GAME_SPEED = 1000;
 
@@ -19,20 +19,22 @@ public class GameConfiguration {
 	
 	public static final int DIFFICULTE = 3; // Choisir entre 1 et 3 (3 étant le plus difficile)
 	
-	public static final int NB_LIGNE = 32;
-	public static final int NB_COLONNE = 32;
+	public static final int NB_LIGNE = 100;
+	public static final int NB_COLONNE = 100;
 	
-	public static final int DENSITE_ROCHE = 50;
-	public static final int NB_ROCHE = (NB_LIGNE*NB_COLONNE)/(12*(4 - DIFFICULTE));
-	public static final int NB_CASE_DENSITE_ROCHE = 4;
+	public static final int NB_LAC = 2;
+	public static final int DENSITE_LAC = 5000;
+	public static final int NB_CASE_LAC = (NB_LIGNE*NB_COLONNE)/(15*(4 - DIFFICULTE));
+	public static final int NB_CASE_DENSITE_LAC = 2;
+	
+	public static final int NB_ROCHE = 6;
+	public static final int DENSITE_ROCHE = 325;
+	public static final int NB_CASE_ROCHE = (NB_LIGNE*NB_COLONNE)/(50*(4 - DIFFICULTE));
+	public static final int NB_CASE_DENSITE_ROCHE = 3;
 	
 	public static final int DENSITE_ARBRE = 5;
-	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(15*(4 - DIFFICULTE));
-	public static final int NB_CASE_DENSITE_ARBRE = 0;	
-	
-	public static final int DENSITE_LAC = 200;
-	public static final int NB_LAC = (NB_LIGNE*NB_COLONNE)/(8*(4 - DIFFICULTE));	
-	public static final int NB_CASE_DENSITE_LAC = 1;
+	public static final int NB_CASE_ARBRE = (NB_LIGNE*NB_COLONNE)/(15*(4 - DIFFICULTE));
+	public static final int NB_CASE_DENSITE_ARBRE = 0;
 	
 	public static final Plaine PLAINE = new Plaine();
 	public static final Arbre ARBRE = new Arbre();

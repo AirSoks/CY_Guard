@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import config.GameConfiguration;
-
 public class MapProbaCoordonnee {
 	private Map<Double, List<Coordonnee>> mapProbaCoordonnee = new HashMap<>();
 

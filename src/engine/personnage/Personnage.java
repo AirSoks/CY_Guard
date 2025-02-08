@@ -32,7 +32,7 @@ public abstract class Personnage {
 		return tempsInvocation;
 	}
 	
-	public long getVitesse() {
+	public int getVitesse() {
 		return vitesse;
 	}
 	

@@ -1,11 +1,12 @@
 package engine.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import config.GameConfiguration;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Grille {
 	
@@ -22,7 +23,7 @@ public class Grille {
 			for (int columnIndex = 0; columnIndex < nbColonne; columnIndex++) {
 				
 				Coordonnee position = new Coordonnee(lineIndex, columnIndex);
-				grille[lineIndex][columnIndex] = new Case(position);	
+				grille[lineIndex][columnIndex] = new Case(position, GameConfiguration.PLAINE);
 			}
 		}
 	}
@@ -81,7 +82,7 @@ public class Grille {
 	
 	public void setGrille(Case[][] grille) {
 		this.grille = grille;
-	}
+	} 
 	
 	public List<Personnage> getPersonnages(Coordonnee coordonnee) {
         List<Personnage> personnages = new ArrayList<>();

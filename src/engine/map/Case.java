@@ -1,9 +1,8 @@
 package engine.map;
 
-import java.util.Objects;
-
-import config.GameConfiguration;
 import engine.map.obstacle.Obstacle;
+
+import java.util.Objects;
 
 /**
  * Représente une case de la grille.
@@ -12,9 +11,9 @@ public class Case {
 	private Coordonnee position;
 	private Obstacle obstacle;
 	
-	public Case(Coordonnee position) {
+	public Case(Coordonnee position, Obstacle obstacle) {
 		this.position = position;
-		this.obstacle = GameConfiguration.PLAINE; // On initialise les plaines comme obstacles par défaut, on les remplacera plus tard dans le code.
+		this.obstacle = obstacle;
 	}
 	
 	public Coordonnee getPosition() {

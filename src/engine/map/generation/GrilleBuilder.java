@@ -1,6 +1,7 @@
 package engine.map.generation;
 
 import config.GameConfiguration;
+import config.ConfigurationMapAleatoire;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
@@ -21,13 +22,7 @@ public class GrilleBuilder {
     }
     
     private void initObstacleBuilders() {
-    	for (int i = 0; i < GameConfiguration.NB_LAC ; i++ ) {
-    		obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.LAC, GameConfiguration.DENSITE_LAC, GameConfiguration.NB_CASE_LAC, GameConfiguration.NB_CASE_DENSITE_LAC));
-    	}
-    	for (int i = 0; i < GameConfiguration.NB_ROCHE ; i++ ) {
-            obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ROCHE, GameConfiguration.DENSITE_ROCHE, GameConfiguration.NB_CASE_ROCHE, GameConfiguration.NB_CASE_DENSITE_ROCHE));
-    	}
-        obstacleBuilders.add(new ObstacleBuilder(GameConfiguration.ARBRE, GameConfiguration.DENSITE_ARBRE, GameConfiguration.NB_CASE_ARBRE, GameConfiguration.NB_CASE_DENSITE_ARBRE));
+    	this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires();
     }
 	
 	private void genererObstacles() {

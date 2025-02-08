@@ -27,7 +27,7 @@ public class PaintStrategy {
 				
 				
 				 if (obstacle instanceof Arbre) {
-	                    graphics.setColor(Color.green);
+	                    graphics.setColor(new Color(43, 139, 27));
 				 } else if (obstacle instanceof Lac) {
 	                    graphics.setColor(Color.blue);
 				 } else if (obstacle instanceof Roche) {

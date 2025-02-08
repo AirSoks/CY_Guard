@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -10,9 +11,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
-
+import engine.map.Case;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
+import engine.personnage.Gardien;
 import engine.personnage.PersonnageManager;
 
 public class MainGUI extends JFrame implements Runnable{
@@ -20,6 +22,7 @@ public class MainGUI extends JFrame implements Runnable{
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 	
 	private Grille grille;
+	private Gardien gardien;
 	
 	private GameDisplay dashboard;
 	
@@ -37,11 +40,19 @@ public class MainGUI extends JFrame implements Runnable{
 		
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
-		
-		dashboard = new GameDisplay(this.grille);
-		
+	    
+	    Case casedebut = grille.getCase(0, 0);
+	    this.gardien = new Gardien(casedebut);
+	    
+	    this.manager = new PersonnageManager(grille, this.gardien);
+	    
+		dashboard = new GameDisplay(this.grille, gardien);
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
+		
+		JTextField textField = new JTextField();
+        textField.addKeyListener(new KeyControls());
+        contentPane.add(textField, BorderLayout.SOUTH);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
@@ -89,6 +100,7 @@ public class MainGUI extends JFrame implements Runnable{
 			default:
 				break;
 			}
+			dashboard.repaint();
 			
 		}
 
@@ -103,4 +115,5 @@ public class MainGUI extends JFrame implements Runnable{
 		}
 
 	}
+	
 }

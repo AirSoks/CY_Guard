@@ -138,7 +138,7 @@ public class GrilleBuilder {
     private boolean caseEntoure(List<Coordonnee> coordonneesAdjacentes){
     	for (Coordonnee coordonnee : coordonneesAdjacentes) {
     		Case caseAdjacente = grille.getCase(coordonnee);
-    		if (caseAdjacente != null && (caseAdjacente.getObstacle().equals(GameConfiguration.PLAINE) || caseAdjacente.getObstacle().equals(GameConfiguration.ARBRE))){
+    		if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()){
     			return false;
     		}
     	}

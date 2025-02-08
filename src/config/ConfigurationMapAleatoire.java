@@ -42,6 +42,6 @@ public class ConfigurationMapAleatoire {
     }
 	
 	private static int getValeurAleatoire(int min, int max) {
-	    return min + (int) (Math.random() * (max - min));
+	    return min + (int) (Math.random() * (max - min + 1));
 	}
 }

@@ -32,10 +32,10 @@ public class GameConfiguration {
 	
 	public static final int NB_ROCHE_MIN = 3;
 	public static final int NB_ROCHE_MAX = 6;
-	public static final int DENSITE_ROCHE_MIN = 200;
-	public static final int DENSITE_ROCHE_MAX = 400;
-	public static final int TOTAL_CASE_ROCHE_MIN = (NB_LIGNE*NB_COLONNE)/(60*(4 - DIFFICULTE));
-	public static final int TOTAL_CASE_ROCHE_MAX = (NB_LIGNE*NB_COLONNE)/(30*(4 - DIFFICULTE));
+	public static final int DENSITE_ROCHE_MIN = 250;
+	public static final int DENSITE_ROCHE_MAX = 500;
+	public static final int TOTAL_CASE_ROCHE_MIN = (NB_LIGNE*NB_COLONNE)/(80*(4 - DIFFICULTE));
+	public static final int TOTAL_CASE_ROCHE_MAX = (NB_LIGNE*NB_COLONNE)/(25*(4 - DIFFICULTE));
 	public static final int NB_CASE_DENSITE_ROCHE = 3;
 	
 	public static final int DENSITE_ARBRE_MIN = 1;

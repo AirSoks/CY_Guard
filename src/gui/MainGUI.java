@@ -10,9 +10,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
+<<<<<<< HEAD
 import map.Grille;
 import map.GrilleBuilder;
 import personnage.PersonnageManager;
+=======
+import engine.map.Grille;
+import engine.map.generation.GrilleBuilder;
+>>>>>>> branch 'master_2' of https://github.com/AirSoks/CY_Guard.git
 
 public class MainGUI extends JFrame implements Runnable{
 	

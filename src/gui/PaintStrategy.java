@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import config.GameConfiguration;
-import map.Case;
-import map.Grille;
-import map.obstacle.Arbre;
-import map.obstacle.Lac;
-import map.obstacle.Obstacle;
-import map.obstacle.Roche;
+import engine.map.Case;
+import engine.map.Grille;
+import engine.map.obstacle.Arbre;
+import engine.map.obstacle.Lac;
+import engine.map.obstacle.Obstacle;
+import engine.map.obstacle.Roche;
 
 public class PaintStrategy {
 	
@@ -27,7 +27,7 @@ public class PaintStrategy {
 				
 				
 				 if (obstacle instanceof Arbre) {
-	                    graphics.setColor(Color.green);
+	                    graphics.setColor(new Color(43, 139, 27));
 				 } else if (obstacle instanceof Lac) {
 	                    graphics.setColor(Color.blue);
 				 } else if (obstacle instanceof Roche) {

@@ -1,4 +1,6 @@
-package utilitaire;
+package engine.map;
+
+import java.util.Objects;
 
 /**
  * Test
@@ -27,12 +29,18 @@ public class Coordonnee {
 	public void setColonne(int colonne) {
 		this.colonne = colonne;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(colonne, ligne);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (obj == null || getClass() != obj.getClass()) return false;
-	    Coordonnee coordonnee = (Coordonnee) obj;
-	    return ligne == coordonnee.ligne && colonne == coordonnee.colonne;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Coordonnee other = (Coordonnee) obj;
+		return colonne == other.colonne && ligne == other.ligne;
 	}
 }

@@ -1,9 +1,9 @@
 package config;
 
-import map.obstacle.Plaine;
-import map.obstacle.Arbre;
-import map.obstacle.Roche;
-import map.obstacle.Lac;
+import engine.map.obstacle.Arbre;
+import engine.map.obstacle.Lac;
+import engine.map.obstacle.Plaine;
+import engine.map.obstacle.Roche;
 
 public class GameConfiguration {
 	
@@ -22,17 +22,27 @@ public class GameConfiguration {
 	public static final int NB_LIGNE = 32;
 	public static final int NB_COLONNE = 32;
 	
-	public static final int DENSITE_ROCHE = 30;
-	public static final int NB_ROCHE = (NB_LIGNE*NB_COLONNE)/(12*(4 - DIFFICULTE));
-	public static final int NB_CASE_DENSITE_ROCHE = 5;
-	
-	public static final int DENSITE_ARBRE = 5;
-	public static final int NB_ARBRE = (NB_LIGNE*NB_COLONNE)/(12*(4 - DIFFICULTE));
-	public static final int NB_CASE_DENSITE_ARBRE = 0;	
-	
-	public static final int DENSITE_LAC = 250;
-	public static final int NB_LAC = (NB_LIGNE*NB_COLONNE)/(8*(4 - DIFFICULTE));	
+	public static final int NB_LAC_MIN = 2;
+	public static final int NB_LAC_MAX = 3;
+	public static final int DENSITE_LAC_MIN = 20000;
+	public static final int DENSITE_LAC_MAX = 20000;
+	public static final int TOTAL_CASE_LAC_MIN = (NB_LIGNE*NB_COLONNE)/(40*(4 - DIFFICULTE));
+	public static final int TOTAL_CASE_LAC_MAX = (NB_LIGNE*NB_COLONNE)/(10*(4 - DIFFICULTE));
 	public static final int NB_CASE_DENSITE_LAC = 2;
+	
+	public static final int NB_ROCHE_MIN = 3;
+	public static final int NB_ROCHE_MAX = 6;
+	public static final int DENSITE_ROCHE_MIN = 200;
+	public static final int DENSITE_ROCHE_MAX = 400;
+	public static final int TOTAL_CASE_ROCHE_MIN = (NB_LIGNE*NB_COLONNE)/(60*(4 - DIFFICULTE));
+	public static final int TOTAL_CASE_ROCHE_MAX = (NB_LIGNE*NB_COLONNE)/(30*(4 - DIFFICULTE));
+	public static final int NB_CASE_DENSITE_ROCHE = 3;
+	
+	public static final int DENSITE_ARBRE_MIN = 1;
+	public static final int DENSITE_ARBRE_MAX = 1;
+	public static final int TOTAL_CASE_ARBRE_MIN = (NB_LIGNE*NB_COLONNE)/(17*(4 - DIFFICULTE));
+	public static final int TOTAL_CASE_ARBRE_MAX = (NB_LIGNE*NB_COLONNE)/(10*(4 - DIFFICULTE));
+	public static final int NB_CASE_DENSITE_ARBRE = 0;
 	
 	public static final Plaine PLAINE = new Plaine();
 	public static final Arbre ARBRE = new Arbre();

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import map.Grille;
+import engine.map.Grille;
 
 public class GameDisplay extends JPanel{
 	

@@ -10,6 +10,7 @@ import engine.map.obstacle.Arbre;
 import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
+import engine.personnage.Gardien;
 
 public class PaintStrategy {
 	
@@ -40,7 +41,17 @@ public class PaintStrategy {
 			}
 		}
 		
-	};
+	}
 	
+	public void paint(Gardien gardien, Graphics graphics) {
+		int blocksize = GameConfiguration.BLOCK_SIZE;
+		Case cases = gardien.getCase();
+		int x = cases.getPosition().getLigne() * GameConfiguration.BLOCK_SIZE;;
+		int y = cases.getPosition().getColonne() * GameConfiguration.BLOCK_SIZE;;
+		
+		graphics.setColor(Color.pink);
+		graphics.fillRect(x, y, blocksize,blocksize);
+	
+	}
 	
 }

@@ -9,15 +9,16 @@ public class PersonnageManager {
 		
 		private Gardien gardien;
 		
-		public PersonnageManager(Grille grille) {
+		public PersonnageManager(Grille grille, Gardien gardien) {
 			this.grille = grille;
+			this.gardien = gardien;
 		}
 		
 		public void moveLeftGardien() {
 			Case position = gardien.getCase();
 			
 			if(position.getPosition().getColonne() > 0) {
-				Case newposition = grille.getCase(position.getPosition().getLigne(), position.getPosition().getColonne() - 1);
+				Case newposition = grille.getCase(position.getPosition().getLigne()-1, position.getPosition().getColonne());
 				gardien.setCase(newposition);
 			}
 		}
@@ -26,7 +27,7 @@ public class PersonnageManager {
 			Case position = gardien.getCase();
 			
 			if(position.getPosition().getColonne() < GameConfiguration.NB_COLONNE - 1) {
-				Case newposition = grille.getCase(position.getPosition().getLigne(), position.getPosition().getColonne() + 1);
+				Case newposition = grille.getCase(position.getPosition().getLigne()+ 1, position.getPosition().getColonne() );
 				gardien.setCase(newposition);
 			}
 		}
@@ -35,7 +36,7 @@ public class PersonnageManager {
 			Case position = gardien.getCase();
 			
 			if(position.getPosition().getLigne() > 0) {
-				Case newposition = grille.getCase(position.getPosition().getLigne() - 1, position.getPosition().getColonne());
+				Case newposition = grille.getCase(position.getPosition().getLigne() , position.getPosition().getColonne() - 1);
 				gardien.setCase(newposition);
 			}
 		}
@@ -44,7 +45,7 @@ public class PersonnageManager {
 			Case position = gardien.getCase();
 			
 			if(position.getPosition().getColonne() < GameConfiguration.NB_LIGNE - 1) {
-				Case newposition = grille.getCase(position.getPosition().getLigne() + 1, position.getPosition().getColonne());
+				Case newposition = grille.getCase(position.getPosition().getLigne() , position.getPosition().getColonne()+ 1);
 				gardien.setCase(newposition);
 			}
 		}

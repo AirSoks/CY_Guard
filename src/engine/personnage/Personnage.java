@@ -1,27 +1,27 @@
 package engine.personnage;
 
-import engine.map.Case;
+import engine.map.Coordonnee;
 import engine.utilitaire.GenerateurNom;
 
 public abstract class Personnage {
 	
-	private Case caseActuel;
+	private Coordonnee coordonnee;
 	private String name;
 	private long tempsInvocation;
 	private int vitesse;
 	
-	public Personnage(Case caseActuel) {
-		this.caseActuel = caseActuel;
+	public Personnage(Coordonnee coordonnee) {
+		this.coordonnee = coordonnee;
 		this.name = GenerateurNom.genererNom();
 		this.tempsInvocation = System.currentTimeMillis();
 	}
 	
-	public Case getCase() {
-		return caseActuel;
+	public Coordonnee getCoordonnee() {
+		return coordonnee;
 	}
 
-	public void setCase(Case caseActuel) {
-		this.caseActuel = caseActuel;
+	public void setCoordonnee(Coordonnee coordonnee) {
+		this.coordonnee = coordonnee;
 	}
 
 	public String getName() {

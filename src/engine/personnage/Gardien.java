@@ -1,7 +1,7 @@
 package engine.personnage;
 
 import config.GameConfiguration;
-import engine.map.Case;
+import engine.map.Coordonnee;
 
 import java.util.LinkedList;
 
@@ -12,8 +12,8 @@ public class Gardien extends Personnage {
 
 	private int nbIntrusCapture;
 
-	public Gardien(Case caseActuelle) {
-		super(caseActuelle);
+	public Gardien(Coordonnee coordonnee) {
+		super(coordonnee);
 		setVitesse(GameConfiguration.VITESSE_GARDIENS);
 	}
 	

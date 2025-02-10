@@ -85,21 +85,18 @@ public class Grille {
 	} 
 	
 	public List<Personnage> getPersonnages(Coordonnee coordonnee) {
-        List<Personnage> personnages = new ArrayList<>();
-        Case caseRecherchee = getCase(coordonnee);
-        
-        if (caseRecherchee == null) {
+        if (coordonnee == null) {
         	return null;
         }
-        
+		List<Personnage> personnages = new ArrayList<>();
         for (Intrus intrus : this.intrus) {
-            if (intrus.getCase().equals(caseRecherchee)) {
+            if (intrus.getCoordonnee().equals(coordonnee)) {
                 personnages.add(intrus);
             }
         }
         
         for (Gardien gardien : this.gardiens) {
-            if (gardien.getCase().equals(caseRecherchee)) {
+            if (gardien.getCoordonnee().equals(coordonnee)) {
                 personnages.add(gardien);
             }
         }

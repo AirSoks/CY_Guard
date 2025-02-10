@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import config.GameConfiguration;
 import engine.map.Case;
+import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.map.obstacle.Arbre;
 import engine.map.obstacle.Lac;
@@ -45,12 +46,12 @@ public class PaintStrategy {
 	
 	public void paint(Gardien gardien, Graphics graphics) {
 		int blocksize = GameConfiguration.BLOCK_SIZE;
-		Case cases = gardien.getCase();
-		int x = cases.getPosition().getLigne() * GameConfiguration.BLOCK_SIZE;;
-		int y = cases.getPosition().getColonne() * GameConfiguration.BLOCK_SIZE;;
+		Coordonnee coordonnee = gardien.getCoordonnee();
+		int x = coordonnee.getLigne() * GameConfiguration.BLOCK_SIZE;;
+		int y = coordonnee.getColonne() * GameConfiguration.BLOCK_SIZE;;
 		
 		graphics.setColor(Color.pink);
-		graphics.fillRect(x, y, blocksize,blocksize);
+		graphics.fillRect(y, x, blocksize,blocksize);
 	
 	}
 	

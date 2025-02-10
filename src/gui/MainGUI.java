@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
-import engine.map.Case;
+import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
@@ -30,7 +30,6 @@ public class MainGUI extends JFrame implements Runnable{
 	
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
-		this.grille = new Grille(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 		init();
 	}
 
@@ -41,8 +40,8 @@ public class MainGUI extends JFrame implements Runnable{
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 	    
-	    Case casedebut = grille.getCase(0, 0);
-	    this.gardien = new Gardien(casedebut);
+	    Coordonnee position = grille.getCase(0, 0).getPosition();
+	    this.gardien = new Gardien(position);
 	    
 	    this.manager = new PersonnageManager(grille, this.gardien);
 	    
@@ -79,29 +78,32 @@ public class MainGUI extends JFrame implements Runnable{
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
-			char keychar = e.getKeyChar();
-			switch (keychar) {
+		    int keyCode = e.getKeyCode();
+		    switch (keyCode) {
 			
-			case 'a':
-				manager.moveLeftGardien();
-				break;
-			
-			case 'd':
-				manager.moveRightGardien();
-				break;
-				
-			case 'w':
-				manager.moveUpGardien();
-				break;
-				
-			case 's':
-				manager.moveDownGardien();
-				break;
-			default:
-				break;
+		    case KeyEvent.VK_LEFT: // Flèche gauche
+	        case KeyEvent.VK_Q:
+	        case KeyEvent.VK_A:
+	            manager.moveLeftGardien();
+	            break;
+	        
+	        case KeyEvent.VK_RIGHT: // Flèche droit
+	        case KeyEvent.VK_D:
+	            manager.moveRightGardien();
+	            break;
+	        
+	        case KeyEvent.VK_UP: // Flèche haut
+	        case KeyEvent.VK_Z:
+	        case KeyEvent.VK_W:
+	            manager.moveUpGardien();
+	            break;
+	        
+	        case KeyEvent.VK_DOWN: // Flèche bas
+	        case KeyEvent.VK_S:
+	            manager.moveDownGardien();
+	            break;
 			}
 			dashboard.repaint();
-			
 		}
 
 		@Override

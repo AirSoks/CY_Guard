@@ -1,10 +1,5 @@
 package config;
 
-import engine.map.obstacle.Arbre;
-import engine.map.obstacle.Lac;
-import engine.map.obstacle.Plaine;
-import engine.map.obstacle.Roche;
-
 public class GameConfiguration {
 	
 	public static final int WINDOW_WIDTH = 800;
@@ -43,11 +38,6 @@ public class GameConfiguration {
 	public static final int TOTAL_CASE_ARBRE_MIN = (NB_LIGNE*NB_COLONNE)/(17*(4 - DIFFICULTE));
 	public static final int TOTAL_CASE_ARBRE_MAX = (NB_LIGNE*NB_COLONNE)/(10*(4 - DIFFICULTE));
 	public static final int NB_CASE_DENSITE_ARBRE = 0;
-	
-	public static final Plaine PLAINE = new Plaine();
-	public static final Arbre ARBRE = new Arbre();
-	public static final Roche ROCHE = new Roche();	
-	public static final Lac LAC = new Lac();
 	
 	public static final boolean PERMET_DEPLACEMENT_DIAGONNAL = true;
 }

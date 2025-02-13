@@ -1,6 +1,6 @@
 package engine.map;
 
-import config.GameConfiguration;
+import engine.map.obstacle.ObstacleFactory;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
@@ -10,6 +10,8 @@ import java.util.List;
 
 public class Grille {
 	
+	private static Grille instance;
+	
 	private Case[][] grille;
 	private int nbLigne;
 	private int nbColonne;
@@ -17,15 +19,22 @@ public class Grille {
     private List<Intrus> intrus = new ArrayList<>();
     private List<Gardien> gardiens = new ArrayList<>();
 	
-	public Grille(int nbLigne, int nbColonne) {
+	private Grille(int nbLigne, int nbColonne) {
 		init(nbLigne, nbColonne);
 		for (int lineIndex = 0; lineIndex < nbLigne; lineIndex++) {
 			for (int columnIndex = 0; columnIndex < nbColonne; columnIndex++) {
 				
 				Coordonnee position = new Coordonnee(lineIndex, columnIndex);
-				grille[lineIndex][columnIndex] = new Case(position, GameConfiguration.PLAINE);
+				grille[lineIndex][columnIndex] = new Case(position, ObstacleFactory.getObstacle("Plaine"));
 			}
 		}
+	}
+	
+	public static Grille getInstance(int nbLigne, int nbColonne) {
+		if (instance == null) {
+			instance = new Grille(nbLigne, nbColonne);
+		}
+		return instance;
 	}
 	
 	private void init(int nbLigne, int nbColonne) {

@@ -5,7 +5,10 @@ import config.ConfigurationMapAleatoire;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
+import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
+import engine.map.obstacle.ObstacleFactory;
+import engine.map.obstacle.Plaine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ public class GrilleBuilder {
 	private List<ObstacleBuilder> obstacleBuilders;
 	
     public GrilleBuilder() {
-        this.grille = new Grille(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
+        this.grille = Grille.getInstance(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
         this.obstacleBuilders = new ArrayList<>();
         initObstacleBuilders();
         genererObstacles();
@@ -65,7 +68,7 @@ public class GrilleBuilder {
         for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
             for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
                 Coordonnee position = new Coordonnee(i, j);
-                if (grille.getCase(position).getObstacle().equals(GameConfiguration.PLAINE)) {
+                if (grille.getCase(position).getObstacle() instanceof Plaine) {
                     coordonnees.add(position);
                 }
             }
@@ -83,7 +86,7 @@ public class GrilleBuilder {
 				
 				Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + i, coordonnee.getColonne() + j);
 				Case caseAdjacente = grille.getCase(coordonneeAdjacente);
-				if (caseAdjacente != null && caseAdjacente.getObstacle().equals(GameConfiguration.PLAINE)){
+				if (caseAdjacente != null && caseAdjacente.getObstacle() instanceof Plaine){
 					coordonneeAdjacentes.add(coordonneeAdjacente);
 				}
             }
@@ -126,9 +129,9 @@ public class GrilleBuilder {
     			Case CaseActuel = grille.getCase(coordonnee);
     			if (caseEntoure(Coordonnees)) {
 	    			if (caseEntoureLac(Coordonnees)) {
-	    				CaseActuel.setObstacle(GameConfiguration.LAC);
+	    				CaseActuel.setObstacle(ObstacleFactory.getObstacle("Lac"));
 	    			}else {
-	    				CaseActuel.setObstacle(GameConfiguration.ROCHE);
+	    				CaseActuel.setObstacle(ObstacleFactory.getObstacle("Roche"));
 	    			}
     			}
         	}
@@ -149,7 +152,7 @@ public class GrilleBuilder {
     	int nbLac = 0;
     	for (Coordonnee coordonnee : coordonneesAdjacentes) {
     		Case caseAdjacente = grille.getCase(coordonnee);
-    		if (caseAdjacente != null && caseAdjacente.getObstacle().equals(GameConfiguration.LAC)) {
+    		if (caseAdjacente != null && caseAdjacente.getObstacle() instanceof Lac) {
     			nbLac += 1;
     		}
     	}

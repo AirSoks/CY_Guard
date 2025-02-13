@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
@@ -43,7 +44,7 @@ public class MainGUI extends JFrame implements Runnable{
 	    Coordonnee position = grille.getCase(0, 0).getPosition();
 	    this.gardien = new Gardien(position);
 	    
-	    this.manager = new PersonnageManager(grille, this.gardien);
+	    this.manager = new PersonnageManager(grille);
 	    
 		dashboard = new GameDisplay(this.grille, gardien);
 		dashboard.setPreferredSize(preferredSize);
@@ -84,23 +85,23 @@ public class MainGUI extends JFrame implements Runnable{
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	            manager.moveLeftGardien();
+	            manager.deplacerPersonnage(gardien, Direction.GAUCHE);
 	            break;
 	        
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	            manager.moveRightGardien();
+	            manager.deplacerPersonnage(gardien, Direction.DROITE);
 	            break;
 	        
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	            manager.moveUpGardien();
+	            manager.deplacerPersonnage(gardien, Direction.HAUT);
 	            break;
 	        
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	            manager.moveDownGardien();
+	            manager.deplacerPersonnage(gardien, Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();

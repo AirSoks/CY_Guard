@@ -41,10 +41,10 @@ public class MainGUI extends JFrame implements Runnable{
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 	    
-	    Coordonnee position = grille.getCase(0, 0).getPosition();
-	    this.gardien = new Gardien(position);
-	    
 	    this.manager = new PersonnageManager(grille);
+	    
+	    this.gardien = manager.spawnGardien();
+	    
 	    
 		dashboard = new GameDisplay(this.grille, gardien);
 		dashboard.setPreferredSize(preferredSize);

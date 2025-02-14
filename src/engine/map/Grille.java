@@ -1,12 +1,6 @@
 package engine.map;
 
 import engine.map.obstacle.ObstacleFactory;
-import engine.personnage.Gardien;
-import engine.personnage.Intrus;
-import engine.personnage.Personnage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Grille {
 	
@@ -15,9 +9,6 @@ public class Grille {
 	private Case[][] grille;
 	private int nbLigne;
 	private int nbColonne;
-	
-    private List<Intrus> intrus = new ArrayList<>();
-    private List<Gardien> gardiens = new ArrayList<>();
 	
 	private Grille(int nbLigne, int nbColonne) {
 		init(nbLigne, nbColonne);
@@ -50,26 +41,6 @@ public class Grille {
 	public int getNbColonne() {
 		return nbColonne;
 	}
-
-	public void ajouterIntrus(Intrus intrus) {
-        this.intrus.add(intrus);
-    }
-	
-	public List<Intrus> getIntrus() {
-        return this.intrus;
-    }
-	
-	public void retirerIntrus(Intrus intrus) {
-        this.intrus.remove(intrus);
-    }
-	
-	public void ajouterGardien(Gardien gardien) {
-        this.gardiens.add(gardien);
-    }
-
-    public List<Gardien> getGardiens() {
-        return this.gardiens;
-    }
 	
 	public Case getCase(Coordonnee position) {
 		int ligne = position.getLigne();
@@ -93,23 +64,4 @@ public class Grille {
 		this.grille = grille;
 	} 
 	
-	public List<Personnage> getPersonnages(Coordonnee coordonnee) {
-        if (coordonnee == null) {
-        	return null;
-        }
-		List<Personnage> personnages = new ArrayList<>();
-        for (Intrus intrus : this.intrus) {
-            if (intrus.getCoordonnee().equals(coordonnee)) {
-                personnages.add(intrus);
-            }
-        }
-        
-        for (Gardien gardien : this.gardiens) {
-            if (gardien.getCoordonnee().equals(coordonnee)) {
-                personnages.add(gardien);
-            }
-        }
-        
-        return personnages;
-    }
 }

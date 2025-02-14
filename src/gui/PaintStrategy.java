@@ -12,6 +12,9 @@ import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
 import engine.personnage.Gardien;
+import engine.personnage.Intrus;
+import engine.personnage.Personnage;
+import engine.personnage.gestion.PersonnageManager;
 
 public class PaintStrategy {
 	
@@ -44,15 +47,21 @@ public class PaintStrategy {
 		
 	}
 	
-	public void paint(Gardien gardien, Graphics graphics) {
+	public void paint(PersonnageManager personnages, Graphics graphics) {
 		int blocksize = GameConfiguration.BLOCK_SIZE;
-		Coordonnee coordonnee = gardien.getCoordonnee();
-		int x = coordonnee.getLigne() * GameConfiguration.BLOCK_SIZE;;
-		int y = coordonnee.getColonne() * GameConfiguration.BLOCK_SIZE;;
 		
-		graphics.setColor(Color.pink);
-		graphics.fillRect(y, x, blocksize,blocksize);
-	
+		for (Personnage personnage : personnages.getPersonnages()) {
+			Coordonnee coordonnee = personnage.getCoordonnee();
+	        int x = coordonnee.getColonne() * blocksize;
+	        int y = coordonnee.getLigne() * blocksize;
+	        
+	        if (personnage instanceof Gardien) {
+	            graphics.setColor(Color.pink);
+	        } else if (personnage instanceof Intrus) {
+	            graphics.setColor(Color.red);
+	        }
+
+	        graphics.fillRect(x, y, blocksize, blocksize);
+	    }
 	}
-	
 }

@@ -11,23 +11,21 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import config.GameConfiguration;
-import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
-import engine.personnage.PersonnageManager;
+import engine.personnage.gestion.PersonnageApparition;
+import engine.personnage.gestion.PersonnageManager;
 
 public class MainGUI extends JFrame implements Runnable{
 	
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 	
 	private Grille grille;
-	private Gardien gardien;
+	private PersonnageManager personnages;
 	
 	private GameDisplay dashboard;
-	
-	private PersonnageManager manager;
 	
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
@@ -41,12 +39,13 @@ public class MainGUI extends JFrame implements Runnable{
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 	    
-	    this.manager = new PersonnageManager(grille);
+	    personnages = new PersonnageManager();
+	    Gardien gardien = PersonnageApparition.apparitionGardien(grille);
 	    
-	    this.gardien = manager.spawnGardien();
+	    personnages.ajouterPersonnage(gardien);
+	    personnages.setGardienActif(gardien);
 	    
-	    
-		dashboard = new GameDisplay(this.grille, gardien);
+		dashboard = new GameDisplay(this.grille, personnages);
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
 		
@@ -80,28 +79,34 @@ public class MainGUI extends JFrame implements Runnable{
 		@Override
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
+		    Gardien gardienActif = personnages.getGardienActif();
+		    
+		    if (gardienActif == null) {
+                return;
+            }
+		    
 		    switch (keyCode) {
 			
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	            manager.deplacerPersonnage(gardien, Direction.GAUCHE);
+	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.GAUCHE);
 	            break;
 	        
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	            manager.deplacerPersonnage(gardien, Direction.DROITE);
+	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.DROITE);
 	            break;
 	        
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	            manager.deplacerPersonnage(gardien, Direction.HAUT);
+	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.HAUT);
 	            break;
 	        
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	            manager.deplacerPersonnage(gardien, Direction.BAS);
+	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();

@@ -15,6 +15,7 @@ import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
+import engine.personnage.gestion.GestionPersonnage;
 import engine.personnage.gestion.PersonnageManager;
 
 public class MainGUI extends JFrame implements Runnable{
@@ -22,7 +23,7 @@ public class MainGUI extends JFrame implements Runnable{
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 	
 	private Grille grille;
-	private PersonnageManager personnages;
+	private GestionPersonnage gestionPersonnage;
 	
 	private GameDisplay dashboard;
 	
@@ -38,20 +39,20 @@ public class MainGUI extends JFrame implements Runnable{
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 	    
-	    personnages = PersonnageManager.getInstance();
-	    Gardien gardien = personnages.ajouterGardien(grille);
-	    personnages.ajouterGardien(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.ajouterIntrus(grille);
-	    personnages.setGardienActif(gardien);
+	    PersonnageManager personnageManager = PersonnageManager.getInstance();
+	    this.gestionPersonnage = new GestionPersonnage(grille, personnageManager);
 	    
-		dashboard = new GameDisplay(this.grille, this.personnages);
+	    Gardien gardien = (Gardien) gestionPersonnage.ajouterGardien();
+	    gestionPersonnage.ajouterGardien();
+	    gestionPersonnage.ajouterIntrus();
+	    gestionPersonnage.ajouterIntrus();
+	    gestionPersonnage.ajouterIntrus();
+	    gestionPersonnage.ajouterIntrus();
+	    gestionPersonnage.ajouterIntrus();
+	    gestionPersonnage.ajouterIntrus();
+	    personnageManager.setGardienActif(gardien);
+	    
+		dashboard = new GameDisplay(this.grille, personnageManager);
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
 		
@@ -85,7 +86,7 @@ public class MainGUI extends JFrame implements Runnable{
 		@Override
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
-		    Gardien gardienActif = personnages.getGardienActif();
+		    Gardien gardienActif = gestionPersonnage.getPersonnageManager().getGardienActif();
 		    
 		    if (gardienActif == null) {
                 return;
@@ -96,23 +97,23 @@ public class MainGUI extends JFrame implements Runnable{
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.GAUCHE);
+	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.GAUCHE);
 	            break;
 	        
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.DROITE);
+	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.DROITE);
 	            break;
 	        
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.HAUT);
+	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.HAUT);
 	            break;
 	        
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	        	personnages.deplacerPersonnage(grille, gardienActif, Direction.BAS);
+	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();

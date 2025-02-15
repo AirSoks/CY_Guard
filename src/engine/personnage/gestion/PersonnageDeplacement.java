@@ -7,6 +7,7 @@ import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;
 import engine.personnage.Gardien;
+import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 
 public class PersonnageDeplacement {
@@ -28,21 +29,13 @@ public class PersonnageDeplacement {
 		return false;
 	}
 
-	public static void contactPersonnage(PersonnageManager personnageManager, Coordonnee coordonnee) { // Erreur lors de plusieurs intrus sur la mm case
-		List<Personnage> personnages = personnageManager.getPersonnages(coordonnee);
-		int nbPersonnageInitial = personnages.size();
-
-    	if (nbPersonnageInitial >= 2) {
-    		for (Personnage personnage : personnages) {
-    			if (personnage instanceof Gardien) {
-    				personnages.remove(personnage);
-    			}
-    		}
-    		if (nbPersonnageInitial != personnages.size()) {
-    			for (Personnage personnage : personnages) {
-    				personnageManager.retirerPersonnage(personnage);
-    			}
-    		}
-    	}
+	public static void contactPersonnage(PersonnageManager personnageManager, Coordonnee coordonnee) {
+		List<Gardien> listeGardien = personnageManager.getGardiens(coordonnee);
+		List<Intrus> listeIntrus = personnageManager.getIntrus(coordonnee);
+		if (listeGardien.size() >= 1 && listeIntrus.size() >= 1) {
+			for (Intrus intrus : listeIntrus) {
+				personnageManager.retirerPersonnage(intrus);
+			}
+		}
 	}
 }

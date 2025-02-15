@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import engine.map.Coordonnee;
-import engine.map.Direction;
-import engine.map.Grille;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
@@ -27,6 +25,10 @@ public class PersonnageManager {
         this.personnages.add(personnage);
     }
 
+	public void retirerPersonnage(Personnage personnage) {
+        this.personnages.remove(personnage);
+    }
+
     public Gardien getGardienActif() {
 		return gardienActif;
 	}
@@ -35,30 +37,31 @@ public class PersonnageManager {
 		this.gardienActif = gardienActif;
 	}
 
-	public void retirerPersonnage(Personnage personnage) {
-        this.personnages.remove(personnage);
-    }
-
     public List<Personnage> getPersonnages() {
         return this.personnages;
     }
+    
+    public List<Intrus> getIntrus() {
+        return getIntrus(null);
+    }
+
+    public List<Gardien> getGardiens() {
+        return getGardiens(null);
+    }
 
     public List<Personnage> getPersonnages(Coordonnee coordonnee) {
-        if (coordonnee == null) {
-            return null;
-        }
         List<Personnage> result = new ArrayList<>();
         for (Personnage personnage : this.personnages) {
-            if (personnage.getCoordonnee().equals(coordonnee)) {
+            if (coordonnee == null || personnage.getCoordonnee().equals(coordonnee)) {
                 result.add(personnage);
             }
         }
         return result;
     }
 
-    public List<Intrus> getIntrus() {
+    public List<Intrus> getIntrus(Coordonnee coordonnee) {
         List<Intrus> intrus = new ArrayList<>();
-        for (Personnage personnage : this.personnages) {
+        for (Personnage personnage : getPersonnages(coordonnee)) {
             if (personnage instanceof Intrus) {
                 intrus.add((Intrus) personnage);
             }
@@ -66,33 +69,13 @@ public class PersonnageManager {
         return intrus;
     }
 
-    public List<Gardien> getGardiens() {
+    public List<Gardien> getGardiens(Coordonnee coordonnee) {
         List<Gardien> gardiens = new ArrayList<>();
-        for (Personnage personnage : this.personnages) {
+        for (Personnage personnage : getPersonnages(coordonnee)) {
             if (personnage instanceof Gardien) {
                 gardiens.add((Gardien) personnage);
             }
         }
         return gardiens;
-    }
-    
-    public Gardien ajouterGardien(Grille grille) {
-        Gardien gardien = PersonnageApparition.apparitionGardien(grille);
-        this.ajouterPersonnage(gardien);
-        return gardien;
-    }
-
-    public Intrus ajouterIntrus(Grille grille) {
-        Intrus intrus = PersonnageApparition.apparitionIntrus(grille);
-        this.ajouterPersonnage(intrus);
-        return intrus;
-    }
-
-    public boolean deplacerPersonnage(Grille grille, Personnage personnage, Direction direction) {	
-        if (PersonnageDeplacement.deplacerPersonnage(grille, personnage, direction)) {
-        	PersonnageDeplacement.contactPersonnage(instance, personnage.getCoordonnee());
-        	return true;
-        }
-        return false;
     }
 }

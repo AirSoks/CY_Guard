@@ -11,9 +11,17 @@ import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 
 public class PersonnageManager {
+	private static PersonnageManager instance;
     
     private List<Personnage> personnages = new ArrayList<>();
     private Gardien gardienActif;
+    
+    public static PersonnageManager getInstance() {
+		if (instance == null) {
+			instance = new PersonnageManager();
+		}
+		return instance;
+	}
     
     public void ajouterPersonnage(Personnage personnage) {
         this.personnages.add(personnage);
@@ -80,9 +88,11 @@ public class PersonnageManager {
         return intrus;
     }
 
-    public boolean deplacerPersonnage(Grille grille, Personnage personnage, Direction direction) {
-        PersonnageDeplacement mouvement = new PersonnageDeplacement();
-        return mouvement.deplacerPersonnage(grille, personnage, direction);
+    public boolean deplacerPersonnage(Grille grille, Personnage personnage, Direction direction) {	
+        if (PersonnageDeplacement.deplacerPersonnage(grille, personnage, direction)) {
+        	PersonnageDeplacement.contactPersonnage(instance, personnage.getCoordonnee());
+        	return true;
+        }
+        return false;
     }
-
 }

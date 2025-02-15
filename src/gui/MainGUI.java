@@ -15,7 +15,6 @@ import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
-import engine.personnage.gestion.PersonnageApparition;
 import engine.personnage.gestion.PersonnageManager;
 
 public class MainGUI extends JFrame implements Runnable{
@@ -39,13 +38,20 @@ public class MainGUI extends JFrame implements Runnable{
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
 	    
-	    personnages = new PersonnageManager();
-	    Gardien gardien = PersonnageApparition.apparitionGardien(grille);
-	    
-	    personnages.ajouterPersonnage(gardien);
+	    personnages = PersonnageManager.getInstance();
+	    Gardien gardien = personnages.ajouterGardien(grille);
+	    personnages.ajouterGardien(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
+	    personnages.ajouterIntrus(grille);
 	    personnages.setGardienActif(gardien);
 	    
-		dashboard = new GameDisplay(this.grille, personnages);
+		dashboard = new GameDisplay(this.grille, this.personnages);
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
 		

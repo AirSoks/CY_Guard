@@ -28,7 +28,7 @@ public class PersonnageDeplacement {
 		return false;
 	}
 
-	public static void contactPersonnage(PersonnageManager personnageManager, Coordonnee coordonnee) { //
+	public static void contactPersonnage(PersonnageManager personnageManager, Coordonnee coordonnee) { // Erreur lors de plusieurs intrus sur la mm case
 		List<Personnage> personnages = personnageManager.getPersonnages(coordonnee);
 		int nbPersonnageInitial = personnages.size();
 

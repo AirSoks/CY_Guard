@@ -5,11 +5,23 @@ import engine.map.Coordonnee;
 
 import java.util.LinkedList;
 
+/**
+ * Gardien est une classe représentant un personnage gardien
+ * 
+ * @author GLP_19
+ * @see Personnage
+ * @see Intrus
+ */
 public class Gardien extends Personnage {
 	
-	//	Un FIFO 
+	/**
+	 * Les intrus ciblé par ce gardien
+	 */
 	private LinkedList<Intrus> cibles;
 
+	/**
+	 * Le nombre d'intru capturé
+	 */
 	private int nbIntrusCapture;
 
 	public Gardien(Coordonnee coordonnee) {

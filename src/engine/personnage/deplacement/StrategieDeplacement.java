@@ -4,15 +4,31 @@ import java.util.List;
 
 import engine.map.Case;
 import engine.map.Coordonnee;
-import engine.map.Direction;
 import engine.map.Grille;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
+/**
+ * Cette classe abstraite représente un déplacement type d'un personnage
+ * 
+ * @author GLP_19
+ * @see Grille
+ * @see PersonnageManager
+ * @see Personnage
+ * @see Deplacement
+ */
 public abstract class StrategieDeplacement implements Deplacement {
+	
+    /**
+     * La grille sur laquelle le personnage bouge
+     */
     private Grille grille;
+    
+    /**
+     * La liste des personnages, si contact
+     */
     private PersonnageManager personnages;
 
 	public StrategieDeplacement(PersonnageManager personnages, Grille grille) {
@@ -48,6 +64,11 @@ public abstract class StrategieDeplacement implements Deplacement {
 		return false;
 	}
 
+	/**
+	 * Vérifie si un contact à eu lieu entre un gardien et un intrus sur la coordonnée
+	 * 
+	 * @param coordonnee La coordonnée où vérifier le contact
+	 */
 	public void contactPersonnage(Coordonnee coordonnee) {
 		List<Gardien> listeGardien = personnages.getGardiens(coordonnee);
 		List<Intrus> listeIntrus = personnages.getIntrus(coordonnee);

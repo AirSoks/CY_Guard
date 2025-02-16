@@ -13,15 +13,15 @@ public class MapProbaCoordonnee {
 	public MapProbaCoordonnee() {
         this.mapProbaCoordonnee = new HashMap<>();
     }
-	
+
 	public List<Double> getListeProbabilites() {
         return new ArrayList<>(mapProbaCoordonnee.keySet());
     }
-	
+
 	public List<Coordonnee> getCoordonneesFromProbabilite(Double probabilite) {
         return mapProbaCoordonnee.get(probabilite);
     }
-	
+
 	public void ajouterProbabilite(Double nouvelleProbabilite, List<Coordonnee> nouvelleCoordonnees) {
         if (nouvelleProbabilite != null && nouvelleCoordonnees != null && !nouvelleCoordonnees.isEmpty()) {
 			for (Coordonnee coordonnee : nouvelleCoordonnees) {
@@ -29,18 +29,18 @@ public class MapProbaCoordonnee {
             }
         }
     }
-	
+
 	public void ajouterProbabilite(Double nouvelleProbabilite, Coordonnee nouvelleCoordonnees) {
         if (nouvelleProbabilite != null && nouvelleCoordonnees != null) {
         	List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(nouvelleProbabilite);
-            if (coordonnees == null) { 
+            if (coordonnees == null) {
             	coordonnees = new ArrayList<>();
             }
             coordonnees.add(nouvelleCoordonnees);
             mapProbaCoordonnee.put(nouvelleProbabilite, coordonnees);
         }
     }
-	
+
 	public Double getProbabiliteFromCoordonnee(Coordonnee coordonnee) {
 		if (coordonnee == null) {
 			return null;
@@ -53,14 +53,14 @@ public class MapProbaCoordonnee {
 	    }
 	    return null;
 	}
-	
+
 	public void supprimerCoordonnee(Coordonnee coordonnee) {
 		if (coordonnee == null) {
 			return;
 		}
 		for (Double probabilite : getListeProbabilites()) {
 	        List<Coordonnee> coordonnees = getCoordonneesFromProbabilite(probabilite);
-	        if (coordonnees.remove(coordonnee) == true) {
+	        if (coordonnees.remove(coordonnee)) {
 	            if (coordonnees.isEmpty()) {
 	                mapProbaCoordonnee.remove(probabilite);
 	            }
@@ -68,7 +68,7 @@ public class MapProbaCoordonnee {
 	        }
 	    }
 	}
-	
+
 	public double getSommeProbabilite() {
 	    double sommeProbabilite = 0.0;
 	    for (Double probabilite : getListeProbabilites()) {
@@ -77,7 +77,7 @@ public class MapProbaCoordonnee {
 	    }
 	    return sommeProbabilite;
 	}
-	
+
     public Coordonnee getCoordonneeAleatoire(List<Coordonnee> coordonnees) {
 		if (coordonnees == null || coordonnees.isEmpty()) {
 			return null;
@@ -85,7 +85,7 @@ public class MapProbaCoordonnee {
 		int index = (int) getValeurAleatoire(coordonnees.size());
 		return coordonnees.get(index);
 	}
-	
+
 	public List<Coordonnee> getListeAleatoire() {
 		double valeurAleatoire = getValeurAleatoire(getSommeProbabilite());
         double sommeProbabilite = 0.0;
@@ -98,8 +98,8 @@ public class MapProbaCoordonnee {
         }
         return null;
     }
-    
+
 	private static double getValeurAleatoire(double value) {
-	    return (double) Math.random() * value;
+	    return Math.random() * value;
 	}
 }

@@ -1,8 +1,5 @@
 package gui;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -10,23 +7,26 @@ import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
 import config.GameConfiguration;
 import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
-import engine.personnage.gestion.GestionPersonnage;
-import engine.personnage.gestion.PersonnageManager;
+import engine.personnage.PersonnageManager;
+import engine.personnage.deplacement.DeplacementManuel;
 
 public class MainGUI extends JFrame implements Runnable{
-	
+
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
-	
+
 	private Grille grille;
-	private GestionPersonnage gestionPersonnage;
-	
+	private PersonnageManager manager;
+
 	private GameDisplay dashboard;
-	
+
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
 		init();
@@ -35,37 +35,34 @@ public class MainGUI extends JFrame implements Runnable{
 	private void init() {
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		
+
 		GrilleBuilder mapBuilder = new GrilleBuilder();
 	    this.grille = mapBuilder.getGrille();
-	    
-	    PersonnageManager personnageManager = PersonnageManager.getInstance();
-	    this.gestionPersonnage = new GestionPersonnage(grille, personnageManager);
-	    
-	    Gardien gardien = (Gardien) gestionPersonnage.ajouterGardien();
-	    gestionPersonnage.ajouterGardien();
-	    gestionPersonnage.ajouterIntrus();
-	    gestionPersonnage.ajouterIntrus();
-	    gestionPersonnage.ajouterIntrus();
-	    gestionPersonnage.ajouterIntrus();
-	    gestionPersonnage.ajouterIntrus();
-	    gestionPersonnage.ajouterIntrus();
-	    personnageManager.setGardienActif(gardien);
-	    
-		dashboard = new GameDisplay(this.grille, personnageManager);
+
+	    this.manager = PersonnageManager.getInstance(grille);
+
+	    Gardien gardien = manager.ajouterGardien();
+	    manager.ajouterGardien();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.setGardienActif(gardien);
+
+		dashboard = new GameDisplay(this.grille, manager);
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
-		
+
 		JTextField textField = new JTextField();
         textField.addKeyListener(new KeyControls());
         contentPane.add(textField, BorderLayout.SOUTH);
-		
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
 		setPreferredSize(preferredSize);
 		setResizable(false);
-		
+
 	}
 
 	@Override
@@ -76,44 +73,53 @@ public class MainGUI extends JFrame implements Runnable{
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
 			}
+			manager.deplacerPersonnages();
 			dashboard.repaint();
 		}
-		
+
 	}
-	
+
 	public class KeyControls implements KeyListener{
-		
+
 		@Override
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
-		    Gardien gardienActif = gestionPersonnage.getPersonnageManager().getGardienActif();
-		    
+		    Gardien gardienActif = manager.getGardienActif();
+
 		    if (gardienActif == null) {
                 return;
             }
-		    
+
 		    switch (keyCode) {
-			
+
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.GAUCHE);
+	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
+	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.GAUCHE);
+	        	}
 	            break;
-	        
+
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.DROITE);
+	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
+	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.DROITE);
+	        	}
 	            break;
-	        
+
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.HAUT);
+	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
+	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.HAUT);
+	        	}
 	            break;
-	        
+
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	        	gestionPersonnage.deplacerPersonnage(gardienActif, Direction.BAS);
+	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
+	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.BAS);
+	        	}
 	            break;
 			}
 			dashboard.repaint();
@@ -121,14 +127,14 @@ public class MainGUI extends JFrame implements Runnable{
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			
+
 		}
 
 	}
-	
+
 }

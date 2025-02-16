@@ -1,6 +1,7 @@
 package engine.personnage;
 
 import engine.map.Coordonnee;
+import engine.personnage.deplacement.Deplacement;
 import engine.utilitaire.GenerateurNom;
 
 public abstract class Personnage {
@@ -9,6 +10,7 @@ public abstract class Personnage {
 	private String name;
 	private long tempsInvocation;
 	private int vitesse;
+    private Deplacement deplacement;
 	
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
@@ -39,4 +41,16 @@ public abstract class Personnage {
 	public void setVitesse(int vitesse) {
 		this.vitesse = vitesse;
 	}
+
+	public Deplacement getDeplacement() {
+		return deplacement;
+	}
+
+	public void setDeplacement(Deplacement deplacement) {
+		this.deplacement = deplacement;
+	}
+	
+	public void deplacer() {
+		deplacement.deplacer(this);
+    }
 }

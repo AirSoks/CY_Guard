@@ -8,7 +8,7 @@ public class ObstacleBuilder {
 	private int nbObstacle;
 	private int nbCaseDensiteObstacle;
 	private MapProbaCoordonnee mapProbaCoordonnee;
-	
+
 	public MapProbaCoordonnee getMapProbaCoordonnee() {
 		return mapProbaCoordonnee;
 	}
@@ -24,7 +24,7 @@ public class ObstacleBuilder {
 	public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
     }
-    
+
     public Obstacle getObstacle() {
 		return obstacle;
 	}
@@ -32,7 +32,7 @@ public class ObstacleBuilder {
     public void setDensite(int densite) {
         this.densite = densite;
     }
-    
+
     public int getDensite() {
 		return densite;
 	}
@@ -40,7 +40,7 @@ public class ObstacleBuilder {
     public void setNbObstacle(int nbObstacle) {
         this.nbObstacle = nbObstacle;
     }
-    
+
     public int getNbObstacle() {
 		return nbObstacle;
 	}
@@ -48,7 +48,7 @@ public class ObstacleBuilder {
     public void setNbCaseDensiteObstacle(int nbCaseDensiteObstacle) {
         this.nbCaseDensiteObstacle = nbCaseDensiteObstacle;
     }
-    
+
     public int getNbCaseDensiteObstacle() {
 		return nbCaseDensiteObstacle;
 	}

@@ -5,7 +5,11 @@ import engine.map.obstacle.Obstacle;
 import java.util.Objects;
 
 /**
- * Représente une case de la grille.
+ * Représente une case de la grille
+ * 
+ * @author GLP_19
+ * @see Coordonne
+ * @see Obstacle
  */
 public class Case {
 	private Coordonnee position;

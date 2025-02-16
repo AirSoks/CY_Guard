@@ -75,6 +75,9 @@ public class MainGUI extends JFrame implements Runnable{
 
 	}
 
+	/**
+	 * Boucle principale du jeu qui met à jour les déplacements des personnages
+	 */
 	@Override
 	public void run() {
 		while(true) {

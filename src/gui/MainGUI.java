@@ -26,7 +26,9 @@ import engine.personnage.deplacement.DeplacementManuel;
  */
 public class MainGUI extends JFrame implements Runnable{
 
-	// Dimension de la fenêtre du simulation
+	/**
+	 * Dimension de la fenêtre du simulation
+	 */
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 
 	private Grille grille; // Grille du simulation

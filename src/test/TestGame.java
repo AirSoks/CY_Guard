@@ -7,6 +7,7 @@ import gui.MainGUI;
  * Elle démarre le thread d'exécution.
  * 
  * @author GLP_19
+ * @see MainGUI
  */
 
 public class TestGame {

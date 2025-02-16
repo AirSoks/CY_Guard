@@ -5,6 +5,7 @@ package engine.map.obstacle;
  * Un arbre bloque la vision mais ne bloque pas le deplacement
  * 
  * @author GLP_19
+ * @see Obstacle
  */
 public class Arbre extends Obstacle{
 	

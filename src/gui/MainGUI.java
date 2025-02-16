@@ -23,6 +23,7 @@ import engine.personnage.deplacement.DeplacementManuel;
  * Il gère les interactions utilisateur
  * 
  * @author GLP_19
+ * @see GameDisplay
  */
 public class MainGUI extends JFrame implements Runnable{
 

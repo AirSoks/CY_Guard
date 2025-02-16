@@ -6,6 +6,7 @@ import java.util.List;
  * La relation entres deux cases
  * 
  * @author GLP_19
+ * @see Case
  */
 public class CasesRelation {
 	

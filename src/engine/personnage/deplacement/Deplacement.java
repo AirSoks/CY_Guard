@@ -6,8 +6,8 @@ import engine.personnage.Personnage;
  * Cette interface défini le déplacement des personnages
  * 
  * @author GLP_19
- * @see StrategieDeplacement
  * @see Personnage
+ * @see StrategieDeplacement
  */
 public interface Deplacement {
 	

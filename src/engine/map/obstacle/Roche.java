@@ -5,6 +5,7 @@ package engine.map.obstacle;
  * Une roche bloque la vision et le deplacement
  * 
  * @author GLP_19
+ * @see Obstacle
  */
 public class Roche extends Obstacle {
 	

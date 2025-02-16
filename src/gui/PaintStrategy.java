@@ -20,6 +20,7 @@ import engine.personnage.PersonnageManager;
  * Classe responsable de la gestion de l'affichage des élements de simulation
  * 
  * @author GLP_19
+ * @see GameDisplay
  */
 public class PaintStrategy {
 

@@ -10,9 +10,18 @@ import java.util.Objects;
  * @author GLP_19
  * @see Coordonne
  * @see Obstacle
+ * @see Grille
  */
 public class Case {
+	
+	/**
+	 * La coordonnée de la case dans la grille
+	 */
 	private Coordonnee position;
+	
+	/**
+	 * L'obstacle présent sur cette case 
+	 */
 	private Obstacle obstacle;
 	
 	public Case(Coordonnee position, Obstacle obstacle) {

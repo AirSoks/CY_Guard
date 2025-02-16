@@ -12,6 +12,10 @@ import java.util.List;
  * Elle crée une liste d'obstacles de différents types (Lac, Roche, Arbre) avec des valeurs aléatoire basées sur les paramètres de config de simulation
  * 
  * @author GLP_19
+ * @see ObstacleBuilder
+ * @see Obstacle
+ * @see ObstacleFactory
+ * @see GameConfiguration
  */
 public class ConfigurationMapAleatoire {
 

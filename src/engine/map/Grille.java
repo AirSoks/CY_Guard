@@ -2,12 +2,34 @@ package engine.map;
 
 import engine.map.obstacle.ObstacleFactory;
 
+/**
+ * Cette classe représente la grille du jeu.
+ * 
+ * @author GLP_19
+ * @see Case
+ * @see Coordonnee 
+ * @see Obstacle
+ */
 public class Grille {
 	
+	/**
+	 * Utilisation d'un singleton
+	 */
 	private static Grille instance;
 	
+	/**
+	 * La matrice de case qui représente la grille
+	 */
 	private Case[][] grille;
+	
+	/**
+	 * Le nombre de ligne de cette grille
+	 */
 	private int nbLigne;
+	
+	/**
+	 * Le nombre de colonne de cette grille
+	 */
 	private int nbColonne;
 	
 	private Grille(int nbLigne, int nbColonne) {

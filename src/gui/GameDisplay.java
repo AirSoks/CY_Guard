@@ -15,6 +15,7 @@ import engine.personnage.PersonnageManager;
  * @see Grille
  * @see PersonnageManager
  * @see PaintStrategy
+ * @see MainGUI
  */
 public class GameDisplay extends JPanel{
 

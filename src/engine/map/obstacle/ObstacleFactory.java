@@ -7,6 +7,7 @@ import java.util.List;
  * Cette classe permet de récupérer un obstacle par son type (nom)
  * 
  * @author GLP_19
+ * @see Obstacle
  */
 public class ObstacleFactory {
 	

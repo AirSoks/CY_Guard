@@ -4,6 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Cette classe représente la génération de nom aléatoire 
+ * 
+ * @author GLP_19
+ * @see Personnage
+ */
 public class GenerateurNom {
     private static final List<String> PRENOMS = Arrays.asList(
         "Emma", "Liam", "Olivia", "Noah", "Ava", "Quentin", "Sophia", "Redouane",

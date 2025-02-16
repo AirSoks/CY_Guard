@@ -7,7 +7,6 @@ import java.util.Objects;
  * 
  * @author GLP_19
  * @see Case
- * @see Grille
  * @see Personnage
  * 
  */

@@ -7,6 +7,7 @@ import java.util.Objects;
  * Un obstacle a un type, et peut bloquer la vision ou le deplacement
  * 
  * @author GLP_19
+ * @see ObstacleFactory
  */
 public abstract class Obstacle {
 	

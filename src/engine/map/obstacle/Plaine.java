@@ -5,6 +5,7 @@ package engine.map.obstacle;
  * Une plaine ne bloque ni la vision ni le deplacement
  * 
  * @author GLP_19
+ * @see Obstacle
  */
 public class Plaine extends Obstacle {
 	

@@ -6,6 +6,13 @@ import engine.map.Grille;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
+/**
+ * Cette classe représente le déplacement aléatoire d'un personnage
+ * 
+ * @author GLP_19
+ * @see Deplacement
+ * @see StrategieDeplacement
+ */
 public class DeplacementAleatoire extends StrategieDeplacement {
     private Direction direction;
 

@@ -10,11 +10,35 @@ import engine.personnage.deplacement.DeplacementAleatoire;
 import engine.personnage.deplacement.DeplacementManuel;
 import engine.utilitaire.MaximumTentativeAtteind;
 
+/**
+ * Cette classe sert à la gestion des personnages
+ * 
+ * @author GLP_19
+ * @see Personnage
+ * @see Intrus
+ * @see Gardien
+ * @see Grille
+ */
 public class PersonnageManager {
+	
+	/**
+	 * Utilisation d'un singleton
+	 */
 	private static PersonnageManager instance;
     
+    /**
+     * La liste des personnages présent dans le jeu
+     */
     private List<Personnage> personnages = new ArrayList<>();
+    
+    /**
+     * La grille du jeu
+     */
     private Grille grille;
+    
+    /**
+     * Le gardien actif, qui peut être controlé par le joueur
+     */
     private Gardien gardienActif;
     
     public static PersonnageManager getInstance(Grille grille) {
@@ -89,6 +113,9 @@ public class PersonnageManager {
         return gardiens;
     }
 	
+	/**
+	 * Déplace tout les personnages de la grille
+	 */
 	public void deplacerPersonnages() {
         for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
@@ -102,6 +129,11 @@ public class PersonnageManager {
         }
     }
 	
+    /**
+     * Ajoute un gardien sur la grille
+     * 
+     * @return Le gardien
+     */
     public Gardien ajouterGardien() {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Gardien gardien = new Gardien(coordonnee);
@@ -110,7 +142,12 @@ public class PersonnageManager {
 		personnages.add(gardien);
 		return gardien;
 	}
-	
+    
+    /**
+     * Ajoute un intrus sur la grille
+     * 
+     * @return L'intrus
+     */
 	public Intrus ajouterIntrus() {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Intrus intrus = new Intrus(coordonnee);
@@ -120,6 +157,11 @@ public class PersonnageManager {
 		return intrus;
 	}
 	
+	/**
+	 * Récupère une coordonnée aléatoire valide sur la grille
+	 * 
+	 * @return Une coordonnées aléatoire valide
+	 */
 	private Coordonnee getCoordonneeAleatoireValide() {
 	    int tentativeMax = 2*grille.getNbLigne()*grille.getNbColonne();
 	    for (int i = 0; i < tentativeMax; i++) {
@@ -137,6 +179,12 @@ public class PersonnageManager {
 	    return new Coordonnee(ligneAleatoire, colonneAleatoire);
 	}
 	
+	/**
+	 * Verifie si la coordonnée est valide pour y placer un personnage
+	 * 
+	 * @param coordonnee La coordonnée à vérifier
+	 * @return true si la coordonnée ne bloque pas l'apparition, false sinon
+	 */
 	private Boolean isCoordonneeValide(Coordonnee coordonnee) {
 		Case c = grille.getCase(coordonnee);
 		if (c != null && !c.getObstacle().isBloqueDeplacement()) {

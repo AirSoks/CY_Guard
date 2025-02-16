@@ -4,12 +4,41 @@ import engine.map.Coordonnee;
 import engine.personnage.deplacement.Deplacement;
 import engine.utilitaire.GenerateurNom;
 
+/**
+ * Personnage est une classe abstraite représentant un personnage dans la grille
+ * 
+ * @author GLP_19
+ * @see Gardien
+ * @see Intrus
+ * @see Coordonnee
+ * @see Deplacement
+ * 
+ */
 public abstract class Personnage {
 	
+	/**
+	 * La coordonnée du personnage
+	 */
 	private Coordonnee coordonnee;
+	
+	/**
+	 * Le nom du personnage
+	 */
 	private String name;
+	
+	/**
+	 * Le temps d'incocation du personnage
+	 */
 	private long tempsInvocation;
+	
+	/**
+	 * La vitesse du personnage
+	 */
 	private int vitesse;
+	
+    /**
+     * Le déplacement du personnage
+     */
     private Deplacement deplacement;
 	
 	public Personnage(Coordonnee coordonnee) {

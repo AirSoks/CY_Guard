@@ -31,10 +31,20 @@ public class MainGUI extends JFrame implements Runnable{
 	 */
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 
-	private Grille grille; // Grille du simulation
-	private PersonnageManager manager; // Gestionnaire des personnages
-
-	private GameDisplay dashboard; // L'interface d'affichage du simulation
+	/**
+	 * Grille du simulation
+	 */
+	private Grille grille;
+	
+	/**
+	 * Gestionnaire des personnages
+	 */
+	private PersonnageManager manager;
+	
+	/**
+	 * L'interface d'affichage du simulation
+	 */
+	private GameDisplay dashboard;
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);

@@ -14,15 +14,6 @@ import engine.personnage.PersonnageManager;
 public abstract class StrategieDeplacement implements Deplacement {
     private Grille grille;
     private PersonnageManager manager;
-    private Direction direction;
-
-    public Direction getDirection() {
-		return direction;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-	}
 
 	public StrategieDeplacement(PersonnageManager manager, Grille grille) {
         this.manager = manager;

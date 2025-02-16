@@ -7,9 +7,18 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
 public class DeplacementManuel extends StrategieDeplacement {
+	private Direction direction;
 
 	public DeplacementManuel(PersonnageManager manager, Grille grille) {
 		super(manager, grille);
+	}
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 	@Override
@@ -25,5 +34,4 @@ public class DeplacementManuel extends StrategieDeplacement {
 		contactPersonnage(nouvellePosition);
 		setDirection(null);
 	}
-
 }

@@ -51,6 +51,8 @@ public abstract class Personnage {
 	}
 	
 	public void deplacer() {
-		deplacement.deplacer(this);
+		if (deplacement != null) {
+			deplacement.deplacer(this);
+		}
     }
 }

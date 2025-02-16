@@ -3,10 +3,24 @@ package engine.map;
 import java.util.Objects;
 
 /**
- * Test
+ * Cette classe représente des coordonnées pour les cases et les personnages dans la grille
+ * 
+ * @author GLP_19
+ * @see Case
+ * @see Grille
+ * @see Personnage
+ * 
  */
 public class Coordonnee {
+	
+	/**
+	 * La coordonnée des abscisses
+	 */
 	private int ligne;
+	
+	/**
+	 * La coordonnée des ordonnées
+	 */
 	private int colonne;
 	
 	public Coordonnee(int ligne, int colonne) {

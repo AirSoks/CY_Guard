@@ -2,11 +2,42 @@ package engine.map.generation;
 
 import engine.map.obstacle.Obstacle;
 
+/**
+ * La classe utilitaire pour générer des obstacles
+ * 
+ * @author GLP_19
+ * @see ConfigurationMapAleatoire
+ * @see GrilleBuilder
+ * @see MapProbaCoordonnee
+ * 
+ */
 public class ObstacleBuilder {
+	
+	/**
+	 * L'obstacle à générer
+	 */
 	private Obstacle obstacle;
+	
+	/**
+	 * La densité de l'obstacle à créer
+	 * Plus la densité est faible plus les obstacles seront dispersé
+	 * Plus la densité est forte plus les obstacles seront rapproché 
+	 */
 	private int densite;
+	
+	/**
+	 * Le nombre d'obstacle à construire
+	 */
 	private int nbObstacle;
+	
+	/**
+	 * Le nombre de case adjacente où la densité va être appliqué
+	 */
 	private int nbCaseDensiteObstacle;
+	
+	/**
+	 * La map de coordonnées avec leur probabilité
+	 */
 	private MapProbaCoordonnee mapProbaCoordonnee;
 
 	public MapProbaCoordonnee getMapProbaCoordonnee() {

@@ -9,8 +9,8 @@ import engine.personnage.PersonnageManager;
 public class DeplacementManuel extends StrategieDeplacement {
 	private Direction direction;
 
-	public DeplacementManuel(PersonnageManager manager, Grille grille) {
-		super(manager, grille);
+	public DeplacementManuel(PersonnageManager personnages, Grille grille) {
+		super(personnages, grille);
 	}
 
 	public Direction getDirection() {

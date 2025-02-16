@@ -13,10 +13,10 @@ import engine.personnage.PersonnageManager;
 
 public abstract class StrategieDeplacement implements Deplacement {
     private Grille grille;
-    private PersonnageManager manager;
+    private PersonnageManager personnages;
 
-	public StrategieDeplacement(PersonnageManager manager, Grille grille) {
-        this.manager = manager;
+	public StrategieDeplacement(PersonnageManager personnages, Grille grille) {
+        this.personnages = personnages;
         this.grille = grille;
     }
 
@@ -28,16 +28,16 @@ public abstract class StrategieDeplacement implements Deplacement {
 		this.grille = grille;
 	}
 
-	public PersonnageManager getManager() {
-		return manager;
+	public PersonnageManager getPersonnage() {
+		return personnages;
 	}
 
-	public void setManager(PersonnageManager manager) {
-		this.manager = manager;
+	public void setPersonnage(PersonnageManager personnages) {
+		this.personnages = personnages;
 	}
 
 	public List<Personnage> getPersonnages() {
-        return manager.getPersonnages();
+        return personnages.getPersonnages();
     }
 
 	public Boolean isCoordonneeValide(Coordonnee coordonnee) {
@@ -49,11 +49,11 @@ public abstract class StrategieDeplacement implements Deplacement {
 	}
 
 	public void contactPersonnage(Coordonnee coordonnee) {
-		List<Gardien> listeGardien = manager.getGardiens(coordonnee);
-		List<Intrus> listeIntrus = manager.getIntrus(coordonnee);
+		List<Gardien> listeGardien = personnages.getGardiens(coordonnee);
+		List<Intrus> listeIntrus = personnages.getIntrus(coordonnee);
 		if (listeGardien.size() >= 1 && listeIntrus.size() >= 1) {
 			for (Intrus intrus : listeIntrus) {
-				manager.retirerPersonnage(intrus);
+				personnages.retirerPersonnage(intrus);
 			}
 		}
 	}

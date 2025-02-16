@@ -8,12 +8,12 @@ import java.util.Map;
 import engine.map.Coordonnee;
 
 public class MapProbaCoordonnee {
+
 	private Map<Double, List<Coordonnee>> mapProbaCoordonnee = new HashMap<>();
 
 	public MapProbaCoordonnee() {
         this.mapProbaCoordonnee = new HashMap<>();
     }
-
 	public List<Double> getListeProbabilites() {
         return new ArrayList<>(mapProbaCoordonnee.keySet());
     }

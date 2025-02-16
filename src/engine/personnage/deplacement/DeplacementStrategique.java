@@ -6,8 +6,8 @@ import engine.personnage.PersonnageManager;
 
 public class DeplacementStrategique extends StrategieDeplacement{
 
-	public DeplacementStrategique(PersonnageManager manager, Grille grille) {
-		super(manager, grille);
+	public DeplacementStrategique(PersonnageManager personnages, Grille grille) {
+		super(personnages, grille);
 		// TODO Auto-generated constructor stub
 	}
 

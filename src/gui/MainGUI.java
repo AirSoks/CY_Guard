@@ -40,7 +40,7 @@ public class MainGUI extends JFrame implements Runnable{
 	}
 
 	/**
-	 * Initialise l'interface graphique et les elements du jeu
+	 * Initialise l'interface graphique et les élements du jeu
 	 */
 	private void init() {
 		Container contentPane = getContentPane();

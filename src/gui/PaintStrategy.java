@@ -16,8 +16,19 @@ import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
+/**
+ * Classe responsable de la gestion de l'affichage des élements de jeu
+ * 
+ * @author GLP_19
+ */
 public class PaintStrategy {
 
+	/**
+	 * Dessine la grille avec les obstacles
+	 * 
+	 * @param grille La grille de jeu contenant les obstacles
+	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
+	 */
 	public void paint(Grille grille, Graphics graphics) {
 
 		int blocksize = GameConfiguration.BLOCK_SIZE;
@@ -47,6 +58,12 @@ public class PaintStrategy {
 
 	}
 
+	/**
+	 * Dessine les personnages sur la grille
+	 * 
+	 * @param personnages La liste de personnages
+	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
+	 */
 	public void paint(PersonnageManager personnages, Graphics graphics) {
 		int blocksize = GameConfiguration.BLOCK_SIZE;
 

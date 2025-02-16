@@ -17,7 +17,7 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
 /**
- * Classe responsable de la gestion de l'affichage des élements de jeu
+ * Classe responsable de la gestion de l'affichage des élements de simulation
  * 
  * @author GLP_19
  */
@@ -26,7 +26,7 @@ public class PaintStrategy {
 	/**
 	 * Dessine la grille avec les obstacles
 	 * 
-	 * @param grille La grille de jeu contenant les obstacles
+	 * @param grille La grille de simulation contenant les obstacles
 	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
 	 */
 	public void paint(Grille grille, Graphics graphics) {

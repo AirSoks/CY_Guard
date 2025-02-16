@@ -19,20 +19,20 @@ import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementManuel;
 
 /**
- * Classe principale de l'interface graphique du jeu
+ * Classe principale de l'interface graphique du simulation
  * Il gère les interactions utilisateur
  * 
  * @author GLP_19
  */
 public class MainGUI extends JFrame implements Runnable{
 
-	// Dimension de la fenêtre du jeu
+	// Dimension de la fenêtre du simulation
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 
-	private Grille grille; // Grille du jeu
+	private Grille grille; // Grille du simulation
 	private PersonnageManager manager; // Gestionnaire des personnages
 
-	private GameDisplay dashboard; // L'interface d'affichage du jeu
+	private GameDisplay dashboard; // L'interface d'affichage du simulation
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);

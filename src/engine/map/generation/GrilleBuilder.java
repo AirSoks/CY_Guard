@@ -207,7 +207,7 @@ public class GrilleBuilder {
      * Vérifie si la case est entouré par au moins 2 lac
      * 
      * @param coordonneesAdjacentes Les coordonnées adjacentes à la coordonnée
-     * @returntrue si la case est entouré de lac, false sinon
+     * @return true si la case est entouré de lac, false sinon
      */
     private boolean caseEntoureLac(List<Coordonnee> coordonneesAdjacentes){
     	int nbLac = 0;

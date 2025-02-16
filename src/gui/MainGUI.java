@@ -18,20 +18,30 @@ import engine.personnage.Gardien;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementManuel;
 
+/**
+ * Classe principale de l'interface graphique du jeu
+ * Il gère les interactions utilisateur
+ * 
+ * @author GLP_19
+ */
 public class MainGUI extends JFrame implements Runnable{
 
+	// Dimension de la fenêtre du jeu
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 
-	private Grille grille;
-	private PersonnageManager manager;
+	private Grille grille; // Grille du jeu
+	private PersonnageManager manager; // Gestionnaire des personnages
 
-	private GameDisplay dashboard;
+	private GameDisplay dashboard; // L'interface d'affichage du jeu
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
 		init();
 	}
 
+	/**
+	 * Initialise l'interface graphique et les elements du jeu
+	 */
 	private void init() {
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -79,6 +89,9 @@ public class MainGUI extends JFrame implements Runnable{
 
 	}
 
+	/**
+	 * Classe interne pour gérer les contrôles clavier
+	 */
 	public class KeyControls implements KeyListener{
 
 		@Override

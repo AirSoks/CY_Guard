@@ -4,7 +4,7 @@ import gui.MainGUI;
 
 /**
  * Cette classe permet de tester la simulation du gardien de parc
- * Cette classe démarre le thread d'exécution.
+ * Elle démarre le thread d'exécution.
  * 
  * @author GLP_19
  */

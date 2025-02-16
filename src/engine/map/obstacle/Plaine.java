@@ -1,5 +1,11 @@
 package engine.map.obstacle;
 
+/**
+ * Represente un obstacle de type "Plaine"
+ * Une plaine ne bloque ni la vision ni le deplacement
+ * 
+ * @author GLP_19
+ */
 public class Plaine extends Obstacle {
 	
 	public Plaine() {

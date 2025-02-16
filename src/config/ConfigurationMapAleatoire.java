@@ -56,14 +56,7 @@ public class ConfigurationMapAleatoire {
 
         return obstacleBuilders;
     }
-	
-	/**
-	 * 
-	 * 
-	 * @param min
-	 * @param max
-	 * @return
-	 */
+
 	private static int getValeurAleatoire(int min, int max) {
 	    return min + (int) (Math.random() * (max - min + 1));
 	}

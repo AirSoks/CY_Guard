@@ -17,6 +17,7 @@ import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementManuel;
+import engine.personnage.deplacement.StrategieDeplacement;
 
 /**
  * Classe principale de l'interface graphique du simulation
@@ -114,41 +115,32 @@ public class MainGUI extends JFrame implements Runnable{
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
 		    Gardien gardienActif = manager.getGardienActif();
-
-		    if (gardienActif == null) {
-                return;
-            }
+		    if (gardienActif == null) { return; }
+		    StrategieDeplacement deplacement = (StrategieDeplacement) gardienActif.getDeplacement();
+		    if (!(deplacement instanceof DeplacementManuel)) { return; }
 
 		    switch (keyCode) {
 
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
-	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.GAUCHE);
-	        	}
+	        	((DeplacementManuel) deplacement).setDirection(Direction.GAUCHE);
 	            break;
 
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
-	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.DROITE);
-	        	}
+	        	((DeplacementManuel) deplacement).setDirection(Direction.DROITE);
 	            break;
 
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
-	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.HAUT);
-	        	}
+	        	((DeplacementManuel) deplacement).setDirection(Direction.HAUT);
 	            break;
 
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	        	if (gardienActif.getDeplacement() instanceof DeplacementManuel) {
-	        	    ((DeplacementManuel) gardienActif.getDeplacement()).setDirection(Direction.BAS);
-	        	}
+	        	((DeplacementManuel) deplacement).setDirection(Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();
@@ -163,7 +155,5 @@ public class MainGUI extends JFrame implements Runnable{
 		public void keyReleased(KeyEvent e) {
 
 		}
-
 	}
-
 }

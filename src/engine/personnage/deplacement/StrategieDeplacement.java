@@ -52,10 +52,6 @@ public abstract class StrategieDeplacement implements Deplacement {
 		this.personnages = personnages;
 	}
 
-	public List<Personnage> getPersonnages() {
-        return personnages.getPersonnages();
-    }
-
 	public Boolean isCoordonneeValide(Coordonnee coordonnee) {
 		Case c = grille.getCase(coordonnee);
 		if (c != null && !c.getObstacle().isBloqueDeplacement()) {

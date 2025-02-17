@@ -33,8 +33,8 @@ public class Gardien extends Personnage {
 		return nbIntrusCapture;
 	}
 
-	public void setNbIntrusCapture(int nbIntrusCapture) {
-		this.nbIntrusCapture = nbIntrusCapture;
+	public void addNbIntrusCapture() {
+		nbIntrusCapture ++;
 	}
 	
 	public void ajouterCible(Intrus cible) {

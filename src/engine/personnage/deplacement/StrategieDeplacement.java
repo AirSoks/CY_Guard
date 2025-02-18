@@ -71,8 +71,9 @@ public abstract class StrategieDeplacement implements Deplacement {
 		if (listeGardien.size() >= 1 && listeIntrus.size() >= 1) {
 			for (Intrus intrus : listeIntrus) {
 				personnages.retirerPersonnage(intrus);
+				listeGardien.getFirst().addNbIntrusCapture();
 			}
-			listeGardien.getFirst().addNbIntrusCapture();
+			
 		}
 	}
 }

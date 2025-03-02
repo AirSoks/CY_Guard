@@ -55,13 +55,13 @@ public abstract class Personnage {
 	}
 	
 	public Image getSprite() {
-	    String type = "intrus";
+	    String type = "i";
 
 	    if (this instanceof Gardien) {
-	        type = "guard";
+	        type = "g";
 	    }
 
-	    String fileName = "./images/" + type + dernierDirection.toLowerCase() + animationFrame + ".png";
+	    String fileName = "src/images/" + type + dernierDirection.toLowerCase() + animationFrame + ".png";
 	    return SimulationUtility.readImage(fileName);
 	}
 	

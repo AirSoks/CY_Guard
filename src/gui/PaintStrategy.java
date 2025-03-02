@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import config.GameConfiguration;
 import engine.map.Case;
@@ -66,20 +67,18 @@ public class PaintStrategy {
 	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
 	 */
 	public void paint(PersonnageManager personnages, Graphics graphics) {
-		int blocksize = GameConfiguration.BLOCK_SIZE;
+		int blockSize = GameConfiguration.BLOCK_SIZE;
 
 		for (Personnage personnage : personnages.getPersonnages()) {
 			Coordonnee coordonnee = personnage.getCoordonnee();
-	        int x = coordonnee.getColonne() * blocksize;
-	        int y = coordonnee.getLigne() * blocksize;
+	        int x = coordonnee.getColonne() * blockSize;
+	        int y = coordonnee.getLigne() * blockSize;
 
-	        if (personnage instanceof Gardien) {
-	            graphics.setColor(Color.pink);
-	        } else if (personnage instanceof Intrus) {
-	            graphics.setColor(Color.red);
+	        Image sprite = personnage.getSprite();
+
+	        if (sprite != null) {
+	            graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
 	        }
-
-	        graphics.fillRect(x, y, blocksize, blocksize);
 	    }
 	}
 }

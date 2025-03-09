@@ -29,6 +29,6 @@ public class ObstacleFactory {
         		return obstacle;
         	}
         }
-        return obstacles.getFirst(); // On récupère la Plaine par défaut
+        return obstacles.get(0); // On récupère la Plaine par défaut
     }
 }

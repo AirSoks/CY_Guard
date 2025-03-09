@@ -135,7 +135,15 @@ public class GrilleBuilder {
      */
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
     	List<Coordonnee> coordonnees = new ArrayList<>();
-    	List<Coordonnee> directions = new ArrayList<>(List.of(new Coordonnee(0,1), new Coordonnee(-1,0), new Coordonnee(0,-1), new Coordonnee(1,0)));
+    	Coordonnee coord1 = new Coordonnee(0, 1);
+        Coordonnee coord2 = new Coordonnee(-1, 0);
+        Coordonnee coord3 = new Coordonnee(0, -1);
+        Coordonnee coord4 = new Coordonnee(1, 0);
+        List<Coordonnee> directions = new ArrayList<>();
+        directions.add(coord1);
+        directions.add(coord2);
+        directions.add(coord3);
+        directions.add(coord4);
     	for (Coordonnee direction : directions) {
     		Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + direction.getLigne(), coordonnee.getColonne() + direction.getColonne());
     		Case caseAdjacente = grille.getCase(coordonneeAdjacente);

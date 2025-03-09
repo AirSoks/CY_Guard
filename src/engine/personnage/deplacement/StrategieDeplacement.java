@@ -4,6 +4,7 @@ import java.util.List;
 
 import engine.map.Case;
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.map.Grille;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
@@ -30,6 +31,39 @@ public abstract class StrategieDeplacement implements Deplacement {
      * La liste des personnages, si contact
      */
     private PersonnageManager personnages;
+    
+    private Direction direction;
+    
+    private int animationFrame = 1;
+    
+    private String derniereDirection;
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+		if (direction != null ) {
+			this.derniereDirection = direction.toString();
+		}
+	}
+	
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+    
+    public void changeAnimationFrame() {
+    	if (animationFrame == 1) {
+	        animationFrame = 2;
+	    } else {
+	        animationFrame = 1;
+	    }
+    }
+
+    public String getDernierDirection() {
+        return derniereDirection;
+    }
 
 	public StrategieDeplacement(PersonnageManager personnages, Grille grille) {
         this.personnages = personnages;
@@ -71,9 +105,8 @@ public abstract class StrategieDeplacement implements Deplacement {
 		if (listeGardien.size() >= 1 && listeIntrus.size() >= 1) {
 			for (Intrus intrus : listeIntrus) {
 				personnages.retirerPersonnage(intrus);
-				listeGardien.getFirst().addNbIntrusCapture();
+				listeGardien.get(0).addNbIntrusCapture();
 			}
-			
 		}
 	}
 }

@@ -15,6 +15,8 @@ import engine.personnage.PersonnageManager;
  */
 public class DeplacementAleatoire extends StrategieDeplacement {
 
+    Direction[] directions = Direction.values();
+
     public DeplacementAleatoire(PersonnageManager personnages, Grille grille) {
         super(personnages, grille);
     }
@@ -25,16 +27,17 @@ public class DeplacementAleatoire extends StrategieDeplacement {
             return;
         }
         
-        Direction[] directions = Direction.values();
         int randomDirection = getValeurAleatoire(directions.length);
-        Direction direction = directions[randomDirection];
+        setDirection(directions[randomDirection]);
         
-        Coordonnee nouvellePosition = direction.getCoordonnee(personnage.getCoordonnee());
+        Coordonnee nouvellePosition = getDirection().getCoordonnee(personnage.getCoordonnee());
         if (isCoordonneeValide(nouvellePosition)) {
             personnage.setCoordonnee(nouvellePosition);
         }
         
         contactPersonnage(nouvellePosition);
+        changeAnimationFrame();
+        setDirection(null);
     }
     
     private static int getValeurAleatoire(int value) {

@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import engine.map.Coordonnee;
 import engine.personnage.deplacement.Deplacement;
+import engine.personnage.deplacement.StrategieDeplacement;
 import engine.utilitaire.GenerateurNom;
 import engine.utilitaire.SimulationUtility;
 
@@ -43,10 +44,6 @@ public abstract class Personnage {
      * Le déplacement du personnage
      */
     private Deplacement deplacement;
-    
-    private int animationFrame = 1;
-    
-    private String dernierDirection = "BAS";
 	
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
@@ -56,22 +53,25 @@ public abstract class Personnage {
 	
 	public Image getSprite() {
 	    String type = "i";
-
 	    if (this instanceof Gardien) {
 	        type = "g";
 	    }
 
-	    String fileName = "src/images/" + type + dernierDirection.toLowerCase() + animationFrame + ".png";
-	    return SimulationUtility.readImage(fileName);
-	}
-	
-	public void movement(String direction) {
-		this.dernierDirection = direction;
-		if (animationFrame == 1) {
-	        animationFrame = 2;
-	    } else {
-	        animationFrame = 1;
+	    String direction = "BAS";
+	    int frame = 1;
+	    
+	    if (deplacement instanceof StrategieDeplacement strat) {
+	    	if (strat.getDernierDirection() != null ) {
+	    		direction = strat.getDernierDirection();
+	    	}
+	    	else {
+	    		direction = "BAS";
+	    	}
+	        frame = strat.getAnimationFrame();
 	    }
+
+	    String fileName = "src/images/" + type + direction.toLowerCase() + frame + ".png";
+	    return SimulationUtility.readImage(fileName);
 	}
 	
 	public Coordonnee getCoordonnee() {

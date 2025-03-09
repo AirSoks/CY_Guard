@@ -22,4 +22,12 @@ public enum Direction {
         int nouvelleColonne = coordonnee.getColonne() + this.deltaColonne;
 		return new Coordonnee(nouvelleLigne, nouvelleColonne);
 	}
+	
+	/**
+     * Retourne le nom de la direction.
+     * @return Une chaîne de caractères de la direction.
+     */
+    public String toString() {
+        return this.name();
+    }
 }

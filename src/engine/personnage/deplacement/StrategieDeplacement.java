@@ -45,7 +45,7 @@ public abstract class StrategieDeplacement implements Deplacement {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 		if (direction != null ) {
-			this.derniereDirection = direction.toString();
+			this.derniereDirection = direction.name();
 		}
 	}
 	

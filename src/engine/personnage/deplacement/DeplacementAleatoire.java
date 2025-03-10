@@ -28,16 +28,16 @@ public class DeplacementAleatoire extends StrategieDeplacement {
         }
         
         int randomDirection = getValeurAleatoire(directions.length);
-        setDirection(directions[randomDirection]);
+        Direction direction = directions[randomDirection];
         
-        Coordonnee nouvellePosition = getDirection().getCoordonnee(personnage.getCoordonnee());
+        updateAnimation(personnage, direction);
+        
+        Coordonnee nouvellePosition = direction.getCoordonnee(personnage.getCoordonnee());
         if (isCoordonneeValide(nouvellePosition)) {
             personnage.setCoordonnee(nouvellePosition);
         }
         
         contactPersonnage(nouvellePosition);
-        changeAnimationFrame();
-        setDirection(null);
     }
     
     private static int getValeurAleatoire(int value) {

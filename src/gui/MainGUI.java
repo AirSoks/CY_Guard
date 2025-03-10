@@ -16,8 +16,8 @@ import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
 import engine.personnage.PersonnageManager;
+import engine.personnage.deplacement.DeplacementIntelligent;
 import engine.personnage.deplacement.DeplacementManuel;
-import engine.personnage.deplacement.StrategieDeplacement;
 
 /**
  * Classe principale de l'interface graphique du simulation
@@ -66,7 +66,9 @@ public class MainGUI extends JFrame implements Runnable{
 	    this.manager = PersonnageManager.getInstance(grille);
 
 	    Gardien gardien = manager.ajouterGardien();
-	    manager.ajouterGardien();
+	    Gardien gardien2 = manager.ajouterGardien();
+	    DeplacementIntelligent deplacementintelligent = new DeplacementIntelligent(manager, grille);
+	    gardien2.setDeplacement(deplacementintelligent);
 	    manager.ajouterIntrus();
 	    manager.ajouterIntrus();
 	    manager.ajouterIntrus();
@@ -115,32 +117,33 @@ public class MainGUI extends JFrame implements Runnable{
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
 		    Gardien gardienActif = manager.getGardienActif();
-		    if (gardienActif == null) { return; }
-		    StrategieDeplacement deplacement = (StrategieDeplacement) gardienActif.getDeplacement();
-		    if (!(deplacement instanceof DeplacementManuel)) { return; }
+		    if (gardienActif == null) { 
+		    	return; 
+		    }
+		    if (!(gardienActif.getDeplacement() instanceof DeplacementManuel)) { return; }
 
 		    switch (keyCode) {
 
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	        	((DeplacementManuel) deplacement).setDirection(Direction.GAUCHE);
+	        	gardienActif.setDirection(Direction.GAUCHE);
 	            break;
 
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	        	((DeplacementManuel) deplacement).setDirection(Direction.DROITE);
+	        	gardienActif.setDirection(Direction.DROITE);
 	            break;
 
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	        	((DeplacementManuel) deplacement).setDirection(Direction.HAUT);
+	        	gardienActif.setDirection(Direction.HAUT);
 	            break;
 
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	        	((DeplacementManuel) deplacement).setDirection(Direction.BAS);
+	        	gardienActif.setDirection(Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();

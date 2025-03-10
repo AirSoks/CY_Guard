@@ -21,16 +21,17 @@ public class DeplacementManuel extends StrategieDeplacement {
 
 	@Override
 	public void deplacer(Personnage personnage) {
-		Direction direction = getDirection();
+		Direction direction = personnage.getDirection();
 		if (direction == null || personnage == null) {
             return;
         }
+		updateAnimation(personnage, direction);
+		
 		Coordonnee nouvellePosition = direction.getCoordonnee(personnage.getCoordonnee());
 		if (isCoordonneeValide(nouvellePosition)) {
 			personnage.setCoordonnee(nouvellePosition);
 		}
+		updateAnimation(personnage, null);
 		contactPersonnage(nouvellePosition);
-		changeAnimationFrame();
-		setDirection(null);
 	}
 }

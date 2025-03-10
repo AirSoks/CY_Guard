@@ -3,8 +3,8 @@ package engine.personnage;
 import java.awt.Image;
 
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
-import engine.personnage.deplacement.StrategieDeplacement;
 import engine.utilitaire.GenerateurNom;
 import engine.utilitaire.SimulationUtility;
 
@@ -44,6 +44,12 @@ public abstract class Personnage {
      * Le déplacement du personnage
      */
     private Deplacement deplacement;
+    
+    private int animationFrame = 1;
+    
+    private Direction direction = Direction.BAS;
+    
+    private String derniereDirection = "BAS";
 	
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
@@ -56,21 +62,8 @@ public abstract class Personnage {
 	    if (this instanceof Gardien) {
 	        type = "g";
 	    }
-
-	    String direction = "BAS";
-	    int frame = 1;
 	    
-	    if (deplacement instanceof StrategieDeplacement strat) {
-	    	if (strat.getDernierDirection() != null ) {
-	    		direction = strat.getDernierDirection();
-	    	}
-	    	else {
-	    		direction = "BAS";
-	    	}
-	        frame = strat.getAnimationFrame();
-	    }
-
-	    String fileName = "src/images/" + type + direction.toLowerCase() + frame + ".png";
+	    String fileName = "src/images/" + type + derniereDirection + animationFrame + ".png";
 	    return SimulationUtility.readImage(fileName);
 	}
 	
@@ -105,6 +98,33 @@ public abstract class Personnage {
 	public void setDeplacement(Deplacement deplacement) {
 		this.deplacement = deplacement;
 	}
+	
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+
+    public void switchAnimationFrame() {
+    	if (animationFrame == 1) {
+	        animationFrame = 2;
+	    } else {
+	        animationFrame = 1;
+	    }
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+        if (direction != null ) {
+			this.derniereDirection = direction.name();
+		}
+    }
+    
+    public String getDernierDirection() {
+        return derniereDirection;
+    }
 	
 	public void deplacer() {
 		if (deplacement != null) {

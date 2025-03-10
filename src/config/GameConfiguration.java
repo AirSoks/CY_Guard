@@ -40,4 +40,5 @@ public class GameConfiguration {
 	public static final int NB_CASE_DENSITE_ARBRE = 0;
 	
 	public static final boolean PERMET_DEPLACEMENT_DIAGONNAL = true;
+	public static final int NB_CASES_VISION = 5;
 }

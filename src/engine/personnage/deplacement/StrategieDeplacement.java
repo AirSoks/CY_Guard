@@ -32,37 +32,9 @@ public abstract class StrategieDeplacement implements Deplacement {
      */
     private PersonnageManager personnages;
     
-    private Direction direction;
-    
-    private int animationFrame = 1;
-    
-    private String derniereDirection;
-
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-		if (direction != null ) {
-			this.derniereDirection = direction.name();
-		}
-	}
-	
-    public int getAnimationFrame() {
-        return animationFrame;
-    }
-    
-    public void changeAnimationFrame() {
-    	if (animationFrame == 1) {
-	        animationFrame = 2;
-	    } else {
-	        animationFrame = 1;
-	    }
-    }
-
-    public String getDernierDirection() {
-        return derniereDirection;
+    protected void updateAnimation(Personnage personnage, Direction direction) {
+        personnage.setDirection(direction);
+        personnage.switchAnimationFrame();
     }
 
 	public StrategieDeplacement(PersonnageManager personnages, Grille grille) {

@@ -127,23 +127,23 @@ public class MainGUI extends JFrame implements Runnable{
 		    case KeyEvent.VK_LEFT: // Flèche gauche
 	        case KeyEvent.VK_Q:
 	        case KeyEvent.VK_A:
-	        	gardienActif.setDirection(Direction.GAUCHE);
+	        	gardienActif.getAnimation().setDirection(Direction.GAUCHE);
 	            break;
 
 	        case KeyEvent.VK_RIGHT: // Flèche droit
 	        case KeyEvent.VK_D:
-	        	gardienActif.setDirection(Direction.DROITE);
+	        	gardienActif.getAnimation().setDirection(Direction.DROITE);
 	            break;
 
 	        case KeyEvent.VK_UP: // Flèche haut
 	        case KeyEvent.VK_Z:
 	        case KeyEvent.VK_W:
-	        	gardienActif.setDirection(Direction.HAUT);
+	        	gardienActif.getAnimation().setDirection(Direction.HAUT);
 	            break;
 
 	        case KeyEvent.VK_DOWN: // Flèche bas
 	        case KeyEvent.VK_S:
-	        	gardienActif.setDirection(Direction.BAS);
+	        	gardienActif.getAnimation().setDirection(Direction.BAS);
 	            break;
 			}
 			dashboard.repaint();

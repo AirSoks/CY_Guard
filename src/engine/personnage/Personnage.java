@@ -3,7 +3,6 @@ package engine.personnage;
 import java.awt.Image;
 
 import engine.map.Coordonnee;
-import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
 import engine.utilitaire.GenerateurNom;
 import engine.utilitaire.SimulationUtility;
@@ -59,17 +58,7 @@ public abstract class Personnage {
 		this.coordonnee = coordonnee;
 		this.name = GenerateurNom.genererNom();
 		this.tempsInvocation = System.currentTimeMillis();
-		this.animation = new PersonnageAnimation();
-	}
-	
-	public Image getSprite() {
-	    String type = "i";
-	    if (this instanceof Gardien) {
-	        type = "g";
-	    }
-	    
-	    String fileName = "src/images/" + type + animation.getDerniereDirection() + animation.getAnimationFrame() + ".png";
-	    return SimulationUtility.readImage(fileName);
+		this.animation = new PersonnageAnimation(this);
 	}
 	
 	public Coordonnee getCoordonnee() {

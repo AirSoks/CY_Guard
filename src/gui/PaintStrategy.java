@@ -57,7 +57,6 @@ public class PaintStrategy {
 				 graphics.fillRect(col * blocksize, line * blocksize, blocksize, blocksize);
 			}
 		}
-
 	}
 
 	/**
@@ -68,17 +67,18 @@ public class PaintStrategy {
 	 */
 	public void paint(PersonnageManager personnages, Graphics graphics) {
 		int blockSize = GameConfiguration.BLOCK_SIZE;
-
 		for (Personnage personnage : personnages.getPersonnages()) {
-			Coordonnee coordonnee = personnage.getCoordonnee();
-	        int x = coordonnee.getColonne() * blockSize;
-	        int y = coordonnee.getLigne() * blockSize;
-
-	        Image sprite = personnage.getSprite();
-
-	        if (sprite != null) {
-	            graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
-	        }
-	    }
+			if (personnage != null) {
+				Coordonnee coordonnee = personnage.getCoordonnee();
+		        int x = coordonnee.getColonne() * blockSize;
+		        int y = coordonnee.getLigne() * blockSize;
+	
+		        Image sprite = personnage.getAnimation().getSprite();
+	
+		        if (sprite != null) {
+		            graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
+		       }
+			}
+		}
 	}
 }

@@ -1,6 +1,9 @@
 package engine.personnage;
 
+import java.awt.Image;
+
 import engine.map.Direction;
+import engine.utilitaire.SimulationUtility;
 
 public class PersonnageAnimation {
 	
@@ -10,10 +13,23 @@ public class PersonnageAnimation {
     
     private Direction derniereDirection;
     
-    public PersonnageAnimation() {
+    private String typePersonnage;
+    
+    public PersonnageAnimation(Personnage personnage) {
     	this.animationFrame = 1;
     	this.derniereDirection = Direction.BAS;
+    	typePersonnage = "i";
+	    if (personnage instanceof Gardien) {
+	    	typePersonnage = "g";
+	    }
     }
+    
+	public Image getSprite() {
+	    
+	    
+	    String fileName = "src/images/" + typePersonnage + getDerniereDirection() + getAnimationFrame() + ".png";
+	    return SimulationUtility.readImage(fileName);
+	}
     
     public int getAnimationFrame() {
         return animationFrame;

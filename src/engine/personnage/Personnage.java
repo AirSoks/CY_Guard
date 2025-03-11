@@ -45,16 +45,21 @@ public abstract class Personnage {
      */
     private Deplacement deplacement;
     
-    private int animationFrame = 1;
-    
-    private Direction direction = Direction.BAS;
-    
-    private String derniereDirection = "BAS";
+    private PersonnageAnimation animation;
 	
+	public PersonnageAnimation getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(PersonnageAnimation animation) {
+		this.animation = animation;
+	}
+
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
 		this.name = GenerateurNom.genererNom();
 		this.tempsInvocation = System.currentTimeMillis();
+		this.animation = new PersonnageAnimation();
 	}
 	
 	public Image getSprite() {
@@ -63,7 +68,7 @@ public abstract class Personnage {
 	        type = "g";
 	    }
 	    
-	    String fileName = "src/images/" + type + derniereDirection + animationFrame + ".png";
+	    String fileName = "src/images/" + type + animation.getDerniereDirection() + animation.getAnimationFrame() + ".png";
 	    return SimulationUtility.readImage(fileName);
 	}
 	
@@ -98,33 +103,6 @@ public abstract class Personnage {
 	public void setDeplacement(Deplacement deplacement) {
 		this.deplacement = deplacement;
 	}
-	
-    public int getAnimationFrame() {
-        return animationFrame;
-    }
-
-    public void switchAnimationFrame() {
-    	if (animationFrame == 1) {
-	        animationFrame = 2;
-	    } else {
-	        animationFrame = 1;
-	    }
-    }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-        if (direction != null ) {
-			this.derniereDirection = direction.name();
-		}
-    }
-    
-    public String getDernierDirection() {
-        return derniereDirection;
-    }
 	
 	public void deplacer() {
 		if (deplacement != null) {

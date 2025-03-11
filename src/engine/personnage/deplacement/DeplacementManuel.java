@@ -21,7 +21,7 @@ public class DeplacementManuel extends StrategieDeplacement {
 
 	@Override
 	public void deplacer(Personnage personnage) {
-		Direction direction = personnage.getDirection();
+		Direction direction = personnage.getAnimation().getDirection();
 		if (direction == null || personnage == null) {
             return;
         }

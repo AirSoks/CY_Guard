@@ -46,6 +46,13 @@ public class DeplacementIntelligent extends StrategieDeplacement {
 
         if (!intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
             gardien.retirerPremiereCible();
+
+            Intrus nouvelleCible = gardien.getPremiereCible();
+            if (nouvelleCible != null) {
+                deplacerVersCible(gardien, gardien.getCoordonnee(), nouvelleCible.getCoordonnee());
+                return;
+            }
+
             deplacementAleatoire.deplacer(gardien);
             return;
         }

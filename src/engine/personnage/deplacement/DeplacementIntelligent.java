@@ -82,22 +82,20 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         return false;
     }
     
-    private void deplacerVersCible(Personnage personnage, Coordonnee depart, Coordonnee objectif) {
+    private void deplacerVersCible(Gardien gardien, Coordonnee depart, Coordonnee objectif) {
         List<Direction> chemin = aStar(depart, objectif);
         if (!chemin.isEmpty()) {
             Direction direction = chemin.get(0);
-            updateAnimation(personnage, direction);
+            updateAnimation(gardien, direction);
             
             Coordonnee nouvellePosition = direction.getCoordonnee(depart);
             if (isCoordonneeValide(nouvellePosition)) {
-                personnage.setCoordonnee(nouvellePosition);
+            	gardien.setCoordonnee(nouvellePosition);
             }
             contactPersonnage(nouvellePosition);
         } else {
-            if (personnage instanceof Gardien) {
-                ((Gardien) personnage).retirerPremiereCible();
-            }
-            deplacementAleatoire.deplacer(personnage);
+            gardien.retirerPremiereCible();
+            deplacementAleatoire.deplacer(gardien);
         }
     }
 
@@ -118,21 +116,19 @@ public class DeplacementIntelligent extends StrategieDeplacement {
 
             for (Direction direction : Direction.values()) {
                 Coordonnee voisinCoord = direction.getCoordonnee(courant.coord);
-                if (!isCoordonneeValide(voisinCoord)) {
-                	continue;
-                }
-
+                if (!isCoordonneeValide(voisinCoord)) continue;
                 int nouveauCout = courant.coutActuel + 1;
-                Noeud noeudVoisin = noeudsDejaVisites.getOrDefault(voisinCoord, new Noeud(voisinCoord));
-                noeudsDejaVisites.put(voisinCoord, noeudVoisin);
 
-                if (nouveauCout < noeudVoisin.coutActuel) {
+                Noeud noeudVoisin = noeudsDejaVisites.get(voisinCoord);
+                if (noeudVoisin == null) {
+                    noeudVoisin = new Noeud(voisinCoord, courant, nouveauCout, nouveauCout + distanceManhattan(voisinCoord, objectif));
+                    noeudsDejaVisites.put(voisinCoord, noeudVoisin);
+                    noeudsAVisiter.add(noeudVoisin);
+                    
+                } else if (nouveauCout < noeudVoisin.coutActuel) {
                     noeudVoisin.parent = courant;
                     noeudVoisin.coutActuel = nouveauCout;
-                    noeudVoisin.coutTotal = noeudVoisin.coutActuel + distanceManhattan(voisinCoord, objectif);
-                    if (noeudsAVisiter.contains(noeudVoisin)) {
-                        noeudsAVisiter.remove(noeudVoisin);
-                    }
+                    noeudVoisin.coutTotal = nouveauCout + distanceManhattan(voisinCoord, objectif);
                     noeudsAVisiter.add(noeudVoisin);
                 }
             }
@@ -168,10 +164,6 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         Noeud parent;
         int coutActuel;
         int coutTotal;
-
-        Noeud(Coordonnee coord) {
-            this(coord, null, Integer.MAX_VALUE, Integer.MAX_VALUE);
-        }
 
         Noeud(Coordonnee coord, Noeud parent, int coutActuel, int coutTotal) {
             this.coord = coord;

@@ -1,6 +1,6 @@
 /**
  * 
  */
-module aaaaa {
+module CY_Guard {
 	requires java.desktop;
 }

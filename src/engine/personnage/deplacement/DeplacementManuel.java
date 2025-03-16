@@ -19,6 +19,11 @@ public class DeplacementManuel extends StrategieDeplacement {
 		super(personnages, grille);
 	}
 
+	/**
+     * Déplace le personnage dans la direction spécifiée.
+     *
+     * @param personnage Le personnage à déplacer.
+     */
 	@Override
 	public void deplacer(Personnage personnage) {
 		Direction direction = personnage.getDirection();

@@ -32,6 +32,11 @@ public abstract class StrategieDeplacement implements Deplacement {
      */
     private PersonnageManager personnages;
     
+    /** 
+     * Met à jour l'animation du personnage en fonction de la direction du mouvement.
+     * @param personnage La personnage dont l'animation doit être mise à jour.
+     * @param direction La nouvelle direction du personnage.
+     */
     protected void updateAnimation(Personnage personnage, Direction direction) {
         personnage.setDirection(direction);
         if (direction != null) {

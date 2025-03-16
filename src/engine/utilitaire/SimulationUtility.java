@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 */
 public class SimulationUtility {
 
-	
     /**
      * Cette classe retourne le fichier image appartir du chemin fourni dans le parametre
      * 

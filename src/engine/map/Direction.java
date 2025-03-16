@@ -3,6 +3,7 @@ package engine.map;
 /**
  * Cette classe represente les differentes directions possible dans le grille
  * Chaque direction est associée à un mouvement sur la ligne ou la colonne
+ * @author GLP_19
  */
 public enum Direction {
 	HAUT(-1,0),

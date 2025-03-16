@@ -6,6 +6,9 @@ import java.util.Map;
 import engine.map.Grille;
 import engine.personnage.PersonnageManager;
 
+/**
+ * Cette classe gère les différents types de déplacements pour les personnages.
+ */
 public class DeplacementFactory {
     private static final Map<String, Deplacement> deplacements = new HashMap<>();
 

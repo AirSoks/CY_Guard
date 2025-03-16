@@ -3,6 +3,7 @@ package engine.personnage.deplacement;
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;
+import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
@@ -23,40 +24,55 @@ public class DeplacementIntelligent extends StrategieDeplacement {
 
     public DeplacementIntelligent(PersonnageManager personnages, Grille grille) {
         super(personnages, grille);
-        
         this.deplacementAleatoire = new DeplacementAleatoire(personnages, grille);
     }
 
     @Override
     public void deplacer(Personnage personnage) {
-        if (personnage == null) {
+        if (personnage == null || !(personnage instanceof Gardien)) {
             return;
         }
 
-        Coordonnee depart = personnage.getCoordonnee();
-        Coordonnee objectif = trouverIntrus(depart);
+        Gardien gardien = (Gardien) personnage;
 
-        if (objectif == null) {
-            deplacementAleatoire.deplacer(personnage);
-        } else {
-            deplacerVersCible(personnage, depart, objectif);
+        rechercherEtAjouterCible(gardien);
+
+        Intrus cible = gardien.getPremiereCible();
+
+        if (cible == null) {
+            deplacementAleatoire.deplacer(gardien);
+            return;
         }
+
+        if (!intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
+            gardien.retirerPremiereCible();
+            deplacementAleatoire.deplacer(gardien);
+            return;
+        }
+
+        deplacerVersCible(gardien, gardien.getCoordonnee(), cible.getCoordonnee());
     }
 
-    private Coordonnee trouverIntrus(Coordonnee position) {
-        List<Personnage> personnages = getPersonnage().getPersonnages();
-        
-        for (Personnage p : personnages) {
+    private void rechercherEtAjouterCible(Gardien gardien) {
+        for (Personnage p : getPersonnage().getPersonnages()) {
             if (p instanceof Intrus) {
                 Coordonnee coordIntrus = p.getCoordonnee();
-                int distance = distanceManhattan(position, coordIntrus);
+                int distance = distanceManhattan(gardien.getCoordonnee(), coordIntrus);
                 
-                if (distance <= GameConfiguration.NB_CASES_VISION) {
-                    return coordIntrus;
+                if (distance <= GameConfiguration.NB_CASES_VISION && !gardien.getCibles().contains(p)) {
+                    gardien.ajouterCible((Intrus) p);
                 }
             }
         }
-        return null;
+    }
+    
+    private boolean intrusExiste(Coordonnee coordIntrus) {
+        for (Personnage p : getPersonnage().getPersonnages()) {
+            if (p instanceof Intrus && p.getCoordonnee().equals(coordIntrus)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     private void deplacerVersCible(Personnage personnage, Coordonnee depart, Coordonnee objectif) {
@@ -70,6 +86,11 @@ public class DeplacementIntelligent extends StrategieDeplacement {
                 personnage.setCoordonnee(nouvellePosition);
             }
             contactPersonnage(nouvellePosition);
+        } else {
+            if (personnage instanceof Gardien) {
+                ((Gardien) personnage).retirerPremiereCible();
+            }
+            deplacementAleatoire.deplacer(personnage);
         }
     }
 
@@ -90,19 +111,22 @@ public class DeplacementIntelligent extends StrategieDeplacement {
 
             for (Direction direction : Direction.values()) {
                 Coordonnee voisinCoord = direction.getCoordonnee(courant.coord);
-                if (!isCoordonneeValide(voisinCoord)) continue;
+                if (!isCoordonneeValide(voisinCoord)) {
+                	continue;
+                }
 
                 int nouveauCout = courant.coutActuel + 1;
                 Noeud noeudVoisin = noeudsDejaVisites.getOrDefault(voisinCoord, new Noeud(voisinCoord));
-                noeudsDejaVisites.putIfAbsent(voisinCoord, noeudVoisin);
+                noeudsDejaVisites.put(voisinCoord, noeudVoisin);
 
                 if (nouveauCout < noeudVoisin.coutActuel) {
                     noeudVoisin.parent = courant;
                     noeudVoisin.coutActuel = nouveauCout;
                     noeudVoisin.coutTotal = noeudVoisin.coutActuel + distanceManhattan(voisinCoord, objectif);
-                    if (!noeudsAVisiter.contains(noeudVoisin)) {
-                        noeudsAVisiter.add(noeudVoisin);
+                    if (noeudsAVisiter.contains(noeudVoisin)) {
+                        noeudsAVisiter.remove(noeudVoisin);
                     }
+                    noeudsAVisiter.add(noeudVoisin);
                 }
             }
         }
@@ -132,7 +156,8 @@ public class DeplacementIntelligent extends StrategieDeplacement {
     }
 
     private static class Noeud {
-        Coordonnee coord;
+
+		Coordonnee coord;
         Noeud parent;
         int coutActuel;
         int coutTotal;
@@ -147,5 +172,22 @@ public class DeplacementIntelligent extends StrategieDeplacement {
             this.coutActuel = coutActuel;
             this.coutTotal = coutTotal;
         }
+
+        @Override
+		public int hashCode() {
+			return Objects.hash(coord);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Noeud other = (Noeud) obj;
+			return Objects.equals(coord, other.coord);
+		}
     }
 }

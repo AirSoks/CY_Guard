@@ -33,7 +33,7 @@ public abstract class StrategieDeplacement implements Deplacement {
     private PersonnageManager personnages;
     
     protected void updateAnimation(Personnage personnage, Direction direction) {
-        personnage.getAnimation().setDirection(direction);
+        personnage.setDirection(direction);
         if (direction != null) {
             personnage.getAnimation().switchAnimationFrame();
         }

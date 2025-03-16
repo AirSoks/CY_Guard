@@ -3,6 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
 import config.GameConfiguration;
 import engine.map.Case;
@@ -66,19 +68,22 @@ public class PaintStrategy {
 	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
 	 */
 	public void paint(PersonnageManager personnages, Graphics graphics) {
-		int blockSize = GameConfiguration.BLOCK_SIZE;
-		for (Personnage personnage : personnages.getPersonnages()) {
-			if (personnage != null) {
-				Coordonnee coordonnee = personnage.getCoordonnee();
-		        int x = coordonnee.getColonne() * blockSize;
-		        int y = coordonnee.getLigne() * blockSize;
-	
-		        Image sprite = personnage.getAnimation().getSprite();
-	
-		        if (sprite != null) {
-		            graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
-		       }
-			}
-		}
+	    int blockSize = GameConfiguration.BLOCK_SIZE;
+
+	    List<Personnage> personnagesCopy = new ArrayList<>(personnages.getPersonnages());
+
+	    for (Personnage personnage : personnagesCopy) {
+	        if (personnage != null) {
+	            Coordonnee coordonnee = personnage.getCoordonnee();
+	            int x = coordonnee.getColonne() * blockSize;
+	            int y = coordonnee.getLigne() * blockSize;
+
+	            Image sprite = personnage.getAnimation().getSprite();
+
+	            if (sprite != null) {
+	                graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
+	            }
+	        }
+	    }
 	}
 }

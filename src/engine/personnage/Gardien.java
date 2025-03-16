@@ -26,19 +26,20 @@ public class Gardien extends Personnage {
 
 	public Gardien(Coordonnee coordonnee) {
 		super(coordonnee);
+		this.cibles = new LinkedList<>();
 		setVitesse(GameConfiguration.VITESSE_GARDIENS);
 	}
 	
-	public int getNbIntrusCapture() {
-		return nbIntrusCapture;
-	}
+    public int getNbIntrusCapture() {
+        return nbIntrusCapture;
+    }
 
-	public void addNbIntrusCapture() {
-		nbIntrusCapture ++;
-	}
-	
-	public void ajouterCible(Intrus cible) {
-        if (cible != null) {
+    public void addNbIntrusCapture() {
+        nbIntrusCapture++;
+    }
+
+    public void ajouterCible(Intrus cible) {
+        if (cible != null && !cibles.contains(cible)) {
             this.cibles.addLast(cible);
         }
     }
@@ -48,6 +49,10 @@ public class Gardien extends Personnage {
     }
 
     public Intrus retirerPremiereCible() {
-    	return this.cibles.pollFirst();
+        return this.cibles.pollFirst();
+    }
+    
+    public LinkedList<Intrus> getCibles() {
+        return this.cibles;
     }
 }

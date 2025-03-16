@@ -3,6 +3,7 @@ package engine.personnage;
 import java.awt.Image;
 
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
 import engine.utilitaire.GenerateurNom;
 import engine.utilitaire.SimulationUtility;
@@ -43,8 +44,10 @@ public abstract class Personnage {
      * Le déplacement du personnage
      */
     private Deplacement deplacement;
+
+	private PersonnageAnimation animation;
     
-    private PersonnageAnimation animation;
+    private Direction direction;
 	
 	public PersonnageAnimation getAnimation() {
 		return animation;
@@ -60,6 +63,17 @@ public abstract class Personnage {
 		this.tempsInvocation = System.currentTimeMillis();
 		this.animation = new PersonnageAnimation(this);
 	}
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+        if (direction != null ) {
+			this.animation.setDerniereDirection(direction);
+		}
+    }
 	
 	public Coordonnee getCoordonnee() {
 		return coordonnee;

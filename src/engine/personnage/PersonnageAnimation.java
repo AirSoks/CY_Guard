@@ -9,8 +9,6 @@ public class PersonnageAnimation {
 	
     private int animationFrame;
     
-    private Direction direction;
-    
     private Direction derniereDirection;
     
     private String typePersonnage;
@@ -25,8 +23,6 @@ public class PersonnageAnimation {
     }
     
 	public Image getSprite() {
-	    
-	    
 	    String fileName = "src/images/" + typePersonnage + getDerniereDirection() + getAnimationFrame() + ".png";
 	    return SimulationUtility.readImage(fileName);
 	}
@@ -42,19 +38,12 @@ public class PersonnageAnimation {
 	        animationFrame = 1;
 	    }
     }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-        if (direction != null ) {
-			this.derniereDirection = direction;
-		}
-    }
     
     public String getDerniereDirection() {
         return derniereDirection.name().toLowerCase();
     }
+
+	public void setDerniereDirection(Direction derniereDirection) {
+		this.derniereDirection = derniereDirection;
+	}
 }

@@ -6,7 +6,10 @@ import java.util.List;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
+import engine.personnage.deplacement.Deplacement;
 import engine.personnage.deplacement.DeplacementAleatoire;
+import engine.personnage.deplacement.DeplacementFactory;
+import engine.personnage.deplacement.DeplacementIntelligent;
 import engine.personnage.deplacement.DeplacementManuel;
 import engine.utilitaire.MaximumTentativeAtteind;
 
@@ -62,13 +65,11 @@ public class PersonnageManager {
 
 	public void setGardienActif(Gardien newGardienActif) {
 		if (this.gardienActif != null) {
-			DeplacementAleatoire deplacementAleatoire = new DeplacementAleatoire(this, grille);
-			this.gardienActif.setDeplacement(deplacementAleatoire);
+			this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
 		}
 		
 		this.gardienActif = newGardienActif;
-		DeplacementManuel deplacementManuel = new DeplacementManuel(this, grille);
-		this.gardienActif.setDeplacement(deplacementManuel);
+		this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
 	}
 
     public List<Personnage> getPersonnages() {
@@ -137,8 +138,7 @@ public class PersonnageManager {
     public Gardien ajouterGardien() {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Gardien gardien = new Gardien(coordonnee);
-		DeplacementAleatoire deplacement = new DeplacementAleatoire(this, grille);
-		gardien.setDeplacement(deplacement);
+		gardien.setDeplacement(DeplacementFactory.getDeplacement("Intelligent", this, grille));
 		personnages.add(gardien);
 		return gardien;
 	}
@@ -151,8 +151,7 @@ public class PersonnageManager {
 	public Intrus ajouterIntrus() {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Intrus intrus = new Intrus(coordonnee);
-		DeplacementAleatoire deplacement = new DeplacementAleatoire(this, grille);
-		intrus.setDeplacement(deplacement);
+		intrus.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
 		personnages.add(intrus);
 		return intrus;
 	}

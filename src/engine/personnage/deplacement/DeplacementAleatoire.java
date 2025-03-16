@@ -15,12 +15,20 @@ import engine.personnage.PersonnageManager;
  */
 public class DeplacementAleatoire extends StrategieDeplacement {
 
+	/**
+     * Tableau contenant toutes les directions possibles pour le déplacement aléatoire
+     */
     Direction[] directions = Direction.values();
 
     public DeplacementAleatoire(PersonnageManager personnages, Grille grille) {
         super(personnages, grille);
     }
     
+    /**
+     * Déplace le personnage dans une direction aléatoire.
+     *
+     * @param personnage Le personnage à déplacer
+     */
     @Override
     public void deplacer(Personnage personnage) {
         if (personnage == null) {

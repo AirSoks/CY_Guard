@@ -8,10 +8,28 @@ import engine.personnage.PersonnageManager;
 
 /**
  * Cette classe gère les différents types de déplacements pour les personnages.
+ * Factory permettant de créer et de gérer les instances de stratégies de déplacement.
+ *
+ * @author GLP_19
+ * @see DeplacementIntelligent
+ * @see DeplacementAleatoire
+ * @see DeplacementManuel
  */
 public class DeplacementFactory {
+	
+	/**
+     * Les instances de déplacement existantes (Singleton)
+     */
     private static final Map<String, Deplacement> deplacements = new HashMap<>();
 
+    /**
+     * Récupère une instance de stratégie de déplacement selon le type spécifié.
+     * Crée une nouvelle instance si elle n'existe pas déjà.
+     *
+     * @param type Type de déplacement ("Intelligent", "Aleatoire", "Manuel")
+     * @param personnages Gestionnaire des personnages du jeu
+     * @param grille Grille de jeu utilisée pour les déplacements
+     */
     public static Deplacement getDeplacement(String type, PersonnageManager personnages, Grille grille) {
         Deplacement deplacement = deplacements.get(type);
         

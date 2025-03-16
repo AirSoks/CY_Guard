@@ -1,12 +1,9 @@
 package engine.personnage;
 
-import java.awt.Image;
-
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
 import engine.utilitaire.GenerateurNom;
-import engine.utilitaire.SimulationUtility;
 
 /**
  * Personnage est une classe abstraite représentant un personnage dans la grille
@@ -45,8 +42,14 @@ public abstract class Personnage {
      */
     private Deplacement deplacement;
 
+    /**
+     * Les informations pour l'animation du personnage
+     */
 	private PersonnageAnimation animation;
     
+	/**
+     * La direction de son prochain déplacement
+     */
     private Direction direction;
 	
 	public PersonnageAnimation getAnimation() {

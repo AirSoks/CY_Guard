@@ -20,13 +20,23 @@ import config.GameConfiguration;
  * @see StrategieDeplacement
  */
 public class DeplacementIntelligent extends StrategieDeplacement {
+	
+	/**
+     * Instance d'un déplacement aléatoire
+     */
     private final DeplacementAleatoire deplacementAleatoire;
 
     public DeplacementIntelligent(PersonnageManager personnages, Grille grille) {
         super(personnages, grille);
         this.deplacementAleatoire = new DeplacementAleatoire(personnages, grille);
     }
-
+    
+    /**
+     * Déplace le personnage de manière intelligente vers une cible si elle existe.
+     * Si aucune cible n'est trouvée, un déplacement aléatoire est effectué.
+     *
+     * @param personnage Le personnage à déplacer (doit être un Gardien).
+     */
     @Override
     public void deplacer(Personnage personnage) {
         if (personnage == null || !(personnage instanceof Gardien)) {
@@ -60,6 +70,11 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         deplacerVersCible(gardien, gardien.getCoordonnee(), cible.getCoordonnee());
     }
 
+    /**
+     * Recherche et ajoute des cibles (Intrus) dans le champ de vision du gardien.
+     *
+     * @param gardien Le gardien pour lequel on recherche des cibles.
+     */
     private void rechercherEtAjouterCible(Gardien gardien) {
         for (Personnage p : getPersonnage().getPersonnages()) {
             if (p instanceof Intrus) {
@@ -82,8 +97,15 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         return false;
     }
     
-    private void deplacerVersCible(Gardien gardien, Coordonnee depart, Coordonnee objectif) {
-        List<Direction> chemin = aStar(depart, objectif);
+    /**
+     * Déplace le gardien vers la cible spécifiée en utilisant l'algorithme A*.
+     *
+     * @param gardien Le gardien à déplacer.
+     * @param depart La coordonnée de départ du gardien.
+     * @param objectif La coordonnée de la cible.
+     */
+    private void deplacerVersCible(Gardien gardien, Coordonnee depart, Coordonnee arrive) {
+        List<Direction> chemin = aStar(depart, arrive);
         if (!chemin.isEmpty()) {
             Direction direction = chemin.get(0);
             updateAnimation(gardien, direction);
@@ -98,19 +120,26 @@ public class DeplacementIntelligent extends StrategieDeplacement {
             deplacementAleatoire.deplacer(gardien);
         }
     }
-
-    private List<Direction> aStar(Coordonnee depart, Coordonnee objectif) {
+    
+    /**
+     * Implémente l'algorithme A* pour trouver le chemin optimal entre deux points.
+     *
+     * @param depart La coordonnée de départ.
+     * @param arrive La coordonnée d'arrivée.
+     * @return Une liste de directions représentant le chemin optimal.
+     */
+    private List<Direction> aStar(Coordonnee depart, Coordonnee arrive) {
         PriorityQueue<Noeud> noeudsAVisiter = new PriorityQueue<>(Comparator.comparingInt(n -> n.coutTotal));
         Map<Coordonnee, Noeud> noeudsDejaVisites = new HashMap<>();
 
-        Noeud noeudDepart = new Noeud(depart, null, 0, distanceManhattan(depart, objectif));
+        Noeud noeudDepart = new Noeud(depart, null, 0, distanceManhattan(depart, arrive));
         noeudsAVisiter.add(noeudDepart);
         noeudsDejaVisites.put(depart, noeudDepart);
 
         while (!noeudsAVisiter.isEmpty()) {
             Noeud courant = noeudsAVisiter.poll();
 
-            if (courant.coord.equals(objectif)) {
+            if (courant.coord.equals(arrive)) {
                 return construireChemin(courant);
             }
 
@@ -121,14 +150,14 @@ public class DeplacementIntelligent extends StrategieDeplacement {
 
                 Noeud noeudVoisin = noeudsDejaVisites.get(voisinCoord);
                 if (noeudVoisin == null) {
-                    noeudVoisin = new Noeud(voisinCoord, courant, nouveauCout, nouveauCout + distanceManhattan(voisinCoord, objectif));
+                    noeudVoisin = new Noeud(voisinCoord, courant, nouveauCout, nouveauCout + distanceManhattan(voisinCoord, arrive));
                     noeudsDejaVisites.put(voisinCoord, noeudVoisin);
                     noeudsAVisiter.add(noeudVoisin);
                     
                 } else if (nouveauCout < noeudVoisin.coutActuel) {
                     noeudVoisin.parent = courant;
                     noeudVoisin.coutActuel = nouveauCout;
-                    noeudVoisin.coutTotal = nouveauCout + distanceManhattan(voisinCoord, objectif);
+                    noeudVoisin.coutTotal = nouveauCout + distanceManhattan(voisinCoord, arrive);
                     noeudsAVisiter.add(noeudVoisin);
                 }
             }
@@ -157,7 +186,10 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         }
         throw new IllegalArgumentException("Impossible de trouver la direction de " + depart + " à " + arrivee);
     }
-
+    
+    /**
+     * Classe interne représentant un nœud dans l'algorithme A*.
+     */
     private static class Noeud {
 
 		Coordonnee coord;

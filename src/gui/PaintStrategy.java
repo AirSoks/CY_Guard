@@ -1,89 +1,42 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.GameConfiguration;
-import engine.map.Case;
-import engine.map.Coordonnee;
 import engine.map.Grille;
-import engine.map.obstacle.Arbre;
-import engine.map.obstacle.Lac;
-import engine.map.obstacle.Obstacle;
-import engine.map.obstacle.Roche;
-import engine.personnage.Gardien;
-import engine.personnage.Intrus;
-import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
+import gui.affichage.DessinerGrille;
+import gui.affichage.Dessiner;
+import gui.affichage.DessinerDeplacement;
+import gui.affichage.DessinerPersonnages;
 
-/**
- * Classe responsable de la gestion de l'affichage des élements de simulation
- * 
- * @author GLP_19
- * @see GameDisplay
- */
+
 public class PaintStrategy {
+	
+    private final List<Dessiner> dessins = new ArrayList<>();
 
-	/**
-	 * Dessine la grille avec les obstacles
-	 * 
-	 * @param grille La grille de simulation contenant les obstacles
-	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
-	 */
-	public void paint(Grille grille, Graphics graphics) {
+    public PaintStrategy(Grille grille, PersonnageManager personnageManager) {
+    	dessins.add(new DessinerGrille(grille));
+    	dessins.add(new DessinerPersonnages(personnageManager));
+        dessins.add(new DessinerDeplacement(personnageManager));
+    }
 
-		int blocksize = GameConfiguration.BLOCK_SIZE;
-		Case[][] cases = grille.getGrille();
-		int nbLigne = grille.getNbLigne();
-		int nbColonne = grille.getNbColonne();
+    public void enable(boolean active) {
+        for (Dessiner dessin : dessins) {
+            dessin.enable();
+        }
+    }
+    
+    public void disable(boolean active) {
+        for (Dessiner dessin : dessins) {
+            dessin.disable();
+        }
+    }
 
-		for (int line = 0; line < nbLigne; line++) {
-			for (int col = 0; col < nbColonne; col++) {
-				Case cell = cases[line][col];
-				Obstacle obstacle = cell.getObstacle();
-
-
-				 if (obstacle instanceof Arbre) {
-	                    graphics.setColor(new Color(43, 139, 27));
-				 } else if (obstacle instanceof Lac) {
-	                    graphics.setColor(Color.blue);
-				 } else if (obstacle instanceof Roche) {
-	                    graphics.setColor(Color.gray);
-				 } else {
-	                    graphics.setColor(Color.yellow);
-				 }
-
-				 graphics.fillRect(col * blocksize, line * blocksize, blocksize, blocksize);
-			}
-		}
-	}
-
-	/**
-	 * Dessine les personnages sur la grille
-	 * 
-	 * @param personnages La liste de personnages
-	 * @param graphics L'objet Graphics utilisé pour le rendu graphique 
-	 */
-	public void paint(PersonnageManager personnages, Graphics graphics) {
-	    int blockSize = GameConfiguration.BLOCK_SIZE;
-
-	    List<Personnage> personnagesCopy = new ArrayList<>(personnages.getPersonnages());
-
-	    for (Personnage personnage : personnagesCopy) {
-	        if (personnage != null) {
-	            Coordonnee coordonnee = personnage.getCoordonnee();
-	            int x = coordonnee.getColonne() * blockSize;
-	            int y = coordonnee.getLigne() * blockSize;
-
-	            Image sprite = personnage.getAnimation().getSprite();
-
-	            if (sprite != null) {
-	                graphics.drawImage(sprite, x, y, blockSize, blockSize, null);
-	            }
-	        }
-	    }
-	}
+    public void paint(Graphics g) {
+        for (Dessiner dessin : dessins) {
+        	dessin.paint(g);
+        }
+    }
 }

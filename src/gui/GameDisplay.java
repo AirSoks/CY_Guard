@@ -17,28 +17,18 @@ import engine.personnage.PersonnageManager;
  * @see PaintStrategy
  * @see MainGUI
  */
-public class GameDisplay extends JPanel{
+@SuppressWarnings("serial")
+public class GameDisplay extends JPanel {
 
-	private Grille grille;
-	private PersonnageManager personnages;
+    private final PaintStrategy paintStrategy;
 
-	private PaintStrategy paintStrategy = new PaintStrategy();
+    public GameDisplay(Grille grille, PersonnageManager personnages) {
+        this.paintStrategy = new PaintStrategy(grille, personnages);
+    }
 
-	public GameDisplay(Grille grille, PersonnageManager personnages) {
-		this.grille = grille;
-		this.personnages = personnages;
-	}
-
-	/**
-	 * Méthode de dessin appelée lors du rafraîchissement de l'interface
-	 * 
-	 * @param g L'objet Graphics utilisé pour dessiner
-	 */
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		paintStrategy.paint(grille, g);
-		paintStrategy.paint(personnages, g);
-	}
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        paintStrategy.paint(g);
+    }
 }

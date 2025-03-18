@@ -25,6 +25,7 @@ import engine.personnage.deplacement.DeplacementManuel;
  * @author GLP_19
  * @see GameDisplay
  */
+@SuppressWarnings("serial")
 public class MainGUI extends JFrame implements Runnable{
 
 	/**

@@ -6,11 +6,7 @@ import java.util.List;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
-import engine.personnage.deplacement.Deplacement;
-import engine.personnage.deplacement.DeplacementAleatoire;
 import engine.personnage.deplacement.DeplacementFactory;
-import engine.personnage.deplacement.DeplacementIntelligent;
-import engine.personnage.deplacement.DeplacementManuel;
 import engine.utilitaire.MaximumTentativeAtteind;
 
 /**
@@ -73,7 +69,7 @@ public class PersonnageManager {
 	}
 
     public List<Personnage> getPersonnages() {
-        return this.personnages;
+        return new ArrayList<>(personnages);
     }
     
     public List<Intrus> getIntrus() {

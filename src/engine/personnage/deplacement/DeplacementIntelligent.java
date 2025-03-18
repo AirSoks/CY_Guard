@@ -21,6 +21,12 @@ import config.GameConfiguration;
  */
 public class DeplacementIntelligent extends StrategieDeplacement {
 	
+	private List<Coordonnee> cheminCalcule = new ArrayList<>();
+
+    public List<Coordonnee> getCheminCalcule() {
+        return new ArrayList<>(cheminCalcule);
+    }
+    
 	/**
      * Instance d'un déplacement aléatoire
      */
@@ -39,35 +45,44 @@ public class DeplacementIntelligent extends StrategieDeplacement {
      */
     @Override
     public void deplacer(Personnage personnage) {
-        if (personnage == null || !(personnage instanceof Gardien)) {
+        if (!(personnage instanceof Gardien gardien)) {
             return;
         }
-
-        Gardien gardien = (Gardien) personnage;
 
         rechercherEtAjouterCible(gardien);
 
         Intrus cible = gardien.getPremiereCible();
 
-        if (cible == null) {
-            deplacementAleatoire.deplacer(gardien);
-            return;
-        }
-
-        if (!intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
-            gardien.retirerPremiereCible();
-
-            Intrus nouvelleCible = gardien.getPremiereCible();
-            if (nouvelleCible != null) {
-                deplacerVersCible(gardien, gardien.getCoordonnee(), nouvelleCible.getCoordonnee());
+        if (cible == null || !intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
+            if (cible != null) {
+                gardien.retirerPremiereCible();
+            }
+            
+            cible = trouverNouvelleCibleValide(gardien);
+            
+            if (cible == null) {
+                deplacementAleatoire.deplacer(gardien);
+                cheminCalcule = new ArrayList<>();
                 return;
             }
-
-            deplacementAleatoire.deplacer(gardien);
-            return;
         }
-
+        
         deplacerVersCible(gardien, gardien.getCoordonnee(), cible.getCoordonnee());
+    }
+
+    private Intrus trouverNouvelleCibleValide(Gardien gardien) {
+        Intrus cible;
+        do {
+            cible = gardien.getPremiereCible();
+            if (cible == null) {
+                return null;
+            }
+            if (!intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
+                gardien.retirerPremiereCible();
+            } else {
+                return cible;
+            }
+        } while (true);
     }
 
     /**
@@ -97,6 +112,23 @@ public class DeplacementIntelligent extends StrategieDeplacement {
         return false;
     }
     
+	/**
+	 * Calcule et renvoie le chemin actuel du gardien vers sa cible.
+	 *
+	 * @param gardien Le gardien dont on veut calculer le chemin
+	 * @return Une liste de coordonnées représentant le chemin, ou une liste vide si aucun chemin n'est trouvé
+	 */
+	public List<Coordonnee> calculerCheminActuel(Gardien gardien) {
+	    Intrus cible = gardien.getPremiereCible();
+	
+	    if (cible == null || !intrusExiste(cible.getCoordonnee()) || !isCoordonneeValide(cible.getCoordonnee())) {
+	        return new ArrayList<>();
+	    }
+	
+	    List<Direction> directions = aStar(gardien.getCoordonnee(), cible.getCoordonnee());
+	    return convertirDirectionsEnCoordonnees(gardien.getCoordonnee(), directions);
+	}
+    
     /**
      * Déplace le gardien vers la cible spécifiée en utilisant l'algorithme A*.
      *
@@ -105,19 +137,23 @@ public class DeplacementIntelligent extends StrategieDeplacement {
      * @param objectif La coordonnée de la cible.
      */
     private void deplacerVersCible(Gardien gardien, Coordonnee depart, Coordonnee arrive) {
-        List<Direction> chemin = aStar(depart, arrive);
-        if (!chemin.isEmpty()) {
-            Direction direction = chemin.get(0);
+        List<Direction> directions = aStar(depart, arrive);
+        
+        if (!directions.isEmpty()) {
+            Direction direction = directions.get(0);
             updateAnimation(gardien, direction);
             
             Coordonnee nouvellePosition = direction.getCoordonnee(depart);
             if (isCoordonneeValide(nouvellePosition)) {
-            	gardien.setCoordonnee(nouvellePosition);
+                gardien.setCoordonnee(nouvellePosition);
+                
+                this.cheminCalcule = calculerCheminActuel(gardien);
             }
             contactPersonnage(nouvellePosition);
         } else {
             gardien.retirerPremiereCible();
             deplacementAleatoire.deplacer(gardien);
+            this.cheminCalcule = new ArrayList<>();
         }
     }
     
@@ -185,6 +221,19 @@ public class DeplacementIntelligent extends StrategieDeplacement {
             }
         }
         throw new IllegalArgumentException("Impossible de trouver la direction de " + depart + " à " + arrivee);
+    }
+    
+    private List<Coordonnee> convertirDirectionsEnCoordonnees(Coordonnee depart, List<Direction> directions) {
+        List<Coordonnee> chemin = new ArrayList<>();
+        Coordonnee current = depart;
+        chemin.add(current); // Ajouter la position initiale
+        
+        for (Direction dir : directions) {
+            current = dir.getCoordonnee(current);
+            chemin.add(current);
+        }
+        
+        return chemin;
     }
     
     /**

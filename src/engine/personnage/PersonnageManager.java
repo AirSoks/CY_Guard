@@ -11,6 +11,7 @@ import engine.personnage.deplacement.DeplacementAleatoire;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.deplacement.DeplacementIntelligent;
 import engine.personnage.deplacement.DeplacementManuel;
+import engine.personnage.deplacement.DeplacementFactory;
 import engine.utilitaire.MaximumTentativeAtteind;
 
 /**
@@ -73,7 +74,7 @@ public class PersonnageManager {
 	}
 
     public List<Personnage> getPersonnages() {
-        return this.personnages;
+        return new ArrayList<>(personnages);
     }
     
     public List<Intrus> getIntrus() {

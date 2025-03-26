@@ -10,11 +10,11 @@ import engine.personnage.Gardien;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.Deplacement;
-import engine.personnage.deplacement.DeplacementIntelligent;
+import engine.personnage.deplacement.DeplacementPoursuite;
 
 public class DessinerDeplacement implements Dessiner {
 	
-    private final PersonnageManager personnageManager;
+    private PersonnageManager personnageManager;
     private boolean enabled = true;
 
     public DessinerDeplacement(PersonnageManager personnageManager) {
@@ -28,30 +28,9 @@ public class DessinerDeplacement implements Dessiner {
         for (Personnage personnage : personnageManager.getPersonnages()) {
             Deplacement deplacement = personnage.getDeplacement();
 
-            if (deplacement instanceof DeplacementIntelligent && personnage instanceof Gardien) {
-
-                DeplacementIntelligent intelligent = (DeplacementIntelligent) deplacement;
-                List<Coordonnee> chemin = intelligent.calculerCheminActuel((Gardien) personnage);
-                
-                g.setColor(new Color(255, 0, 0, 100));
-                for (Coordonnee coord : chemin) {
-                    int x = coord.getColonne() * blockSize;
-                    int y = coord.getLigne() * blockSize;
-                    g.fillRect(x, y, blockSize, blockSize);
-                }
+            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
+            	
             } 
-//            else if (deplacement instanceof DeplacementManuel) {
-//
-//                Direction direction = personnage.getDirection();
-//                if (direction != null) {
-//                    Coordonnee cible = direction.getCoordonnee(personnage.getCoordonnee());
-//                    int x = cible.getColonne() * blockSize;
-//                    int y = cible.getLigne() * blockSize;
-//
-//                    g.setColor(new Color(0, 255, 0, 100));
-//                    g.fillRect(x, y, blockSize, blockSize);
-//                }
-//            }
         }
     }
 

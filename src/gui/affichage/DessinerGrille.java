@@ -12,7 +12,7 @@ import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
 
 public class DessinerGrille implements Dessiner {
-    private final Grille grille;
+    private Grille grille;
     private boolean enabled = true;
 
     public DessinerGrille(Grille grille) {

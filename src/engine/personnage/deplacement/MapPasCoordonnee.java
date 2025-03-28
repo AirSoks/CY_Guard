@@ -78,7 +78,7 @@ public class MapPasCoordonnee {
 		if (pasActuel <= 0 && coordonneeActuel == null) {
 			return false;
 		}
-		List<Coordonnee> coordonnees = getCoordonneesFromPas(pasActuel -1);
+		List<Coordonnee> coordonnees = getCoordonneesFromPas(pasActuel - 1);
 		if (coordonnees.contains(coordonneeActuel)) {
 			return true;
 		}

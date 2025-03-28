@@ -32,11 +32,6 @@ public abstract class Personnage {
 	 */
 	private long tempsInvocation;
 	
-	/**
-	 * La vitesse du personnage
-	 */
-	private int vitesse;
-	
     /**
      * Le déplacement du personnage
      */
@@ -51,7 +46,7 @@ public abstract class Personnage {
      * La direction de son prochain déplacement
      */
     private Direction direction;
-	
+    
 	public PersonnageAnimation getAnimation() {
 		return animation;
 	}
@@ -92,14 +87,6 @@ public abstract class Personnage {
 
 	public long getTempsInvocation() {
 		return tempsInvocation;
-	}
-	
-	public int getVitesse() {
-		return vitesse;
-	}
-	
-	public void setVitesse(int vitesse) {
-		this.vitesse = vitesse;
 	}
 
 	public Deplacement getDeplacement() {

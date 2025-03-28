@@ -1,6 +1,5 @@
 package engine.personnage;
 
-import config.GameConfiguration;
 import engine.map.Coordonnee;
 
 import java.util.LinkedList;
@@ -27,7 +26,6 @@ public class Gardien extends Personnage {
 	public Gardien(Coordonnee coordonnee) {
 		super(coordonnee);
 		this.cibles = new LinkedList<>();
-		setVitesse(GameConfiguration.VITESSE_GARDIENS);
 	}
 	
     public int getNbIntrusCapture() {

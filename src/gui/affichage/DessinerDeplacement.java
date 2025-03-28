@@ -23,6 +23,7 @@ public class DessinerDeplacement implements Dessiner {
 
     @Override
     public void paint(Graphics g) {
+    	if (!enabled) return;
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {

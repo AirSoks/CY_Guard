@@ -7,11 +7,12 @@ import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
+import engine.personnage.Vision;
 
 import java.util.*;
 
 /**
- * Cette classe représente le déplacement intelligent d'un personnage utilisant l'algorithme A*
+ * Cette classe représente le déplacement poursuite d'un gardien
  * 
  * @author GLP_19
  * @see Deplacement
@@ -22,7 +23,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	private List<Coordonnee> chemin = new ArrayList<>();
 	
 	private MapPasCoordonnee mapPasCoordonnee = new MapPasCoordonnee();
-    
+
 	/**
      * Instance d'un déplacement aléatoire
      */
@@ -30,7 +31,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 
     public DeplacementPoursuite(PersonnageManager personnages, Grille grille) {
         super(personnages, grille);
-        this.deplacementAleatoire = new DeplacementAleatoire(personnages, grille);
+        this.deplacementAleatoire = (DeplacementAleatoire) DeplacementFactory.getDeplacement("Aleatoire", personnages, grille);
     }
     
     public List<Coordonnee> getChemin() {
@@ -38,7 +39,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
     }
     
     /**
-     * Déplace le personnage de manière intelligente vers une cible si elle existe.
+     * Déplace le personnage de manière à poursuivre une cible.
      * Si aucune cible n'est trouvée, un déplacement aléatoire est effectué.
      *
      * @param personnage Le personnage à déplacer (doit être un Gardien).
@@ -76,13 +77,15 @@ public class DeplacementPoursuite extends StrategieDeplacement {
                 }
             }
             pas++;
+            System.out.println(pas);
         }
         
         this.chemin = trouverChemin(arrivee, pas - 1);
         
-        if (!chemin.isEmpty()) {
+        if (chemin != null && !chemin.isEmpty()) {
         	personnage.setCoordonnee(chemin.get(0));
         }
+        return;
     }
 
 	/**
@@ -93,7 +96,6 @@ public class DeplacementPoursuite extends StrategieDeplacement {
      */
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee, int pasActuel) {
 		List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
 				if (i == 0 && j == 0) { continue; }
@@ -111,11 +113,10 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	}
     
     private Intrus getCible(Gardien gardien) {
-		// TODO Auto-generated method stub
-		return null;
+		Intrus cible = gardien.getPremiereCible();
+		return cible;
 	}
     
-
 	private List<Coordonnee> trouverChemin(Coordonnee arrivee, int pas) {
 		// TODO Auto-generated method stub
 		return null;

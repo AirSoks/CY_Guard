@@ -44,7 +44,7 @@ public class PersonnageAnimation {
      * @return L'image à afficher pour le personnage
      */
 	public Image getSprite() {
-	    String fileName = "src/images/" + typePersonnage + getDerniereDirection() + getAnimationFrame() + ".png";
+	    String fileName = "src/images/sprites/" + typePersonnage + getDerniereDirection() + getAnimationFrame() + ".png";
 	    return SimulationUtility.readImage(fileName);
 	}
     

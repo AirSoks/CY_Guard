@@ -59,6 +59,6 @@ public class Coordonnee {
 	
 	@Override
 	public String toString() {
-	    return "Coordonnee [ligne=" + ligne + ", colonne=" + colonne + "]";
+	    return "[ligne=" + ligne + ", colonne=" + colonne + "]";
 	}
 }

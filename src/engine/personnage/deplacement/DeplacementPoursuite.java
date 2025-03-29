@@ -2,6 +2,7 @@ package engine.personnage.deplacement;
 
 import engine.map.Case;
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.map.Grille;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
@@ -68,6 +69,11 @@ public class DeplacementPoursuite extends StrategieDeplacement {
         
         while (!cibleTrouvee) {
             List<Coordonnee> coordonneesActuelles = mapPasCoordonnee.getCoordonneesFromPas(pas - 1);
+            if (coordonneesActuelles == null) {
+            	// Il faut supprimer la cible et prendre la prochaine - à modifier ici pour rester dans cette itération
+            	gardien.retirerPremiereCible();
+            	break;
+            }
             for (Coordonnee coord : coordonneesActuelles) {
                 List<Coordonnee> adjacentes = getCoordonneeAdjacentes(coord, pas);
                 mapPasCoordonnee.ajouterCoordonnes(pas, adjacentes);
@@ -77,8 +83,8 @@ public class DeplacementPoursuite extends StrategieDeplacement {
                 }
             }
             pas++;
-            System.out.println(pas);
         }
+        System.out.println("Nombre de pas : " + pas);
         
         this.chemin = trouverChemin(arrivee, pas - 1);
         
@@ -95,22 +101,20 @@ public class DeplacementPoursuite extends StrategieDeplacement {
      * @return Une liste de coordonnée adjacente
      */
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee, int pasActuel) {
-		List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-		for (int i = -1; i <= 1; i++) {
-			for (int j = -1; j <= 1; j++) {
-				if (i == 0 && j == 0) { continue; }
-
-				Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + i, coordonnee.getColonne() + j);
-				Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
-				if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()){
-					if (!mapPasCoordonnee.coordonneeIsDejaVu(coordonneeAdjacente, pasActuel)) {
-						coordonneeAdjacentes.add(coordonneeAdjacente);
-					}
-				}
+        List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
+            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
+            
+            if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()) {
+                if (!mapPasCoordonnee.coordonneeIsDejaVu(coordonneeAdjacente)) {
+                    coordonneeAdjacentes.add(coordonneeAdjacente);
+                }
             }
-		}
-		return coordonneeAdjacentes;
-	}
+        }
+        
+        return coordonneeAdjacentes;
+    }
     
     private Intrus getCible(Gardien gardien) {
 		Intrus cible = gardien.getPremiereCible();

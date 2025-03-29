@@ -27,15 +27,11 @@ public class MapPasCoordonnee {
 		return mapPasCoordonnee;
 	}
 
-	public void setMapPasCoordonnee(Map<Integer, List<Coordonnee>> mapPasCoordonnee) {
-		this.mapPasCoordonnee = mapPasCoordonnee;
-	}
-
 	public MapPasCoordonnee() {
         this.mapPasCoordonnee = new HashMap<>();
     }
 	
-	public List<Integer> getListeProbabilites() {
+	public List<Integer> getListePas() {
         return new ArrayList<>(mapPasCoordonnee.keySet());
     }
 
@@ -46,7 +42,7 @@ public class MapPasCoordonnee {
 	/**
 	 * Ajoute une coordonnée dans la map associé à un pas
 	 * 
-	 * @param probabilite La probabilité de la coordonnée
+	 * @param probabilite Le pas de la coordonnée
 	 * @param coordonnee La coordonnée à ajouter
 	 */
 	public void ajouterCoordonne(int pas, Coordonnee coordonnee) {
@@ -73,16 +69,14 @@ public class MapPasCoordonnee {
             }
         }
     }
-
-	public boolean coordonneeIsDejaVu(Coordonnee coordonneeActuel, int pasActuel) {
-		if (pasActuel <= 0 && coordonneeActuel == null) {
-			return false;
-		}
-		List<Coordonnee> coordonnees = getCoordonneesFromPas(pasActuel - 1);
-		if (coordonnees.contains(coordonneeActuel)) {
-			return true;
-		}
-		return false;
+	
+	public boolean coordonneeIsDejaVu(Coordonnee coordonnee) {
+	    for (List<Coordonnee> coordonnees : mapPasCoordonnee.values()) {
+	        if (coordonnees.contains(coordonnee)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 	public void reinitialiserMap() {

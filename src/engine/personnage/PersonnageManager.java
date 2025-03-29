@@ -127,7 +127,7 @@ public class PersonnageManager {
 	public void deplacerPersonnages() {
         for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
-        		ajouterCible(gardien);
+        		observer(gardien);
             	gardien.deplacer();
         	}
         }
@@ -138,7 +138,7 @@ public class PersonnageManager {
         }
     }
 	
-	public void ajouterCible(Gardien gardien) {
+	public void observer(Gardien gardien) {
 		List<Intrus> intrus = (List<Intrus>) vision.recupererIntrusVisibles(gardien);
 		for (Intrus i : intrus) {
 			gardien.ajouterCible(i);

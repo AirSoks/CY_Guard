@@ -11,7 +11,6 @@ import gui.affichage.Dessiner;
 import gui.affichage.DessinerDeplacement;
 import gui.affichage.DessinerPersonnages;
 
-
 public class PaintStrategy {
 	
     private final List<Dessiner> dessins = new ArrayList<>();

@@ -31,24 +31,24 @@ public class Vision {
 
     public List<Gardien> recupererGardiensVisibles(Personnage personnage) {
         List<Coordonnee> zonesVisibles = obtenirCoordonneesVisibles(personnage.getCoordonnee());
-        List<Gardien> resultat = new ArrayList<>();
+        List<Gardien> listeGardiens = new ArrayList<>();
         for (Gardien gardien : personnageManager.getGardiens()) {
             if (zonesVisibles.contains(gardien.getCoordonnee())) {
-                resultat.add(gardien);
+            	listeGardiens.add(gardien);
             }
         }
-        return resultat;
+        return listeGardiens;
     }
 
     public List<Intrus> recupererIntrusVisibles(Personnage personnage) {
         List<Coordonnee> zonesVisibles = obtenirCoordonneesVisibles(personnage.getCoordonnee());
-        List<Intrus> resultat = new ArrayList<>();
+        List<Intrus> listeIntrus = new ArrayList<>();
         for (Intrus intrus : personnageManager.getIntrus()) {
             if (zonesVisibles.contains(intrus.getCoordonnee())) {
-                resultat.add(intrus);
+            	listeIntrus.add(intrus);
             }
         }
-        return resultat;
+        return listeIntrus;
     }
 
     private List<Coordonnee> obtenirCoordonneesVisibles(Coordonnee centre) {

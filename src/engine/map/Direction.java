@@ -3,6 +3,7 @@ package engine.map;
 /**
  * Cette classe represente les differentes directions possible dans le grille
  * Chaque direction est associée à un mouvement sur la ligne ou la colonne
+ * 
  * @author GLP_19
  */
 public enum Direction {
@@ -21,6 +22,8 @@ public enum Direction {
 	public Coordonnee getCoordonnee(Coordonnee coordonnee) {
 		int nouvelleLigne = coordonnee.getLigne() + this.deltaLigne;
         int nouvelleColonne = coordonnee.getColonne() + this.deltaColonne;
-		return new Coordonnee(nouvelleLigne, nouvelleColonne);
+        
+        Coordonnee newCoordonnee = new Coordonnee(nouvelleLigne, nouvelleColonne);
+		return newCoordonnee; 
 	}
 }

@@ -111,10 +111,9 @@ public class GrilleBuilder {
      */
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee, int nbCaseDensiteObstacle) {
 		List<Coordonnee> coordonneeAdjacentes = new ArrayList<>();
-		int nbCaseDensite = nbCaseDensiteObstacle;
 
-		for (int i = -nbCaseDensite; i <= nbCaseDensite; i++) {
-			for (int j = -nbCaseDensite; j <= nbCaseDensite; j++) {
+		for (int i = -nbCaseDensiteObstacle; i <= nbCaseDensiteObstacle; i++) {
+			for (int j = -nbCaseDensiteObstacle; j <= nbCaseDensiteObstacle; j++) {
 				if (i == 0 && j == 0) { continue; }
 
 				Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + i, coordonnee.getColonne() + j);

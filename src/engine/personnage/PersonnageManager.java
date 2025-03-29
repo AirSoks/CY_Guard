@@ -8,7 +8,8 @@ import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
-import engine.utilitaire.MaximumTentativeAtteind;
+import engine.personnage.vision.Vision;
+import engine.utilitaire.MaxTentativeAtteind;
 
 /**
  * Cette classe sert à la gestion des personnages
@@ -37,11 +38,6 @@ public class PersonnageManager {
     private Grille grille;
     
     /**
-     * La vision du personnage
-     */
-    private Vision vision;
-    
-    /**
      * Le gardien actif, qui peut être controlé par le joueur
      */
     private Gardien gardienActif;
@@ -55,11 +51,6 @@ public class PersonnageManager {
 
 	public PersonnageManager(Grille grille) {
 		this.grille = grille;
-		this.vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
-	}
-
-	public Vision getVision() {
-		return vision;
 	}
 
 	public void retirerPersonnage(Personnage personnage) {
@@ -127,23 +118,17 @@ public class PersonnageManager {
 	public void deplacerPersonnages() {
         for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
-        		observer(gardien);
+        		gardien.observer();
             	gardien.deplacer();
         	}
         }
         for (Intrus intrus : getIntrus()) {
         	if (intrus != null) {
+        		intrus.observer();
         		intrus.deplacer();
         	}
         }
     }
-	
-	public void observer(Gardien gardien) {
-		List<Intrus> intrus = (List<Intrus>) vision.recupererIntrusVisibles(gardien);
-		for (Intrus i : intrus) {
-			gardien.ajouterCible(i);
-		}
-	}
 	
     /**
      * Ajoute un gardien sur la grille
@@ -154,6 +139,8 @@ public class PersonnageManager {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Gardien gardien = new Gardien(coordonnee);
 		gardien.setDeplacement(DeplacementFactory.getDeplacement("Poursuite", this, grille));
+		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
+		gardien.setVision(vision);
 		personnages.add(gardien);
 		return gardien;
 	}
@@ -167,6 +154,8 @@ public class PersonnageManager {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Intrus intrus = new Intrus(coordonnee);
 		intrus.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
+		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
+		intrus.setVision(vision);
 		personnages.add(intrus);
 		return intrus;
 	}
@@ -184,7 +173,7 @@ public class PersonnageManager {
 	            return coordonnee;
 	        }
 	    }
-	    throw new MaximumTentativeAtteind(tentativeMax);
+	    throw new MaxTentativeAtteind(tentativeMax);
 	}
 
 	private Coordonnee getCoordonneeAleatoire(int nbLigne, int nbColonne) {

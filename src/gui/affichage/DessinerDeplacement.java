@@ -30,8 +30,29 @@ public class DessinerDeplacement implements Dessiner {
             Deplacement deplacement = personnage.getDeplacement();
 
             if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
-            	
+            	DeplacementPoursuite poursuite = (DeplacementPoursuite) deplacement;
+            	// poursuite.trouverChemin(); il faut recalculer le path
+                List<Coordonnee> chemin = poursuite.getChemin();
+                
+                g.setColor(new Color(255, 0, 0, 100));
+                for (Coordonnee coord : chemin) {
+                    int x = coord.getColonne() * blockSize;
+                    int y = coord.getLigne() * blockSize;
+                    g.fillRect(x, y, blockSize, blockSize);
+                }
             } 
+//            else if (deplacement instanceof DeplacementManuel) {
+//
+//                Direction direction = personnage.getDirection();
+//                if (direction != null) {
+//                    Coordonnee cible = direction.getCoordonnee(personnage.getCoordonnee());
+//                    int x = cible.getColonne() * blockSize;
+//                    int y = cible.getLigne() * blockSize;
+//
+//                    g.setColor(new Color(0, 255, 0, 100));
+//                    g.fillRect(x, y, blockSize, blockSize);
+//          	}
+//      	}
         }
     }
 

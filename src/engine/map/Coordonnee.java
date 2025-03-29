@@ -56,4 +56,9 @@ public class Coordonnee {
 		Coordonnee other = (Coordonnee) obj;
 		return colonne == other.colonne && ligne == other.ligne;
 	}
+	
+	@Override
+	public String toString() {
+	    return "Coordonnee [ligne=" + ligne + ", colonne=" + colonne + "]";
+	}
 }

@@ -7,7 +7,7 @@ public class GameConfiguration {
 	
 	public static final int BLOCK_SIZE = 25;
 	
-	public static final int GAME_SPEED = 5;
+	public static final int GAME_SPEED = 500;
 
 	public static final int VITESSE_INTRUS = 10;
 	public static final int VITESSE_GARDIENS = 12;
@@ -40,5 +40,5 @@ public class GameConfiguration {
 	public static final int NB_CASE_DENSITE_ARBRE = 0;
 	
 	public static final boolean PERMET_DEPLACEMENT_DIAGONNAL = true;
-	public static final int NB_CASES_VISION = 50;
+	public static final int NB_CASES_VISION = 20;
 }

@@ -26,4 +26,16 @@ public enum Direction {
         Coordonnee newCoordonnee = new Coordonnee(nouvelleLigne, nouvelleColonne);
 		return newCoordonnee; 
 	}
+	
+	public static Direction getDirectionEntreCoordonnees(Coordonnee actuelle, Coordonnee suivante) {
+        int deltaLigne = suivante.getLigne() - actuelle.getLigne();
+        int deltaColonne = suivante.getColonne() - actuelle.getColonne();
+
+        for (Direction direction : Direction.values()) {
+            if (direction.deltaLigne == deltaLigne && direction.deltaColonne == deltaColonne) {
+                return direction;
+            }
+        }
+        throw new IllegalArgumentException("Les coordonnées ne sont pas adjacentes : " + actuelle + ", " + suivante);
+    }
 }

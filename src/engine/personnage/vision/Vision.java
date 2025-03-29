@@ -1,10 +1,15 @@
-package engine.personnage;
+package engine.personnage.vision;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
+import engine.personnage.Gardien;
+import engine.personnage.Intrus;
+import engine.personnage.Personnage;
+import engine.personnage.PersonnageManager;
 
 public class Vision {
 	
@@ -28,8 +33,25 @@ public class Vision {
         this.grille = grille;
     	this.distance = distance;
 	}
+	
+    public void observer(Personnage personnage) {
+        if (personnage instanceof Gardien gardien) {
+            List<Intrus> intrusVisibles = recupererIntrusVisibles(gardien);
+            for (Intrus intrus : intrusVisibles) {
+                if (!gardien.getCibles().contains(intrus)) {
+                    gardien.ajouterCible(intrus);
+                }
+            }
+        } 
+        else if (personnage instanceof Intrus intrus) {
+            List<Gardien> gardiensVisibles = recupererGardiensVisibles(intrus);
+            for (Gardien gardien : gardiensVisibles) {
+                intrus.ajouterCible(gardien);
+            }
+        }
+    }
 
-    public List<Gardien> recupererGardiensVisibles(Personnage personnage) {
+	private List<Gardien> recupererGardiensVisibles(Personnage personnage) {
         List<Coordonnee> zonesVisibles = obtenirCoordonneesVisibles(personnage.getCoordonnee());
         List<Gardien> listeGardiens = new ArrayList<>();
         for (Gardien gardien : personnageManager.getGardiens()) {
@@ -40,7 +62,7 @@ public class Vision {
         return listeGardiens;
     }
 
-    public List<Intrus> recupererIntrusVisibles(Personnage personnage) {
+    private List<Intrus> recupererIntrusVisibles(Personnage personnage) {
         List<Coordonnee> zonesVisibles = obtenirCoordonneesVisibles(personnage.getCoordonnee());
         List<Intrus> listeIntrus = new ArrayList<>();
         for (Intrus intrus : personnageManager.getIntrus()) {

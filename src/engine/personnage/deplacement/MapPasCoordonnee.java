@@ -65,7 +65,9 @@ public class MapPasCoordonnee {
 	public void ajouterCoordonnes(int pas, List<Coordonnee> coordonnees) {
         if (pas >= 0 && coordonnees != null && !coordonnees.isEmpty()) {
 			for (Coordonnee coordonnee : coordonnees) {
-				ajouterCoordonne(pas, coordonnee);
+				if (!coordonneeIsDejaVu(coordonnee)) {
+					ajouterCoordonne(pas, coordonnee);
+				}
             }
         }
     }

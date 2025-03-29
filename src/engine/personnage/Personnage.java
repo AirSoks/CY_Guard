@@ -3,6 +3,7 @@ package engine.personnage;
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
+import engine.personnage.vision.Vision;
 import engine.utilitaire.GenerateurNom;
 
 /**
@@ -36,6 +37,11 @@ public abstract class Personnage {
      * Le déplacement du personnage
      */
     private Deplacement deplacement;
+    
+    /**
+     * La vision du personnage
+     */
+	private Vision vision;
 
     /**
      * Les informations pour l'animation du personnage
@@ -97,9 +103,19 @@ public abstract class Personnage {
 		this.deplacement = deplacement;
 	}
 	
+	public void setVision(Vision vision) {
+		this.vision = vision;
+	}
+
 	public void deplacer() {
 		if (deplacement != null) {
 			deplacement.deplacer(this);
+		}
+    }
+	
+	public void observer() {
+		if (vision != null) {
+			vision.observer(this);
 		}
     }
 }

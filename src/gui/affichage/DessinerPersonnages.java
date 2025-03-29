@@ -8,7 +8,9 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
 public class DessinerPersonnages implements Dessiner {
+	
     private PersonnageManager personnageManager;
+    
     private boolean enabled = true;
 
     public DessinerPersonnages(PersonnageManager personnageManager) {

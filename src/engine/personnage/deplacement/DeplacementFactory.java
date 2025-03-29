@@ -35,7 +35,7 @@ public class DeplacementFactory {
         
         if (deplacement == null) {
             switch (type) {
-                case "Intelligent":
+                case "Poursuite":
                     deplacement = new DeplacementPoursuite(personnages, grille);
                     break;
                 case "Aleatoire":

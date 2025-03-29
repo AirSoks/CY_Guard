@@ -3,6 +3,7 @@ package engine.personnage;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.GameConfiguration;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
@@ -36,6 +37,11 @@ public class PersonnageManager {
     private Grille grille;
     
     /**
+     * La vision du personnage
+     */
+    private Vision vision;
+    
+    /**
      * Le gardien actif, qui peut être controlé par le joueur
      */
     private Gardien gardienActif;
@@ -49,6 +55,11 @@ public class PersonnageManager {
 
 	public PersonnageManager(Grille grille) {
 		this.grille = grille;
+		this.vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
+	}
+
+	public Vision getVision() {
+		return vision;
 	}
 
 	public void retirerPersonnage(Personnage personnage) {
@@ -81,13 +92,13 @@ public class PersonnageManager {
     }
 
     public List<Personnage> getPersonnages(Coordonnee coordonnee) {
-        List<Personnage> result = new ArrayList<>();
+        List<Personnage> personnages = new ArrayList<>();
         for (Personnage personnage : this.personnages) {
             if (coordonnee == null || personnage.getCoordonnee().equals(coordonnee)) {
-                result.add(personnage);
+            	personnages.add(personnage);
             }
         }
-        return result;
+        return personnages;
     }
 
     public List<Intrus> getIntrus(Coordonnee coordonnee) {
@@ -116,6 +127,7 @@ public class PersonnageManager {
 	public void deplacerPersonnages() {
         for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
+        		observer(gardien);
             	gardien.deplacer();
         	}
         }
@@ -126,6 +138,13 @@ public class PersonnageManager {
         }
     }
 	
+	public void observer(Gardien gardien) {
+		List<Intrus> intrus = (List<Intrus>) vision.recupererIntrusVisibles(gardien);
+		for (Intrus i : intrus) {
+			gardien.ajouterCible(i);
+		}
+	}
+	
     /**
      * Ajoute un gardien sur la grille
      * 
@@ -134,7 +153,7 @@ public class PersonnageManager {
     public Gardien ajouterGardien() {
 		Coordonnee coordonnee = getCoordonneeAleatoireValide();
 		Gardien gardien = new Gardien(coordonnee);
-		gardien.setDeplacement(DeplacementFactory.getDeplacement("Intelligent", this, grille));
+		gardien.setDeplacement(DeplacementFactory.getDeplacement("Poursuite", this, grille));
 		personnages.add(gardien);
 		return gardien;
 	}

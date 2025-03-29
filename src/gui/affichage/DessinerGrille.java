@@ -2,6 +2,7 @@ package gui.affichage;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import config.GameConfiguration;
 import engine.map.Case;
@@ -10,6 +11,7 @@ import engine.map.obstacle.Arbre;
 import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
+import engine.utilitaire.SimulationUtility;
 
 public class DessinerGrille implements Dessiner {
     private Grille grille;
@@ -32,18 +34,21 @@ public class DessinerGrille implements Dessiner {
             for (int col = 0; col < nbColonne; col++) {
                 Case cell = cases[line][col];
                 Obstacle obstacle = cell.getObstacle();
-
+                int x = col * blockSize;
+                int y = line * blockSize;
                 if (obstacle instanceof Arbre) {
-                    g.setColor(new Color(43, 139, 27));
+                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
+                	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Lac) {
-                    g.setColor(Color.blue);
+                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
+                	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Roche) {
-                    g.setColor(Color.gray);
+                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
+                	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else {
-                    g.setColor(Color.yellow);
+                	Image tile = SimulationUtility.readImage("src/images/tiles/plaine.png");
+                	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 }
-
-                g.fillRect(col * blockSize, line * blockSize, blockSize, blockSize);
             }
         }
     }

@@ -30,8 +30,9 @@ public class DessinerDeplacement implements Dessiner {
         for (Personnage personnage : personnageManager.getPersonnages()) {
             Deplacement deplacement = personnage.getDeplacement();
 
-            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien gardien) {
+            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
             	DeplacementPoursuite poursuite = (DeplacementPoursuite) deplacement;
+            	Gardien gardien = (Gardien) personnage;
             	Intrus cible = poursuite.cibleAccessible(gardien);
                 
                 if (cible == null) {

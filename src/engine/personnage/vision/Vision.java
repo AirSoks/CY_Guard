@@ -35,7 +35,8 @@ public class Vision {
 	}
 	
     public void observer(Personnage personnage) {
-        if (personnage instanceof Gardien gardien) {
+        if (personnage instanceof Gardien) {
+        	Gardien gardien = (Gardien) personnage;
             List<Intrus> intrusVisibles = recupererIntrusVisibles(gardien);
             for (Intrus intrus : intrusVisibles) {
                 if (!gardien.getCibles().contains(intrus)) {
@@ -43,7 +44,8 @@ public class Vision {
                 }
             }
         } 
-        else if (personnage instanceof Intrus intrus) {
+        else if (personnage instanceof Intrus) {
+        	Intrus intrus = (Intrus) personnage;
             List<Gardien> gardiensVisibles = recupererGardiensVisibles(intrus);
             for (Gardien gardien : gardiensVisibles) {
                 intrus.ajouterCible(gardien);

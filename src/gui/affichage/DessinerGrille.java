@@ -40,10 +40,10 @@ public class DessinerGrille implements Dessiner {
                 	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
                 	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Lac) {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
+                	Image tile = SimulationUtility.readImage("src/images/tiles/lac.png");
                 	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Roche) {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
+                	Image tile = SimulationUtility.readImage("src/images/tiles/roche.png");
                 	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else {
                 	Image tile = SimulationUtility.readImage("src/images/tiles/plaine.png");

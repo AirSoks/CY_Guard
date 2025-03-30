@@ -85,5 +85,4 @@ public class Grille {
 	public void setGrille(Case[][] grille) {
 		this.grille = grille;
 	} 
-	
 }

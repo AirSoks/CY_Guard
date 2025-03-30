@@ -39,17 +39,17 @@ public class DessinerPersonnages implements Dessiner {
     }
 
     @Override
-    public void enable() {
+    public void activer() {
         this.enabled = true;
     }
 
     @Override
-    public void disable() {
+    public void desactiver() {
         this.enabled = false;
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isActiver() {
         return this.enabled;
     }
 }

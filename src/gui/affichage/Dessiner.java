@@ -6,9 +6,9 @@ public interface Dessiner {
 	
     void paint(Graphics g);
     
-    void enable();
+    void activer();
     
-    void disable();
+    void desactiver();
     
-    boolean isEnabled();
+    boolean isActiver();
 }

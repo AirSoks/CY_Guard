@@ -61,4 +61,9 @@ public class Case {
 		Case other = (Case) obj;
 		return Objects.equals(position, other.position);
 	}
+	
+	@Override
+	public String toString() {
+	    return "[Coordonnée=" + position + ", Obstacle=" + obstacle + "]";
+	}
 }

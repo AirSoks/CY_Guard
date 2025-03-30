@@ -7,6 +7,7 @@ import config.ConfigurationMapAleatoire;
 import config.GameConfiguration;
 import engine.map.Case;
 import engine.map.Coordonnee;
+import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
@@ -134,18 +135,10 @@ public class GrilleBuilder {
      */
     private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
     	List<Coordonnee> coordonnees = new ArrayList<>();
-    	Coordonnee coord1 = new Coordonnee(0, 1);
-        Coordonnee coord2 = new Coordonnee(-1, 0);
-        Coordonnee coord3 = new Coordonnee(0, -1);
-        Coordonnee coord4 = new Coordonnee(1, 0);
-        List<Coordonnee> directions = new ArrayList<>();
-        directions.add(coord1);
-        directions.add(coord2);
-        directions.add(coord3);
-        directions.add(coord4);
-    	for (Coordonnee direction : directions) {
-    		Coordonnee coordonneeAdjacente = new Coordonnee(coordonnee.getLigne() + direction.getLigne(), coordonnee.getColonne() + direction.getColonne());
-    		Case caseAdjacente = grille.getCase(coordonneeAdjacente);
+        
+        for (Direction direction : Direction.values()) {
+            Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
+            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
 			if (caseAdjacente != null){
 				coordonnees.add(coordonneeAdjacente);
 			}

@@ -21,15 +21,15 @@ public class PaintStrategy {
         dessins.add(new DessinerDeplacement(personnageManager));
     }
 
-    public void enable(boolean active) {
+    public void activer(boolean active) {
         for (Dessiner dessin : dessins) {
-            dessin.enable();
+            dessin.activer();
         }
     }
     
-    public void disable(boolean active) {
+    public void desactiver(boolean active) {
         for (Dessiner dessin : dessins) {
-            dessin.disable();
+            dessin.desactiver();
         }
     }
 

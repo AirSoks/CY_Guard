@@ -7,6 +7,7 @@ import java.util.List;
 import config.GameConfiguration;
 import engine.map.Coordonnee;
 import engine.personnage.Gardien;
+import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.Deplacement;
@@ -29,9 +30,14 @@ public class DessinerDeplacement implements Dessiner {
         for (Personnage personnage : personnageManager.getPersonnages()) {
             Deplacement deplacement = personnage.getDeplacement();
 
-            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
+            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien gardien) {
             	DeplacementPoursuite poursuite = (DeplacementPoursuite) deplacement;
-            	// poursuite.trouverChemin(); il faut recalculer le path
+            	Intrus cible = poursuite.cibleAccessible(gardien);
+                
+                if (cible == null) {
+                    return;
+                }
+            	poursuite.trouverChemin(cible);
                 List<Coordonnee> chemin = poursuite.getChemin();
                 
                 g.setColor(new Color(255, 0, 0, 100));
@@ -57,17 +63,17 @@ public class DessinerDeplacement implements Dessiner {
     }
 
     @Override
-    public void enable() {
+    public void activer() {
         this.enabled = true;
     }
 
     @Override
-    public void disable() {
+    public void desactiver() {
         this.enabled = false;
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isActiver() {
         return this.enabled;
     }
 }

@@ -33,11 +33,12 @@ public class DessinerDeplacement implements Dessiner {
             if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
             	DeplacementPoursuite poursuite = (DeplacementPoursuite) deplacement;
             	Gardien gardien = (Gardien) personnage;
+            	
             	Intrus cible = poursuite.cibleAccessible(gardien);
-                
                 if (cible == null) {
                     return;
                 }
+                
             	poursuite.trouverChemin(cible);
                 List<Coordonnee> chemin = poursuite.getChemin();
                 

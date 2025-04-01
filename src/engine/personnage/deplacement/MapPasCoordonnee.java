@@ -24,7 +24,7 @@ public class MapPasCoordonnee {
 	private Map<Integer, List<Coordonnee>> mapPasCoordonnee = new HashMap<>();
 
 	public Map<Integer, List<Coordonnee>> getMapPasCoordonnee() {
-		return mapPasCoordonnee;
+		return new HashMap<>(mapPasCoordonnee);
 	}
 
 	public MapPasCoordonnee() {

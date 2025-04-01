@@ -68,6 +68,10 @@ public class MainGUI extends JFrame implements Runnable{
 	    Gardien gardien = manager.ajouterGardien();
 	    manager.ajouterGardien(); 
 	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
 	    manager.setGardienActif(gardien);
 
 		dashboard = new GameDisplay(this.grille, manager);

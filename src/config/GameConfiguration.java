@@ -7,7 +7,7 @@ public class GameConfiguration {
 	
 	public static final int BLOCK_SIZE = 25;
 	
-	public static final int GAME_SPEED = 500;
+	public static final int GAME_SPEED = 1;
 
 	public static final int VITESSE_INTRUS = 10;
 	public static final int VITESSE_GARDIENS = 12;

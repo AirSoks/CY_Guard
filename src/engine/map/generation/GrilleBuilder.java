@@ -95,7 +95,6 @@ public class GrilleBuilder {
     			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
     			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
 
-
         		List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
     			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
                 obstaclesPlaces++;

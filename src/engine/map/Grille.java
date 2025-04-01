@@ -65,6 +65,9 @@ public class Grille {
 	}
 	
 	public Case getCase(Coordonnee position) {
+		if (position == null) {
+			return null;
+		}
 		int ligne = position.getLigne();
 		int colonne = position.getColonne();
 		if (ligne >= 0 && ligne < nbLigne && colonne >= 0 && colonne < nbColonne) { 

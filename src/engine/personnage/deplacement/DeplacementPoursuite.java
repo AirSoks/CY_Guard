@@ -65,7 +65,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	public Intrus cibleAccessible(Gardien gardien) {
 		while (gardien.getPremiereCible() != null) {
 	        Intrus cible = gardien.getPremiereCible();
-	        if (isCibleAccessible(gardien, cible)) {
+	        if (getPersonnage().getIntrus().contains(cible) && isCibleAccessible(gardien, cible)) {
 	            return cible;
 	        }
 	        gardien.retirerPremiereCible();
@@ -98,7 +98,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	}
 
 	/**
-     * Récupère les coordonnées adjacentes d'une coordonnée
+     * Récupère les coordonnées adjacentes d'une coordonnée accessible
      * 
      * @param coordonnee La coordonnée à traiter
      * @return Une liste de coordonnée adjacente

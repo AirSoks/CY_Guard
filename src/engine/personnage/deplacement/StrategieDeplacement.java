@@ -65,14 +65,6 @@ public abstract class StrategieDeplacement implements Deplacement {
 		this.personnages = personnages;
 	}
 
-	public Boolean isCoordonneeValide(Coordonnee coordonnee) {
-		Case c = grille.getCase(coordonnee);
-		if (c != null && !c.getObstacle().isBloqueDeplacement()) {
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * Vérifie si un contact à eu lieu entre un gardien et un intrus sur la coordonnée
 	 * 

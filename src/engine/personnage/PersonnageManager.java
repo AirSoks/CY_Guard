@@ -41,15 +41,19 @@ public class PersonnageManager {
      * Le gardien actif, qui peut être controlé par le joueur
      */
     private Gardien gardienActif;
-    
-    public static PersonnageManager getInstance(Grille grille) {
-		if (instance == null) {
-			instance = new PersonnageManager(grille);
+
+	public static void initInstance(Grille grille) {
+        instance = new PersonnageManager(grille);
+    }
+	
+    public static PersonnageManager getInstance() {
+    	if (instance == null) {
+			throw new IllegalStateException("PersonnageManager non initialisée");
 		}
 		return instance;
 	}
 
-	public PersonnageManager(Grille grille) {
+	private PersonnageManager(Grille grille) {
 		this.grille = grille;
 	}
 
@@ -136,7 +140,7 @@ public class PersonnageManager {
      * @return Le gardien
      */
     public Gardien ajouterGardien() {
-		Coordonnee coordonnee = getCoordonneeAleatoireValide();
+		Coordonnee coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
 		Gardien gardien = new Gardien(coordonnee);
 		gardien.setDeplacement(DeplacementFactory.getDeplacement("Poursuite", this, grille));
 		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
@@ -151,48 +155,12 @@ public class PersonnageManager {
      * @return L'intrus
      */
 	public Intrus ajouterIntrus() {
-		Coordonnee coordonnee = getCoordonneeAleatoireValide();
+		Coordonnee coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
 		Intrus intrus = new Intrus(coordonnee);
 		intrus.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
 		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
 		intrus.setVision(vision);
 		personnages.add(intrus);
 		return intrus;
-	}
-	
-	/**
-	 * Récupère une coordonnée aléatoire valide sur la grille
-	 * 
-	 * @return Une coordonnées aléatoire valide
-	 */
-	private Coordonnee getCoordonneeAleatoireValide() {
-	    int tentativeMax = 2*grille.getNbLigne()*grille.getNbColonne();
-	    for (int i = 0; i < tentativeMax; i++) {
-	        Coordonnee coordonnee = getCoordonneeAleatoire(grille.getNbLigne(), grille.getNbColonne());
-	        if (isCoordonneeValide(coordonnee)) {
-	            return coordonnee;
-	        }
-	    }
-	    throw new MaxTentativeAtteind(tentativeMax);
-	}
-
-	private Coordonnee getCoordonneeAleatoire(int nbLigne, int nbColonne) {
-	    int ligneAleatoire =  (int) (Math.random() * nbLigne);
-	    int colonneAleatoire =  (int) (Math.random() * nbColonne);
-	    return new Coordonnee(ligneAleatoire, colonneAleatoire);
-	}
-	
-	/**
-	 * Verifie si la coordonnée est valide pour y placer un personnage
-	 * 
-	 * @param coordonnee La coordonnée à vérifier
-	 * @return true si la coordonnée ne bloque pas l'apparition, false sinon
-	 */
-	private Boolean isCoordonneeValide(Coordonnee coordonnee) {
-		Case c = grille.getCase(coordonnee);
-		if (c != null && !c.getObstacle().isBloqueDeplacement()) {
-			return true;
-		}
-		return false;
 	}
 }

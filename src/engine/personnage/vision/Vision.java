@@ -110,7 +110,7 @@ public class Vision {
     	}
     	
     	vision.reinitialiserMap();
-    	if (!isCoordonneeVisible(centre)) { 
+    	if (grille.isCoordonneeValide(centre,"VISION")) { 
     		return;
     	}
         vision.ajouterCoordonne(distance, centre);
@@ -146,9 +146,8 @@ public class Vision {
         
         for (Direction direction : Direction.values()) {
             Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
-            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
             
-            if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueVision()) {
+            if (grille.isCoordonneeValide(coordonneeAdjacente, "VISION")) {
                 coordonneeAdjacentes.add(coordonneeAdjacente);
             }
         }
@@ -163,7 +162,7 @@ public class Vision {
     	int index = getIndexDirection(centre, autre);
     	if (index == -1) { return directions;}
     	
-    	if (!directions.get(index) && !isCoordonneeVisible(autre)) {
+    	if (!directions.get(index) && !grille.isCoordonneeValide(autre,"VISION")) {
     		directions.set(index, false);
     	}
     	
@@ -183,13 +182,5 @@ public class Vision {
     	if (deltaLigne < 0 && deltaColonne == 0) { return 6; }
     	if (deltaLigne < 0 && deltaColonne < 0) { return 7; }
 		return -1;
-	}
-
-	public Boolean isCoordonneeVisible(Coordonnee coordonnee) {
-		Case c = grille.getCase(coordonnee);
-		if (c != null && !c.getObstacle().isBloqueVision()) {
-			return true;
-		}
-		return false;
 	}
 }

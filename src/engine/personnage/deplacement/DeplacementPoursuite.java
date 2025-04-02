@@ -122,9 +122,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
         
         for (Direction direction : Direction.values()) {
             Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
-            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
-            
-            if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()) {
+            if (getGrille().isCoordonneeValide(coordonneeAdjacente, "DEPLACEMENT")) {
                 coordonneeAdjacentes.add(coordonneeAdjacente);
             }
         }

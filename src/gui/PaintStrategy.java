@@ -19,6 +19,7 @@ public class PaintStrategy {
     	dessins.add(new DessinerGrille(grille));
     	dessins.add(new DessinerPersonnages(personnageManager));
         dessins.add(new DessinerDeplacement(personnageManager));
+        // dessins.add(new DessinerVision(personnageManager));
     }
 
     public void activer(boolean active) {

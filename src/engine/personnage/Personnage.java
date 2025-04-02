@@ -107,6 +107,10 @@ public abstract class Personnage {
 		this.vision = vision;
 	}
 
+	public Vision getVision() {
+		return vision;
+	}
+
 	public void deplacer() {
 		if (deplacement != null) {
 			deplacement.deplacer(this);

@@ -7,7 +7,6 @@ import java.util.List;
 import config.GameConfiguration;
 import engine.map.Coordonnee;
 import engine.personnage.Gardien;
-import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.Deplacement;
@@ -16,6 +15,7 @@ import engine.personnage.deplacement.DeplacementPoursuite;
 public class DessinerDeplacement implements Dessiner {
 	
     private PersonnageManager personnageManager;
+    
     private boolean enabled = true;
 
     public DessinerDeplacement(PersonnageManager personnageManager) {
@@ -25,6 +25,7 @@ public class DessinerDeplacement implements Dessiner {
     @Override
     public void paint(Graphics g) {
     	if (!enabled) return;
+    	
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {

@@ -1,6 +1,5 @@
 package engine.personnage.deplacement;
 
-import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;

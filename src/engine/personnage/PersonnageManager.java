@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.GameConfiguration;
-import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
-import engine.utilitaire.MaxTentativeAtteind;
 
 /**
  * Cette classe sert à la gestion des personnages

@@ -43,31 +43,30 @@ public class MapPasCoordonnee {
 		return new ArrayList<>(coordonnees);
     }
 	
-	public List<Coordonnee> getAllCoordonnee() {
-		List<Integer> listInt = getListePas();
+	public List<Coordonnee> getAllCoordonnees() {
 		List<Coordonnee> coordonnees = new ArrayList<>();
-		for (int i = 0; i > listInt.size(); i++) {
-			coordonnees.addAll(getCoordonneesFromPas(i));
+		for (int i = 0; i <= getListePas().size(); i++) {
+			List<Coordonnee> liste = getCoordonneesFromPas(i);
+	        if (liste != null) {
+	            coordonnees.addAll(liste);
+	        }
 		}
-		return null;
+		return coordonnees;
 	}
 
 	/**
-	 * Ajoute une coordonnée dans la map associé à un pas
+	 * Ajoute une coordonnée dans la map associée à un pas
 	 * 
-	 * @param probabilite Le pas de la coordonnée
+	 * @param pas Le pas de la coordonnée
 	 * @param coordonnee La coordonnée à ajouter
 	 */
 	public void ajouterCoordonne(int pas, Coordonnee coordonnee) {
-        if (pas >= 0 && coordonnee != null) {
-        	List<Coordonnee> coordonnees = getCoordonneesFromPas(pas);
-            if (coordonnees == null || coordonnees.isEmpty()) {
-            	coordonnees = new ArrayList<>();
-            }
-            coordonnees.add(coordonnee);
-            mapPasCoordonnee.put(pas, coordonnees);
-        }
-    }
+	    if (pas >= 0 && coordonnee != null && !coordonneeIsDejaVu(coordonnee)) {
+	        List<Coordonnee> coordonnees = mapPasCoordonnee.getOrDefault(pas, new ArrayList<>());
+	        coordonnees.add(coordonnee);
+	        mapPasCoordonnee.put(pas, coordonnees);
+	    }
+	}
 	
 	/**
 	 * Ajoute une liste de coordonnées dans la map associé à un pas
@@ -78,9 +77,7 @@ public class MapPasCoordonnee {
 	public void ajouterCoordonnes(int pas, List<Coordonnee> coordonnees) {
         if (pas >= 0 && coordonnees != null && !coordonnees.isEmpty()) {
 			for (Coordonnee coordonnee : coordonnees) {
-				if (!coordonneeIsDejaVu(coordonnee)) {
-					ajouterCoordonne(pas, coordonnee);
-				}
+				ajouterCoordonne(pas, coordonnee);
             }
         }
     }
@@ -97,7 +94,6 @@ public class MapPasCoordonnee {
 	    		return true;
 	    	}
 	    }
-	    
 	    return false;
 	}
 

@@ -34,7 +34,6 @@ public class DeplacementManuel extends StrategieDeplacement {
 		
 		Coordonnee nouvellePosition = direction.getCoordonnee(personnage.getCoordonnee());
 		if (getGrille().isCoordonneeValide(nouvellePosition, "DEPLACEMENT")) {
-			System.out.println("ok");
 			personnage.setCoordonnee(nouvellePosition);
 		}
 		updateAnimation(personnage, null);

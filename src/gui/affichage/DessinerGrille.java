@@ -20,6 +20,47 @@ public class DessinerGrille implements Dessiner {
     public DessinerGrille(Grille grille) {
         this.grille = grille;
     }
+    
+    public Image getLacTile(int line, int col) {
+        Case[][] cases = grille.getGrille();
+        int nbLigne = grille.getNbLigne();
+        int nbColonne = grille.getNbColonne();
+
+        boolean leftLac = (col>0)&&(cases[line][col-1].getObstacle() instanceof Lac);
+        boolean topLac = (line>0)&&(cases[line-1][col].getObstacle() instanceof Lac);
+        boolean rightLac = (col<nbColonne-1)&&(cases[line][col+1].getObstacle() instanceof Lac);
+        boolean bottomLac = (line<nbLigne-1)&&(cases[line+1][col].getObstacle() instanceof Lac);
+        
+        if (leftLac && topLac && rightLac && bottomLac) {
+        	return SimulationUtility.readImage("src/images/tiles/lac/l0.png");
+        } else if (!leftLac && topLac && rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l2.png");
+        } else if (leftLac && !topLac && rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l1.png");
+        } else if (leftLac && topLac && !rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l4.png");
+        } else if (leftLac && topLac && rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l3.png");
+        }  else if (!leftLac && !topLac && rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l5.png");
+        } else if (leftLac && !topLac && !rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l8.png");
+        } else if (leftLac && topLac && !rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l7.png");
+        } else if (!leftLac && topLac && rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l6.png");
+        } else if (!leftLac && !topLac && rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l10.png");
+        } else if (!leftLac && !topLac && !rightLac && bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l9.png");
+        } else if (leftLac && !topLac && !rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l12.png");
+        } else if (!leftLac && topLac && !rightLac && !bottomLac) {
+            return SimulationUtility.readImage("src/images/tiles/lac/l11.png");
+        } else {
+            return SimulationUtility.readImage("src/images/tiles/lac/l13.png");
+        }
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -40,7 +81,7 @@ public class DessinerGrille implements Dessiner {
                 	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
                 	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Lac) {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/lac.png");
+                	Image tile = getLacTile(line,col);
                 	g.drawImage(tile, line*blockSize, col*blockSize, blockSize, blockSize, null);
                 } else if (obstacle instanceof Roche) {
                 	Image tile = SimulationUtility.readImage("src/images/tiles/roche.png");

@@ -31,13 +31,14 @@ public class DeplacementFactory {
      * @param grille Grille de jeu utilisée pour les déplacements
      */
     public static Deplacement getDeplacement(String type, PersonnageManager personnages, Grille grille) {
+    	
+        if ("Poursuite".equals(type)) {
+            return new DeplacementPoursuite(personnages, grille);
+        }
+
         Deplacement deplacement = deplacements.get(type);
-        
         if (deplacement == null) {
             switch (type) {
-                case "Poursuite":
-                    deplacement = new DeplacementPoursuite(personnages, grille);
-                    break;
                 case "Aleatoire":
                     deplacement = new DeplacementAleatoire(personnages, grille);
                     break;
@@ -45,7 +46,7 @@ public class DeplacementFactory {
                     deplacement = new DeplacementManuel(personnages, grille);
                     break;
                 default:
-                	deplacement = new DeplacementAleatoire(personnages, grille);
+                    deplacement = new DeplacementAleatoire(personnages, grille);
             }
             deplacements.put(type, deplacement);
         }

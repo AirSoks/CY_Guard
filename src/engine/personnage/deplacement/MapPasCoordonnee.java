@@ -1,6 +1,8 @@
 package engine.personnage.deplacement;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,11 @@ public class MapPasCoordonnee {
     }
 
 	public List<Coordonnee> getCoordonneesFromPas(int pas) {
-        return mapPasCoordonnee.get(pas);
+		List<Coordonnee> coordonnees = mapPasCoordonnee.get(pas);
+		if (coordonnees == null || coordonnees.isEmpty()) {
+	        return null;
+		}
+		return new ArrayList<>(coordonnees);
     }
 
 	/**
@@ -48,7 +54,7 @@ public class MapPasCoordonnee {
 	public void ajouterCoordonne(int pas, Coordonnee coordonnee) {
         if (pas >= 0 && coordonnee != null) {
         	List<Coordonnee> coordonnees = getCoordonneesFromPas(pas);
-            if (coordonnees == null) {
+            if (coordonnees == null || coordonnees.isEmpty()) {
             	coordonnees = new ArrayList<>();
             }
             coordonnees.add(coordonnee);
@@ -73,11 +79,18 @@ public class MapPasCoordonnee {
     }
 	
 	public boolean coordonneeIsDejaVu(Coordonnee coordonnee) {
-	    for (List<Coordonnee> coordonnees : mapPasCoordonnee.values()) {
-	        if (coordonnees.contains(coordonnee)) {
-	            return true;
-	        }
+	    if (coordonnee == null) { return false; }
+	    
+	    List<Integer> listePas = getListePas();
+	    if (listePas == null || listePas.isEmpty()) { return false; }
+	    
+	    for (int pas : listePas) {
+	    	List<Coordonnee> coordonnees = getCoordonneesFromPas(pas);
+	    	if (coordonnees != null && coordonnees.contains(coordonnee)) {
+	    		return true;
+	    	}
 	    }
+	    
 	    return false;
 	}
 

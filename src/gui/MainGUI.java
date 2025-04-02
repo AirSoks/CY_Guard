@@ -104,7 +104,6 @@ public class MainGUI extends JFrame implements Runnable{
 			manager.deplacerPersonnages();
 			dashboard.repaint();
 		}
-
 	}
 
 	/**

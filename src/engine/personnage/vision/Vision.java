@@ -1,8 +1,8 @@
 package engine.personnage.vision;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import engine.map.Case;
 import engine.map.Coordonnee;
@@ -104,15 +104,10 @@ public class Vision {
     }
     
     private void observer(Coordonnee centre) {
-
-    	boolean topVisible = true;
-    	boolean topRightVisible = true;
-    	boolean rightVisible = true;
-    	boolean bottomRightVisible = true;
-    	boolean bottomVisible = true;
-    	boolean bottomLeftVisible = true;
-    	boolean leftVisible = true;
-    	boolean topleftVisible = true;
+    	List<Boolean> directionsValides = new ArrayList<>();
+    	for (int i = 0; i < 8; i++) {
+    		directionsValides.add(true);
+    	}
     	
     	vision.reinitialiserMap();
     	if (!isCoordonneeVisible(centre)) { 
@@ -126,14 +121,12 @@ public class Vision {
         	if (coordonneesActuelles == null || coordonneesActuelles.isEmpty()) {
 	            return;
 	        }
-        	for (Coordonnee coord : coordonneesActuelles) {
-	            List<Coordonnee> adjacentes = getCoordonneeAdjacentes(coord);
-	            for (Coordonnee c : adjacentes) {
-	            	if (!isCoordonneeVisible(c)) {
-	            		
-	            	}
-	            	else {
-	            		
+        	for (Coordonnee coordonneeActuel : coordonneesActuelles) {
+	            List<Coordonnee> adjacentes = getCoordonneeAdjacentes(coordonneeActuel);
+	            for (Coordonnee coordonneeAdjacente : adjacentes) {
+	            	directionsValides = updateVisibilite(centre, coordonneeAdjacente, directionsValides);
+	            	if (directionsValides.get(getIndexDirection(centre, coordonneeAdjacente))) {
+	            		vision.ajouterCoordonne(pas, coordonneeAdjacente);
 	            	}
 		        }
 	        }
@@ -162,12 +155,41 @@ public class Vision {
         return coordonneeAdjacentes;
     }
     
-    public Boolean isCoordonneeVisible(Coordonnee coordonnee) {
+    public List<Boolean> updateVisibilite(Coordonnee centre, Coordonnee autre, List<Boolean> directions){
+    	if (centre == null || autre == null || directions == null || directions.size() == 8) {
+    		throw new IllegalArgumentException();
+    	}
+    	
+    	int index = getIndexDirection(centre, autre);
+    	if (index == -1) { return directions;}
+    	
+    	if (!directions.get(index) && !isCoordonneeVisible(autre)) {
+    		directions.set(index, false);
+    	}
+    	
+		return directions;
+    }
+    
+    private int getIndexDirection(Coordonnee c1, Coordonnee c2) {
+    	int deltaLigne = c2.getLigne() - c1.getLigne();
+    	int deltaColonne = c2.getColonne() - c1.getColonne();
+    	
+    	if (deltaLigne == 0 && deltaColonne < 0) { return 0; }
+    	if (deltaLigne > 0 && deltaColonne < 0) { return 1; }
+    	if (deltaLigne > 0 && deltaColonne == 0) { return 2; }
+    	if (deltaLigne > 0 && deltaColonne > 0) { return 3; }
+    	if (deltaLigne == 0 && deltaColonne > 0) { return 4; }
+    	if (deltaLigne < 0 && deltaColonne > 0) { return 5; }
+    	if (deltaLigne < 0 && deltaColonne == 0) { return 6; }
+    	if (deltaLigne < 0 && deltaColonne < 0) { return 7; }
+		return -1;
+	}
+
+	public Boolean isCoordonneeVisible(Coordonnee coordonnee) {
 		Case c = grille.getCase(coordonnee);
 		if (c != null && !c.getObstacle().isBloqueVision()) {
 			return true;
 		}
 		return false;
 	}
-    
 }

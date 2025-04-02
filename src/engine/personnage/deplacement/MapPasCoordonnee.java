@@ -1,8 +1,6 @@
 package engine.personnage.deplacement;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +42,15 @@ public class MapPasCoordonnee {
 		}
 		return new ArrayList<>(coordonnees);
     }
+	
+	public List<Coordonnee> getAllCoordonnee() {
+		List<Integer> listInt = getListePas();
+		List<Coordonnee> coordonnees = new ArrayList<>();
+		for (int i = 0; i > listInt.size(); i++) {
+			coordonnees.addAll(getCoordonneesFromPas(i));
+		}
+		return null;
+	}
 
 	/**
 	 * Ajoute une coordonnée dans la map associé à un pas

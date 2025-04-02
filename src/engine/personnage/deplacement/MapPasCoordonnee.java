@@ -24,7 +24,7 @@ public class MapPasCoordonnee {
 	private Map<Integer, List<Coordonnee>> mapPasCoordonnee = new HashMap<>();
 
 	public Map<Integer, List<Coordonnee>> getMapPasCoordonnee() {
-		return mapPasCoordonnee;
+		return new HashMap<>(mapPasCoordonnee);
 	}
 
 	public MapPasCoordonnee() {
@@ -36,8 +36,21 @@ public class MapPasCoordonnee {
     }
 
 	public List<Coordonnee> getCoordonneesFromPas(int pas) {
-        return mapPasCoordonnee.get(pas);
+		List<Coordonnee> coordonnees = mapPasCoordonnee.get(pas);
+		if (coordonnees == null || coordonnees.isEmpty()) {
+	        return null;
+		}
+		return new ArrayList<>(coordonnees);
     }
+	
+	public List<Coordonnee> getAllCoordonnee() {
+		List<Integer> listInt = getListePas();
+		List<Coordonnee> coordonnees = new ArrayList<>();
+		for (int i = 0; i > listInt.size(); i++) {
+			coordonnees.addAll(getCoordonneesFromPas(i));
+		}
+		return null;
+	}
 
 	/**
 	 * Ajoute une coordonnée dans la map associé à un pas
@@ -48,7 +61,7 @@ public class MapPasCoordonnee {
 	public void ajouterCoordonne(int pas, Coordonnee coordonnee) {
         if (pas >= 0 && coordonnee != null) {
         	List<Coordonnee> coordonnees = getCoordonneesFromPas(pas);
-            if (coordonnees == null) {
+            if (coordonnees == null || coordonnees.isEmpty()) {
             	coordonnees = new ArrayList<>();
             }
             coordonnees.add(coordonnee);
@@ -73,11 +86,18 @@ public class MapPasCoordonnee {
     }
 	
 	public boolean coordonneeIsDejaVu(Coordonnee coordonnee) {
-	    for (List<Coordonnee> coordonnees : mapPasCoordonnee.values()) {
-	        if (coordonnees.contains(coordonnee)) {
-	            return true;
-	        }
+	    if (coordonnee == null) { return false; }
+	    
+	    List<Integer> listePas = getListePas();
+	    if (listePas == null || listePas.isEmpty()) { return false; }
+	    
+	    for (int pas : listePas) {
+	    	List<Coordonnee> coordonnees = getCoordonneesFromPas(pas);
+	    	if (coordonnees != null && coordonnees.contains(coordonnee)) {
+	    		return true;
+	    	}
 	    }
+	    
 	    return false;
 	}
 

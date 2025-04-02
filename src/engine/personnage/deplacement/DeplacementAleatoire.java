@@ -41,7 +41,7 @@ public class DeplacementAleatoire extends StrategieDeplacement {
         updateAnimation(personnage, direction);
         
         Coordonnee nouvellePosition = direction.getCoordonnee(personnage.getCoordonnee());
-        if (isCoordonneeValide(nouvellePosition)) {
+        if (getGrille().isCoordonneeValide(nouvellePosition, "DEPLACEMENT")) {
             personnage.setCoordonnee(nouvellePosition);
         }
         

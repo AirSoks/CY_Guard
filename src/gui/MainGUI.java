@@ -60,13 +60,19 @@ public class MainGUI extends JFrame implements Runnable{
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		GrilleBuilder mapBuilder = new GrilleBuilder();
+		GrilleBuilder mapBuilder = new GrilleBuilder(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
+		mapBuilder.build();
 	    this.grille = mapBuilder.getGrille();
 
-	    this.manager = PersonnageManager.getInstance(grille);
+	    PersonnageManager.initInstance(grille);
+	    this.manager = PersonnageManager.getInstance();
 
 	    Gardien gardien = manager.ajouterGardien();
 	    manager.ajouterGardien(); 
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
+	    manager.ajouterIntrus();
 	    manager.ajouterIntrus();
 	    manager.setGardienActif(gardien);
 
@@ -100,7 +106,6 @@ public class MainGUI extends JFrame implements Runnable{
 			manager.deplacerPersonnages();
 			dashboard.repaint();
 		}
-
 	}
 
 	/**

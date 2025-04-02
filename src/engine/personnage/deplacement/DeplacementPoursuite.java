@@ -39,6 +39,10 @@ public class DeplacementPoursuite extends StrategieDeplacement {
         return new ArrayList<>(chemin);
     }
     
+    public void effacerChemin() {
+    	chemin.clear();
+    }
+    
     /**
      * Déplace le personnage de manière à poursuivre une cible.
      * Si aucune cible n'est trouvée, un déplacement aléatoire est effectué.
@@ -51,29 +55,40 @@ public class DeplacementPoursuite extends StrategieDeplacement {
             return;
         }
         Gardien gardien = (Gardien) personnage;
-        Intrus cible = cibleAccessible(gardien);
-        
-        if (cible == null) {
-        	deplacementAleatoire.deplacer(gardien);
-            return;
+
+        while (true) {
+            Intrus cible = cibleAccessible(gardien);
+
+            if (cible != null) {
+                try {
+                    trouverChemin(cible);
+                    deplacerVersCible(gardien, cible);
+                    return;
+                } catch (CheminNonViable e) {
+                    gardien.retirerPremiereCible();
+                }
+            } else {
+            	effacerChemin();
+                deplacementAleatoire.deplacer(gardien);
+                return;
+            }
         }
-        
-		trouverChemin(cible);
-        deplacerVersCible(gardien, cible);
     }
 
-	public Intrus cibleAccessible(Gardien gardien) {
-		while (gardien.getPremiereCible() != null) {
-	        Intrus cible = gardien.getPremiereCible();
-	        if (isCibleAccessible(gardien, cible)) {
-	            return cible;
-	        }
-	        gardien.retirerPremiereCible();
-	    }
-	    return null;
-	}
+    private Intrus cibleAccessible(Gardien gardien) {
+        while (gardien.getPremiereCible() != null) {
+            Intrus cible = gardien.getPremiereCible();
+            if (getPersonnage().getIntrus().contains(cible)) {
+                if (isCibleAccessible(gardien, cible)) {
+                    return cible;
+                }
+            }
+            gardien.retirerPremiereCible();
+        }
+        return null;
+    }
 
-	private boolean isCibleAccessible(Gardien gardien, Intrus cible) {
+	private boolean isCibleAccessible(Gardien gardien, Intrus cible){
 	    Coordonnee depart = gardien.getCoordonnee();
 	    Coordonnee arrivee = cible.getCoordonnee();
 	    mapPasCoordonnee.reinitialiserMap();
@@ -83,13 +98,12 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	    while (true) {
 	        List<Coordonnee> coordonneesActuelles = mapPasCoordonnee.getCoordonneesFromPas(pas - 1);
 	        if (coordonneesActuelles == null || coordonneesActuelles.isEmpty()) {
-	            return false; // Toute les coordonnées de la map ont été parcourus
+	            return false;
 	        }
 	        for (Coordonnee coord : coordonneesActuelles) {
 	            List<Coordonnee> adjacentes = getCoordonneeAdjacentes(coord);
 	            mapPasCoordonnee.ajouterCoordonnes(pas, adjacentes);
 	            if (adjacentes.contains(arrivee)) {
-	    	        System.out.println(pas);
 	                return true;
 	            }
 	        }
@@ -98,7 +112,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	}
 
 	/**
-     * Récupère les coordonnées adjacentes d'une coordonnée
+     * Récupère les coordonnées adjacentes d'une coordonnée accessible
      * 
      * @param coordonnee La coordonnée à traiter
      * @return Une liste de coordonnée adjacente
@@ -108,16 +122,14 @@ public class DeplacementPoursuite extends StrategieDeplacement {
         
         for (Direction direction : Direction.values()) {
             Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
-            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
-            
-            if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()) {
+            if (getGrille().isCoordonneeValide(coordonneeAdjacente, "DEPLACEMENT")) {
                 coordonneeAdjacentes.add(coordonneeAdjacente);
             }
         }
         return coordonneeAdjacentes;
     }
     
-    public void trouverChemin(Intrus cible) {
+    private void trouverChemin(Intrus cible) throws CheminNonViable{
         if (cible == null || cible.getCoordonnee() == null) {
             return;
         }

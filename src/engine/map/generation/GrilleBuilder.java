@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ConfigurationMapAleatoire;
-import config.GameConfiguration;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Direction;
@@ -33,40 +32,23 @@ public class GrilleBuilder {
 	 * Les obstacles à construire avec leur spécificité
 	 */
 	private List<ObstacleBuilder> obstacleBuilders;
-
-    private void initObstacleBuilders() {
-    	this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires();
+	
+	public GrilleBuilder(int nbLigne, int nbColonne) {
+        Grille.initInstance(nbLigne, nbColonne);
+        this.grille = Grille.getInstance();
+        this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires();
+    }
+	
+	public Grille build() {
+        genererObstacles();
+        return grille;
     }
 
 	private void genererObstacles() {
-		for (ObstacleBuilder builder : obstacleBuilders) {
+        for (ObstacleBuilder builder : obstacleBuilders) {
             placerObstacles(builder);
         }
         remplissageTrou();
-	}
-	
-    public GrilleBuilder() {
-        this.grille = Grille.getInstance(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
-        this.obstacleBuilders = new ArrayList<>();
-        initObstacleBuilders();
-        genererObstacles();
-    }
-
-	public Grille getGrille() {
-		return this.grille;
-	}
-
-	private List<Coordonnee> getListCoordonneeGrille() {
-        List<Coordonnee> coordonnees = new ArrayList<>();
-        for (int i = 0; i < GameConfiguration.NB_LIGNE; i++) {
-            for (int j = 0; j < GameConfiguration.NB_COLONNE; j++) {
-                Coordonnee position = new Coordonnee(i, j);
-                if (grille.getCase(position).getObstacle() instanceof Plaine) {
-                    coordonnees.add(position);
-                }
-            }
-        }
-        return coordonnees;
     }
 
 	/**
@@ -89,18 +71,33 @@ public class GrilleBuilder {
         while (obstaclesPlaces < nbObstacle) {
     		// On prend une valeur aléatoire
     		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire(mapProbaCoordonnee.getListeAleatoire());
-    		if (coordonneeAleatoire != null && grille.getCase(coordonneeAleatoire) != null) {
+    		if (grille.isCoordonneeValide(coordonneeAleatoire, "INGRILLE")) {
 
     			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
     			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
     			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
-
 
         		List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
     			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
                 obstaclesPlaces++;
         	}
         }
+    }
+
+	private List<Coordonnee> getListCoordonneeGrille() {
+        List<Coordonnee> coordonnees = new ArrayList<>();
+        int nbLigne = grille.getNbLigne();
+        int nbColonne = grille.getNbColonne();
+        
+        for (int i = 0; i < nbLigne; i++) {
+            for (int j = 0; j < nbColonne; j++) {
+                Coordonnee position = new Coordonnee(i, j);
+                if (grille.getCase(position).getObstacle() instanceof Plaine) {
+                    coordonnees.add(position);
+                }
+            }
+        }
+        return coordonnees;
     }
 
     /**
@@ -126,25 +123,6 @@ public class GrilleBuilder {
 		}
 		return coordonneeAdjacentes;
 	}
-
-    /**
-     * Récupère les 4 coordonnées direct adjacentes
-     * 
-     * @param coordonnee La coordonnée à traiter
-     * @return Une liste de coordonnée adjacente
-     */
-    private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
-    	List<Coordonnee> coordonnees = new ArrayList<>();
-        
-        for (Direction direction : Direction.values()) {
-            Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
-            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
-			if (caseAdjacente != null){
-				coordonnees.add(coordonneeAdjacente);
-			}
-    	}
-    	return coordonnees;
-    }
 
     /**
      * Augmente les probabilité d'une liste de coordonnée suivant la densité d'augmentattion
@@ -188,6 +166,25 @@ public class GrilleBuilder {
     }
 
     /**
+     * Récupère les 4 coordonnées direct adjacentes
+     * 
+     * @param coordonnee La coordonnée à traiter
+     * @return Une liste de coordonnée adjacente
+     */
+    private List<Coordonnee> getCoordonneeAdjacentes(Coordonnee coordonnee) {
+    	List<Coordonnee> coordonnees = new ArrayList<>();
+        
+        for (Direction direction : Direction.values()) {
+            Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
+            Case caseAdjacente = getGrille().getCase(coordonneeAdjacente);
+			if (caseAdjacente != null){
+				coordonnees.add(coordonneeAdjacente);
+			}
+    	}
+    	return coordonnees;
+    }
+
+    /**
      * Verifie si une case est entouré par des cases infranchissables
      * 
      * @param coordonneesAdjacentes Les coordonnées adjacentes à la coordonnée
@@ -195,8 +192,8 @@ public class GrilleBuilder {
      */
     private boolean caseEntoure(List<Coordonnee> coordonneesAdjacentes){
     	for (Coordonnee coordonnee : coordonneesAdjacentes) {
-    		Case caseAdjacente = grille.getCase(coordonnee);
-    		if (caseAdjacente != null && !caseAdjacente.getObstacle().isBloqueDeplacement()){
+    		
+    		if (grille.isCoordonneeValide(coordonnee, "DEPLACEMENT")){
     			return false;
     		}
     	}
@@ -222,4 +219,8 @@ public class GrilleBuilder {
     	}
     	return false;
     }
+
+	public Grille getGrille() {
+		return grille;
+	}
 }

@@ -38,19 +38,4 @@ public class DessinerPersonnages implements Dessiner {
             }
         }
     }
-
-    @Override
-    public void activer() {
-        this.enabled = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.enabled = false;
-    }
-
-    @Override
-    public boolean isActiver() {
-        return this.enabled;
-    }
 }

@@ -16,15 +16,12 @@ public class DessinerDeplacement implements Dessiner {
 	
     private PersonnageManager personnageManager;
     
-    private boolean enabled = true;
-
     public DessinerDeplacement(PersonnageManager personnageManager) {
         this.personnageManager = personnageManager;
     }
 
     @Override
     public void paint(Graphics g) {
-    	if (!enabled) return;
     	
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
@@ -51,20 +48,5 @@ public class DessinerDeplacement implements Dessiner {
                 }
             }
         }
-    }
-
-    @Override
-    public void activer() {
-        this.enabled = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.enabled = false;
-    }
-
-    @Override
-    public boolean isActiver() {
-        return this.enabled;
     }
 }

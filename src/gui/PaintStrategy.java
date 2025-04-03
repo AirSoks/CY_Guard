@@ -10,6 +10,7 @@ import gui.affichage.DessinerGrille;
 import gui.affichage.Dessiner;
 import gui.affichage.DessinerDeplacement;
 import gui.affichage.DessinerPersonnages;
+import gui.affichage.DessinerVision;
 
 public class PaintStrategy {
 	
@@ -19,19 +20,7 @@ public class PaintStrategy {
     	dessins.add(new DessinerGrille(grille));
     	dessins.add(new DessinerPersonnages(personnageManager));
         dessins.add(new DessinerDeplacement(personnageManager));
-        // dessins.add(new DessinerVision(personnageManager));
-    }
-
-    public void activer(boolean active) {
-        for (Dessiner dessin : dessins) {
-            dessin.activer();
-        }
-    }
-    
-    public void desactiver(boolean active) {
-        for (Dessiner dessin : dessins) {
-            dessin.desactiver();
-        }
+        dessins.add(new DessinerVision(personnageManager));
     }
 
     public void paint(Graphics g) {

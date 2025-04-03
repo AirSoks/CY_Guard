@@ -116,16 +116,16 @@ public class Vision {
 	            
 	            for (Coordonnee coordonneeAdjacente : adjacentes) {
 	                directionsValides = updateVisibilite(centre, coordonneeAdjacente, directionsValides);
-	                System.out.println(directionsValides);
 	                
 	                int index = getIndexDirection(centre, coordonneeAdjacente);
-	                if (index == -1 || directionsValides.get(index)) {
+	                if ((index == -1 || directionsValides.get(index)) && grille.isCoordonneeValide(coordonneeAdjacente, "VISION")) {
 	                	mapPasCoordonnee.ajouterCoordonne(pas, coordonneeAdjacente);
 	                }
 	            }
 	        }
 	        pas++;
 	    }
+        System.out.println(directionsValides);
 	}
     
     /**
@@ -139,10 +139,7 @@ public class Vision {
         
         for (Direction direction : Direction.values()) {
             Coordonnee coordonneeAdjacente = direction.getCoordonnee(coordonnee);
-            
-            if (grille.isCoordonneeValide(coordonneeAdjacente, "VISION")) {
-            	coordonneeAdjacentes.add(coordonneeAdjacente);
-            }
+            coordonneeAdjacentes.add(coordonneeAdjacente);
         }
         return coordonneeAdjacentes;
     }
@@ -153,9 +150,10 @@ public class Vision {
     	}
     	
     	int index = getIndexDirection(centre, autre);
+        System.out.println(index);
     	if (index == -1) { return directions;}
     	
-    	if (directions.get(index) && !grille.isCoordonneeValide(autre, "VISION")) {
+    	if (!grille.isCoordonneeValide(autre, "VISION")) {
     	    directions.set(index, false);
     	}
     	
@@ -163,17 +161,38 @@ public class Vision {
     }
     
     private int getIndexDirection(Coordonnee c1, Coordonnee c2) {
-    	int deltaLigne = c2.getLigne() - c1.getLigne();
-    	int deltaColonne = c2.getColonne() - c1.getColonne();
-    	
-    	if (deltaLigne == 0 && deltaColonne < 0) { return 0; } //GAUCHE
-    	if (deltaLigne > 0 && deltaColonne < 0) { return 1; } // BAS GAUCHE
-    	if (deltaLigne > 0 && deltaColonne == 0) { return 2; } // BAS
-    	if (deltaLigne > 0 && deltaColonne > 0) { return 3; } // BAS DROITE
-    	if (deltaLigne == 0 && deltaColonne > 0) { return 4; } // DROITE
-    	if (deltaLigne < 0 && deltaColonne > 0) { return 5; } // HAUT DROITE
-    	if (deltaLigne < 0 && deltaColonne == 0) { return 6; } // HAUT
-    	if (deltaLigne < 0 && deltaColonne < 0) { return 7; } // HAUT GAUCHE
-		return -1; // La coordonnée n'est ni dans la croix ni dans une diagonale
-	}
+        int deltaLigne = c2.getLigne() - c1.getLigne();
+        int deltaColonne = c2.getColonne() - c1.getColonne();
+        
+        if (deltaLigne != 0 && deltaColonne != 0 && Math.abs(deltaLigne) != Math.abs(deltaColonne)) {
+            return -1;
+        }
+
+        if (deltaLigne == 0 && deltaColonne < 0) { 
+        	return 0; 
+        } // GAUCHE
+        if (deltaLigne > 0 && deltaColonne < 0) { 
+        	return 1; 
+        } // BAS GAUCHE
+        if (deltaLigne > 0 && deltaColonne == 0) { 
+        	return 2; 
+        } // BAS
+        if (deltaLigne > 0 && deltaColonne > 0) { 
+        	return 3; 
+        } // BAS DROITE
+        if (deltaLigne == 0 && deltaColonne > 0) { 
+        	return 4; 
+        } // DROITE
+        if (deltaLigne < 0 && deltaColonne > 0) { 
+        	return 5; 
+        } // HAUT DROITE
+        if (deltaLigne < 0 && deltaColonne == 0) { 
+        	return 6; 
+        } // HAUT
+        if (deltaLigne < 0 && deltaColonne < 0) { 
+        	return 7; 
+        } // HAUT GAUCHE
+        
+        return -1;
+    }
 }

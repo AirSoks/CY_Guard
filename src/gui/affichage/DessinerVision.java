@@ -28,17 +28,17 @@ public class DessinerVision implements Dessiner {
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
-        	if (personnage instanceof Intrus) {
-        		continue;
-        	}
-        	
             Vision vision = personnage.getVision();
             List<Coordonnee> coordonneesVu = vision.getMapPasCoordonnee().getAllCoordonnees();
             if (coordonneesVu == null ) {
             	continue;
             }
-            
-            g.setColor(new Color(0, 0, 255, 100));
+            if (personnage instanceof Intrus) {
+            	g.setColor(new Color(0, 100, 0, 100));
+        	}
+            else {
+                g.setColor(new Color(0, 255, 255, 100));
+            }
             
             for (int i = 1; i < coordonneesVu.size(); i++) {
                 Coordonnee coord = coordonneesVu.get(i);
@@ -47,20 +47,5 @@ public class DessinerVision implements Dessiner {
                 g.fillRect(x, y, blockSize, blockSize);
             }
         }
-    }
-
-    @Override
-    public void activer() {
-        this.enabled = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.enabled = false;
-    }
-
-    @Override
-    public boolean isActiver() {
-        return this.enabled;
     }
 }

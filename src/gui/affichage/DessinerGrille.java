@@ -17,7 +17,6 @@ import engine.utilitaire.SimulationUtility;
 public class DessinerGrille implements Dessiner {
 	
     private Grille grille;
-    private boolean enabled = true;
     
     private Map<String, Image> imageCache = new HashMap<>();
 
@@ -34,7 +33,6 @@ public class DessinerGrille implements Dessiner {
 
     @Override
     public void paint(Graphics g) {
-        if (!enabled) return;
 
         int blockSize = GameConfiguration.BLOCK_SIZE;
         Case[][] cases = grille.getGrille();
@@ -102,20 +100,5 @@ public class DessinerGrille implements Dessiner {
         } else {
             return getImage("src/images/tiles/lac/l13.jpg");
         }
-    }
-
-	@Override
-    public void activer() {
-        this.enabled = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.enabled = false;
-    }
-
-    @Override
-    public boolean isActiver() {
-        return this.enabled;
     }
 }

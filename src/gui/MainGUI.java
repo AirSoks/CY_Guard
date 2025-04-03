@@ -22,7 +22,6 @@ import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
-import engine.personnage.deplacement.Deplacement;
 import engine.personnage.deplacement.DeplacementCase;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.deplacement.DeplacementManuel;
@@ -75,11 +74,8 @@ public class MainGUI extends JFrame implements Runnable{
 
 	    PersonnageManager.initInstance(grille);
 	    this.manager = PersonnageManager.getInstance();
-
-	    Gardien gardien = manager.ajouterGardien();
-	    manager.setGardienActif(gardien);
 	    
-	    manager.ajouterGardien();
+	    manager.ajouterGardien(2);
 	    manager.ajouterIntrus(5);
 
 		dashboard = new GameDisplay(this.grille, manager);
@@ -228,8 +224,11 @@ public class MainGUI extends JFrame implements Runnable{
 	        }
 
 	        DeplacementCase deplacementCase = (DeplacementCase) DeplacementFactory.getDeplacement("Case", manager, grille);
-	        personnagePressed.setDeplacement(deplacementCase);
+	        if (personnagePressed.equals(manager.getGardienActif())) {
+	        	manager.setGardienActif(null);
+	        }
 	        deplacementCase.setCible(coordonnee);
+	        personnagePressed.setDeplacement(deplacementCase);
 	        
 	        personnagePressed = null;
 		}
@@ -241,6 +240,5 @@ public class MainGUI extends JFrame implements Runnable{
 		@Override
 		public void mouseExited(MouseEvent e) {
 		}
-
 	}
 }

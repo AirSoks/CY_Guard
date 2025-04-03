@@ -1,4 +1,4 @@
-package gui.affichage;
+package gui.dessin;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,7 +6,6 @@ import java.util.List;
 
 import config.GameConfiguration;
 import engine.map.Coordonnee;
-import engine.personnage.Gardien;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.Deplacement;
@@ -44,7 +43,6 @@ public class DessinerDeplacement implements Dessiner {
                 
                 g.setColor(new Color(255, 0, 0, 100));
                 
-                // Parcourir tous les points sauf le premier et dernier
                 for (int i = 1; i < chemin.size(); i++) {
                     Coordonnee coord = chemin.get(i);
                     int x = coord.getColonne() * blockSize;
@@ -64,7 +62,6 @@ public class DessinerDeplacement implements Dessiner {
                 
                 g.setColor(new Color(255, 0, 0, 100));
                 
-                // Parcourir tous les points sauf le premier et dernier
                 for (int i = 1; i < chemin.size(); i++) {
                     Coordonnee coord = chemin.get(i);
                     int x = coord.getColonne() * blockSize;
@@ -75,21 +72,17 @@ public class DessinerDeplacement implements Dessiner {
         }
     }
 
-    @Override
-    public void activer() {
-        this.dessiner = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.dessiner = false;
-    }
-
 	@Override
-	public void activerPerformance() {
+	public String getNom() {
+		return "DEPLACEMENT";
 	}
 
 	@Override
-	public void desactiverPerformance() {
+	public void setActive(Boolean etat) {
+		this.dessiner = etat;
+	}
+
+	@Override
+	public void setPerformance(Boolean etat) {
 	}
 }

@@ -1,4 +1,4 @@
-package gui.affichage;
+package gui.dessin;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -22,19 +22,18 @@ public class DessinerGrille implements Dessiner {
     private boolean dessiner = true;
     private boolean performanceMode = false;
     
-    private Map<String, Image> imageCache = new HashMap<>();
-
-    public Image getImage(String path) {
-        if (!imageCache.containsKey(path)) {
-            imageCache.put(path, SimulationUtility.readImage(path));
-        }
-        return imageCache.get(path);
-    }
+    private Map<String, Image> image = new HashMap<>();
     
     public DessinerGrille(Grille grille) {
         this.grille = grille;
     }
 
+    public Image getImage(String path) {
+        if (!image.containsKey(path)) {
+            image.put(path, SimulationUtility.readImage(path));
+        }
+        return image.get(path);
+    }
     @Override
     public void paint(Graphics g) {
     	
@@ -124,22 +123,17 @@ public class DessinerGrille implements Dessiner {
     }
     
     @Override
-    public void activer() {
-        this.dessiner = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.dessiner = false;
-    }
-
-	@Override
-	public void activerPerformance() {
-        this.performanceMode = true;
+	public String getNom() {
+		return "GRILLE";
 	}
 
 	@Override
-	public void desactiverPerformance() {
-        this.performanceMode = false;
+	public void setActive(Boolean etat) {
+		this.dessiner = etat;
+	}
+
+	@Override
+	public void setPerformance(Boolean etat) {
+		this.performanceMode = etat;
 	}
 }

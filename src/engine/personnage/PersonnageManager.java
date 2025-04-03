@@ -70,9 +70,10 @@ public class PersonnageManager {
 		if (this.gardienActif != null) {
 			setDefautDeplacement(gardienActif);
 		}
-		
 		this.gardienActif = newGardienActif;
-		this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
+		if (gardienActif != null) {
+			this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
+		}
 	}
 	
 	/**
@@ -214,7 +215,12 @@ public class PersonnageManager {
 			return;
 		}
 		else if (personnage instanceof Gardien) {
-			personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
+			if (gardienActif == null) {
+				setGardienActif((Gardien) personnage);
+			}
+			else {
+				personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
+			}
 		}
 		else if (personnage instanceof Intrus) {
 			personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));

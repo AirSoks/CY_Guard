@@ -54,10 +54,13 @@ public class DeplacementCase extends StrategieDeplacement {
                 return;
             } catch (CheminNonViable e) {
             	getPersonnage().setDefautDeplacement(personnage);
+            	personnage.deplacer();
             }
         }
         else {
         	getPersonnage().setDefautDeplacement(personnage);
+        	personnage.setDirection(null);
+        	personnage.deplacer();
         }
     }
     

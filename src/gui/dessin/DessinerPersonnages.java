@@ -1,8 +1,10 @@
-package gui.affichage;
+package gui.dessin;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
 
 import config.GameConfiguration;
 import engine.map.Coordonnee;
@@ -10,6 +12,7 @@ import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
+import engine.utilitaire.SimulationUtility;
 
 public class DessinerPersonnages implements Dessiner {
 	
@@ -17,9 +20,18 @@ public class DessinerPersonnages implements Dessiner {
     
     private boolean dessiner = true;
     private boolean performanceMode = false;
+    
+    private Map<String, Image> image = new HashMap<>();
 
     public DessinerPersonnages(PersonnageManager personnageManager) {
         this.personnageManager = personnageManager;
+    }
+    
+    public Image getImage(String path) {
+        if (!image.containsKey(path)) {
+            image.put(path, SimulationUtility.readImage(path));
+        }
+        return image.get(path);
     }
 
     @Override
@@ -35,11 +47,9 @@ public class DessinerPersonnages implements Dessiner {
                 int y = coordonnee.getLigne() * blockSize;
                 
                 if (!performanceMode) { 
-	                Image sprite = personnage.getAnimation().getSprite();
-	
-	                if (sprite != null) {
-	                    g.drawImage(sprite, x, y, blockSize, blockSize, null);
-	                }
+	                String spritePath = personnage.getAnimation().getSpritePath();
+	                Image sprite = getImage(spritePath);
+	                g.drawImage(sprite, x, y, blockSize, blockSize, null);
                 }
                 else {
 	                if (personnage instanceof Gardien) {
@@ -55,22 +65,17 @@ public class DessinerPersonnages implements Dessiner {
     }
     
     @Override
-    public void activer() {
-        this.dessiner = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.dessiner = false;
-    }
-
-	@Override
-	public void activerPerformance() {
-        this.performanceMode = true;
+	public String getNom() {
+		return "PERSONNAGES";
 	}
 
 	@Override
-	public void desactiverPerformance() {
-        this.performanceMode = false;
+	public void setActive(Boolean etat) {
+		this.dessiner = etat;
+	}
+
+	@Override
+	public void setPerformance(Boolean etat) {
+		this.performanceMode = etat;
 	}
 }

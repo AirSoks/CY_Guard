@@ -3,7 +3,6 @@ package engine.personnage;
 import java.awt.Image;
 
 import engine.map.Direction;
-import engine.utilitaire.SimulationUtility;
 
 /**
  * Gère l'animation et les sprites d'un personnage en fonction de sa direction et de sa position.
@@ -43,9 +42,9 @@ public class PersonnageAnimation {
      * Récupère l'image du sprite correspondant à l'état actuel
      * @return L'image à afficher pour le personnage
      */
-	public Image getSprite() {
+	public String getSpritePath() {
 	    String fileName = "src/images/sprites/" + typePersonnage + getDerniereDirection() + getAnimationFrame() + ".png";
-	    return SimulationUtility.readImage(fileName);
+	    return fileName;
 	}
     
     public int getAnimationFrame() {

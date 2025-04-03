@@ -6,11 +6,11 @@ import java.util.List;
 
 import engine.map.Grille;
 import engine.personnage.PersonnageManager;
-import gui.affichage.DessinerGrille;
-import gui.affichage.Dessiner;
-import gui.affichage.DessinerDeplacement;
-import gui.affichage.DessinerPersonnages;
-import gui.affichage.DessinerVision;
+import gui.dessin.Dessiner;
+import gui.dessin.DessinerDeplacement;
+import gui.dessin.DessinerGrille;
+import gui.dessin.DessinerPersonnages;
+import gui.dessin.DessinerVision;
 
 public class PaintStrategy {
 	
@@ -26,6 +26,35 @@ public class PaintStrategy {
     public void paint(Graphics g) {
         for (Dessiner dessin : dessins) {
         	dessin.paint(g);
+        }
+    }
+    
+    public Dessiner getDessinParNom(String nom) {
+        for (Dessiner dessin : dessins) {
+            if (dessin.getNom().equals(nom.toUpperCase())) {
+                return dessin;
+            }
+        }
+        return null;
+    }
+    
+    public void setDessinActif(String nom, boolean etat) {
+        Dessiner dessin = getDessinParNom(nom);
+        if (dessin != null) {
+            if (etat) {
+                dessin.setActive(etat);
+            }
+        }
+    }
+
+    public void setPerformanceActif(String nom, boolean etat) {
+        Dessiner dessin = getDessinParNom(nom);
+        if (dessin != null) {
+        	if (dessin != null) {
+                if (etat) {
+                    dessin.setPerformance(etat);
+                }
+            }
         }
     }
 }

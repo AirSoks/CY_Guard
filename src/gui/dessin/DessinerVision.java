@@ -1,4 +1,4 @@
-package gui.affichage;
+package gui.dessin;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -50,21 +50,17 @@ public class DessinerVision implements Dessiner {
         }
     }
 
-    @Override
-    public void activer() {
-        this.dessiner = true;
-    }
-
-    @Override
-    public void desactiver() {
-        this.dessiner = false;
-    }
-
 	@Override
-	public void activerPerformance() {
+	public String getNom() {
+		return "VISION";
+	}
+	
+	@Override
+	public void setActive(Boolean etat) {
+		this.dessiner = etat;
 	}
 
 	@Override
-	public void desactiverPerformance() {
+	public void setPerformance(Boolean etat) {
 	}
 }

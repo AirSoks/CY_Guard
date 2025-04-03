@@ -20,7 +20,7 @@ import engine.personnage.PersonnageManager;
 @SuppressWarnings("serial")
 public class GameDisplay extends JPanel {
 
-    private final PaintStrategy paintStrategy;
+    private PaintStrategy paintStrategy;
 
     public GameDisplay(Grille grille, PersonnageManager personnages) {
         this.paintStrategy = new PaintStrategy(grille, personnages);

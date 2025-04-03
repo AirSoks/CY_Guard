@@ -6,16 +6,25 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import config.GameConfiguration;
+import engine.map.Case;
+import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.Gardien;
+import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
+import engine.personnage.deplacement.Deplacement;
+import engine.personnage.deplacement.DeplacementCase;
+import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.deplacement.DeplacementManuel;
 
 /**
@@ -68,15 +77,13 @@ public class MainGUI extends JFrame implements Runnable{
 	    this.manager = PersonnageManager.getInstance();
 
 	    Gardien gardien = manager.ajouterGardien();
-	    manager.ajouterGardien(); 
-	    manager.ajouterIntrus();
-	    manager.ajouterIntrus();
-	    manager.ajouterIntrus();
-	    manager.ajouterIntrus();
-	    manager.ajouterIntrus();
 	    manager.setGardienActif(gardien);
+	    
+	    manager.ajouterGardien();
+	    manager.ajouterIntrus(5);
 
 		dashboard = new GameDisplay(this.grille, manager);
+		dashboard.addMouseListener(new ClicsControls(grille, manager));
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
 
@@ -89,7 +96,6 @@ public class MainGUI extends JFrame implements Runnable{
 		setVisible(true);
 		setPreferredSize(preferredSize);
 		setResizable(false);
-
 	}
 
 	/**
@@ -151,12 +157,90 @@ public class MainGUI extends JFrame implements Runnable{
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-
 		}
+	}
+	
+	public class ClicsControls implements MouseListener {
+
+		/**
+		 * Grille du simulation
+		 */
+		private Grille grille;
+		
+		/**
+		 * Gestionnaire des personnages
+		 */
+		private PersonnageManager manager;
+		
+		private Personnage personnagePressed;
+
+	    public ClicsControls(Grille grille, PersonnageManager manager) {
+	        this.grille = grille;
+	        this.manager = manager;
+	    }
+
+	    @Override
+	    public void mouseClicked(MouseEvent e) {
+	        int blockSize = GameConfiguration.BLOCK_SIZE;
+	        int colonne = e.getX() / blockSize;
+	        int ligne = e.getY() / blockSize;
+	        
+            Coordonnee coordonnee = new Coordonnee(ligne, colonne);
+	        Case c = grille.getCase(coordonnee);
+	        if (c == null) { return; }
+	        
+	        List<Gardien> gardiens = manager.getGardiens(coordonnee);
+	        if (gardiens == null || gardiens.isEmpty()) { return; }
+	        Gardien gardien = gardiens.get(0);
+	        manager.setGardienActif(gardien);
+	    }
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+	        int blockSize = GameConfiguration.BLOCK_SIZE;
+	        int colonne = e.getX() / blockSize;
+	        int ligne = e.getY() / blockSize;
+	        
+            Coordonnee coordonnee = new Coordonnee(ligne, colonne);
+	        Case c = grille.getCase(coordonnee);
+	        if (c == null) { return; }
+	        
+	        List<Personnage> personnages = manager.getPersonnages(coordonnee);
+	        if (personnages == null || personnages.isEmpty()) { return; }
+	        personnagePressed = personnages.get(0);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+	        int blockSize = GameConfiguration.BLOCK_SIZE;
+	        int colonne = e.getX() / blockSize;
+	        int ligne = e.getY() / blockSize;
+	        
+            Coordonnee coordonnee = new Coordonnee(ligne, colonne);
+	        Case c = grille.getCase(coordonnee);
+	        
+	        if (c == null || personnagePressed == null) {
+	        	return;
+	        }
+
+	        DeplacementCase deplacementCase = (DeplacementCase) DeplacementFactory.getDeplacement("Case", manager, grille);
+	        personnagePressed.setDeplacement(deplacementCase);
+	        deplacementCase.setCible(coordonnee);
+	        
+	        personnagePressed = null;
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
 	}
 }

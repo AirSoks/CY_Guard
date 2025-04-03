@@ -1,5 +1,6 @@
 package gui.affichage;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.HashMap;
@@ -18,6 +19,9 @@ public class DessinerGrille implements Dessiner {
 	
     private Grille grille;
     
+    private boolean dessiner = true;
+    private boolean performanceMode = false;
+    
     private Map<String, Image> imageCache = new HashMap<>();
 
     public Image getImage(String path) {
@@ -33,7 +37,9 @@ public class DessinerGrille implements Dessiner {
 
     @Override
     public void paint(Graphics g) {
-
+    	
+    	if (!dessiner) return;
+    	
         int blockSize = GameConfiguration.BLOCK_SIZE;
         Case[][] cases = grille.getGrille();
         int nbLigne = grille.getNbLigne();
@@ -44,18 +50,33 @@ public class DessinerGrille implements Dessiner {
                 Case c = cases[line][col];
                 Obstacle obstacle = c.getObstacle();
 
-                if (obstacle instanceof Arbre) {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/arbre.png");
-                	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
-                } else if (obstacle instanceof Lac) {
-                	Image tile = getLacTile(line,col);
-                	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
-                } else if (obstacle instanceof Roche) {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/roche.png");
-                	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
-                } else {
-                	Image tile = SimulationUtility.readImage("src/images/tiles/plaine.png");
-                	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
+            	if (!performanceMode) {
+                    if (obstacle instanceof Arbre) {
+                    	Image tile = getImage("src/images/tiles/arbre.png");
+                    	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
+                    } else if (obstacle instanceof Lac) {
+                    	Image tile = getLacTile(line,col);
+                    	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
+                    } else if (obstacle instanceof Roche) {
+                    	Image tile = getImage("src/images/tiles/roche.png");
+                    	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
+                    } else {
+                    	Image tile = getImage("src/images/tiles/plaine.png");
+                    	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
+                    }
+            	} 
+            	else {
+            		if (obstacle instanceof Arbre) {
+                        g.setColor(new Color(43, 139, 27));
+                    } else if (obstacle instanceof Lac) {
+                        g.setColor(Color.blue);
+                    } else if (obstacle instanceof Roche) {
+                        g.setColor(Color.gray);
+                    } else {
+                        g.setColor(Color.yellow);
+                    }
+
+                    g.fillRect(col * blockSize, line * blockSize, blockSize, blockSize);
                 }
             }
         }
@@ -98,7 +119,27 @@ public class DessinerGrille implements Dessiner {
         } else if (!leftLac && topLac && !rightLac && !bottomLac) {
             return getImage("src/images/tiles/lac/l12.png");
         } else {
-            return getImage("src/images/tiles/lac/l13.jpg");
+            return getImage("src/images/tiles/lac/l13.png");
         }
     }
+    
+    @Override
+    public void activer() {
+        this.dessiner = true;
+    }
+
+    @Override
+    public void desactiver() {
+        this.dessiner = false;
+    }
+
+	@Override
+	public void activerPerformance() {
+        this.performanceMode = true;
+	}
+
+	@Override
+	public void desactiverPerformance() {
+        this.performanceMode = false;
+	}
 }

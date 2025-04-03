@@ -15,7 +15,7 @@ public class DessinerVision implements Dessiner {
 	
     private PersonnageManager personnageManager;
     
-    private boolean enabled = true;
+    private boolean dessiner = true;
 
     public DessinerVision(PersonnageManager personnageManager) {
         this.personnageManager = personnageManager;
@@ -23,7 +23,8 @@ public class DessinerVision implements Dessiner {
 
     @Override
     public void paint(Graphics g) {
-        if (!enabled) return;
+    	
+        if (!dessiner) return;
 
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
@@ -48,4 +49,22 @@ public class DessinerVision implements Dessiner {
             }
         }
     }
+
+    @Override
+    public void activer() {
+        this.dessiner = true;
+    }
+
+    @Override
+    public void desactiver() {
+        this.dessiner = false;
+    }
+
+	@Override
+	public void activerPerformance() {
+	}
+
+	@Override
+	public void desactiverPerformance() {
+	}
 }

@@ -14,7 +14,7 @@ import gui.affichage.DessinerVision;
 
 public class PaintStrategy {
 	
-    private final List<Dessiner> dessins = new ArrayList<>();
+    private List<Dessiner> dessins = new ArrayList<>();
 
     public PaintStrategy(Grille grille, PersonnageManager personnageManager) {
     	dessins.add(new DessinerGrille(grille));

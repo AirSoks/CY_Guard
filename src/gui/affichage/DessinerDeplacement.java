@@ -10,11 +10,14 @@ import engine.personnage.Gardien;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.Deplacement;
+import engine.personnage.deplacement.DeplacementCase;
 import engine.personnage.deplacement.DeplacementPoursuite;
 
 public class DessinerDeplacement implements Dessiner {
 	
     private PersonnageManager personnageManager;
+    
+    private boolean dessiner = true;
     
     public DessinerDeplacement(PersonnageManager personnageManager) {
         this.personnageManager = personnageManager;
@@ -23,12 +26,14 @@ public class DessinerDeplacement implements Dessiner {
     @Override
     public void paint(Graphics g) {
     	
+    	if (!dessiner) return;
+    	
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
             Deplacement deplacement = personnage.getDeplacement();
 
-            if (deplacement instanceof DeplacementPoursuite && personnage instanceof Gardien) {
+            if (deplacement instanceof DeplacementPoursuite) {
             	DeplacementPoursuite poursuite = (DeplacementPoursuite) deplacement;
 
                 List<Coordonnee> chemin = poursuite.getChemin();
@@ -36,7 +41,27 @@ public class DessinerDeplacement implements Dessiner {
                 if (chemin == null || chemin.size() <= 1) {
                 	continue;
                 }
+                
+                g.setColor(new Color(255, 0, 0, 100));
+                
+                // Parcourir tous les points sauf le premier et dernier
+                for (int i = 1; i < chemin.size(); i++) {
+                    Coordonnee coord = chemin.get(i);
+                    int x = coord.getColonne() * blockSize;
+                    int y = coord.getLigne() * blockSize;
+                    g.fillRect(x, y, blockSize, blockSize);
+                }
+            }
+            
+            if (deplacement instanceof DeplacementCase) {
+            	DeplacementCase poursuite = (DeplacementCase) deplacement;
 
+                List<Coordonnee> chemin = poursuite.getChemin();
+                
+                if (chemin == null || chemin.size() <= 1) {
+                	continue;
+                }
+                
                 g.setColor(new Color(255, 0, 0, 100));
                 
                 // Parcourir tous les points sauf le premier et dernier
@@ -49,4 +74,22 @@ public class DessinerDeplacement implements Dessiner {
             }
         }
     }
+
+    @Override
+    public void activer() {
+        this.dessiner = true;
+    }
+
+    @Override
+    public void desactiver() {
+        this.dessiner = false;
+    }
+
+	@Override
+	public void activerPerformance() {
+	}
+
+	@Override
+	public void desactiverPerformance() {
+	}
 }

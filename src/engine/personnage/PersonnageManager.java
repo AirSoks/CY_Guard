@@ -8,6 +8,7 @@ import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
+import engine.personnage.vision.VisionFactory;
 import engine.utilitaire.MaxTentativeAtteind;
 
 /**
@@ -167,7 +168,7 @@ public class PersonnageManager {
         }
 		Gardien gardien = new Gardien(coordonnee);
 		setDefautDeplacement(gardien);
-		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
+		Vision vision = VisionFactory.getVision(this, grille);
 		gardien.setVision(vision);
 		personnages.add(gardien);
 		return gardien;
@@ -204,7 +205,7 @@ public class PersonnageManager {
         }
 		Intrus intrus = new Intrus(coordonnee);
 		setDefautDeplacement(intrus);
-		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
+		Vision vision = VisionFactory.getVision(this, grille);
 		intrus.setVision(vision);
 		personnages.add(intrus);
 		return intrus;

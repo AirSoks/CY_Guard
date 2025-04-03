@@ -1,5 +1,8 @@
 package engine.personnage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
@@ -52,6 +55,11 @@ public abstract class Personnage {
      * La direction de son prochain déplacement
      */
     private Direction direction;
+    
+    /**
+     * Les coordonnées visibles pas le personnage
+     */
+    private List<Coordonnee> coordonneesVu;
     
 	public PersonnageAnimation getAnimation() {
 		return animation;
@@ -109,6 +117,14 @@ public abstract class Personnage {
 
 	public Vision getVision() {
 		return vision;
+	}
+
+	public List<Coordonnee> getCoordonneesVu() {
+		return coordonneesVu;
+	}
+
+	public void setCoordonneesVu(List<Coordonnee> coordonneesVu) {
+		this.coordonneesVu = coordonneesVu;
 	}
 
 	public void deplacer() {

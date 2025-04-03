@@ -29,8 +29,7 @@ public class DessinerVision implements Dessiner {
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
-            Vision vision = personnage.getVision();
-            List<Coordonnee> coordonneesVu = vision.getMapPasCoordonnee().getAllCoordonnees();
+            List<Coordonnee> coordonneesVu = personnage.getCoordonneesVu();
             if (coordonneesVu == null ) {
             	continue;
             }

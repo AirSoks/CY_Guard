@@ -14,6 +14,11 @@ import engine.personnage.deplacement.MapPasCoordonnee;
 
 public class Vision {
 	
+	/**
+	 * Utilisation d'un singleton
+	 */
+	private static Vision instance;
+	
 	/*
 	 * La distance de case pour voir les personnage
 	 */
@@ -34,10 +39,23 @@ public class Vision {
      */
 	private MapPasCoordonnee mapPasCoordonnee = new MapPasCoordonnee();
 
-    public Vision(PersonnageManager personnageManager, Grille grille, int distance) {
+    private Vision(PersonnageManager personnageManager, Grille grille, int distance) {
         this.personnageManager = personnageManager;
         this.grille = grille;
     	this.distance = distance;
+	}
+    
+	public static void initInstance(PersonnageManager personnageManager, Grille grille, int distance) {
+		if (instance == null){
+	        instance = new Vision(personnageManager, grille, distance);
+		}
+    }
+	
+	public static Vision getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("Vision non initialisée");
+		}
+		return instance;
 	}
 
     public int getDistance() {
@@ -69,10 +87,12 @@ public class Vision {
 
 	private List<Gardien> recupererGardiensVisibles(Personnage personnage) {
     	observer(personnage.getCoordonnee());
-        List<Coordonnee> zonesVisibles = mapPasCoordonnee.getAllCoordonnees();
+    	
+    	personnage.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
         List<Gardien> listeGardiens = new ArrayList<>();
+        
         for (Gardien gardien : personnageManager.getGardiens()) {
-            if (zonesVisibles.contains(gardien.getCoordonnee())) {
+            if (personnage.getCoordonneesVu().contains(gardien.getCoordonnee())) {
             	listeGardiens.add(gardien);
             }
         }
@@ -82,11 +102,11 @@ public class Vision {
 	private List<Intrus> recupererIntrusVisibles(Personnage personnage) {
 	    observer(personnage.getCoordonnee());
 
-	    List<Coordonnee> zonesVisibles = mapPasCoordonnee.getAllCoordonnees();
+	    personnage.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
 	    List<Intrus> listeIntrus = new ArrayList<>();
 	    
 	    for (Intrus intrus : personnageManager.getIntrus()) {
-	        if (zonesVisibles.contains(intrus.getCoordonnee())) {
+	        if (personnage.getCoordonneesVu().contains(intrus.getCoordonnee())) {
 	            listeIntrus.add(intrus);
 	        }
 	    }

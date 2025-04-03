@@ -40,5 +40,8 @@ public class GameConfiguration {
 	public static final int NB_CASE_DENSITE_ARBRE = 0;
 	
 	public static final boolean PERMET_DEPLACEMENT_DIAGONNAL = true;
-	public static final int NB_CASES_VISION = 6;
+	public static final int NB_CASES_VISION = 5;
+    
+    public final static String INTRUS_DEFAUT_DEPLACEMENT = "Aleatoire";
+    public final static String GARDIEN_DEFAUT_DEPLACEMENT = "Poursuite";
 }

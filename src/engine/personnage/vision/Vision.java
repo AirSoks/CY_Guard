@@ -125,7 +125,6 @@ public class Vision {
 	        }
 	        pas++;
 	    }
-        System.out.println(directionsValides);
 	}
     
     /**
@@ -150,7 +149,6 @@ public class Vision {
     	}
     	
     	int index = getIndexDirection(centre, autre);
-        System.out.println(index);
     	if (index == -1) { return directions;}
     	
     	if (!grille.isCoordonneeValide(autre, "VISION")) {

@@ -8,6 +8,7 @@ import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
+import engine.utilitaire.MaxTentativeAtteind;
 
 /**
  * Cette classe sert à la gestion des personnages
@@ -56,8 +57,10 @@ public class PersonnageManager {
 	}
 
 	public void retirerPersonnage(Personnage personnage) {
-        this.personnages.remove(personnage);
-    }
+		if (personnage != null && personnages.contains(personnage)) {
+	        this.personnages.remove(personnage);
+	    }
+	}
 
     public Gardien getGardienActif() {
 		return gardienActif;
@@ -65,23 +68,33 @@ public class PersonnageManager {
 
 	public void setGardienActif(Gardien newGardienActif) {
 		if (this.gardienActif != null) {
-			this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
+			setDefautDeplacement(gardienActif);
 		}
 		
 		this.gardienActif = newGardienActif;
 		this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
 	}
+	
+	/**
+	 * Déplace tout les personnages de la grille
+	 */
+	public void deplacerPersonnages() {
+        for (Intrus intrus : getIntrus()) {
+        	if (intrus != null) {
+        		intrus.deplacer();
+        		intrus.observer();
+        	}
+        }
+        for (Gardien gardien : getGardiens()) {
+        	if (gardien != null) {
+            	gardien.deplacer();
+        		gardien.observer();
+        	}
+        }
+    }
 
     public List<Personnage> getPersonnages() {
         return new ArrayList<>(personnages);
-    }
-    
-    public List<Intrus> getIntrus() {
-        return getIntrus(null);
-    }
-
-    public List<Gardien> getGardiens() {
-        return getGardiens(null);
     }
 
     public List<Personnage> getPersonnages(Coordonnee coordonnee) {
@@ -92,6 +105,10 @@ public class PersonnageManager {
             }
         }
         return personnages;
+    }
+    
+    public List<Intrus> getIntrus() {
+        return getIntrus(null);
     }
 
     public List<Intrus> getIntrus(Coordonnee coordonnee) {
@@ -104,6 +121,10 @@ public class PersonnageManager {
         return intrus;
     }
 
+    public List<Gardien> getGardiens() {
+        return getGardiens(null);
+    }
+
     public List<Gardien> getGardiens(Coordonnee coordonnee) {
         List<Gardien> gardiens = new ArrayList<>();
         for (Personnage personnage : getPersonnages(coordonnee)) {
@@ -113,24 +134,23 @@ public class PersonnageManager {
         }
         return gardiens;
     }
-	
-	/**
-	 * Déplace tout les personnages de la grille
-	 */
-	public void deplacerPersonnages() {
-        for (Gardien gardien : getGardiens()) {
-        	if (gardien != null) {
-        		gardien.observer();
-            	gardien.deplacer();
-        	}
-        }
-        for (Intrus intrus : getIntrus()) {
-        	if (intrus != null) {
-        		intrus.observer();
-        		intrus.deplacer();
-        	}
-        }
-    }
+    
+    /**
+     * Ajoute des gardiens sur la grille
+     * 
+     * @param nombreGardien Le nombre de gardiens à ajouter
+     * @return Le gardien
+     */
+    public List<Gardien> ajouterGardien(int nombreGardien) {
+    	List<Gardien> listGardiens = new ArrayList<>();
+    	for (int i = 0; i < nombreGardien ; i++) {
+    		Gardien gardien = ajouterGardien();
+    		if (gardien != null ) {
+    			listGardiens.add(gardien);
+    		}
+    	}
+		return listGardiens;
+	}
 	
     /**
      * Ajoute un gardien sur la grille
@@ -138,13 +158,35 @@ public class PersonnageManager {
      * @return Le gardien
      */
     public Gardien ajouterGardien() {
-		Coordonnee coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
+        Coordonnee coordonnee;
+        try {
+            coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
+        } catch (MaxTentativeAtteind e) {
+            return null;
+        }
 		Gardien gardien = new Gardien(coordonnee);
-		gardien.setDeplacement(DeplacementFactory.getDeplacement("Poursuite", this, grille));
+		setDefautDeplacement(gardien);
 		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
 		gardien.setVision(vision);
 		personnages.add(gardien);
 		return gardien;
+	}
+    
+    /**
+     * Ajoute des intrus sur la grille
+     * 
+     * @param nombreGardien Le nombre de gardiens à ajouter
+     * @return Le gardien
+     */
+    public List<Intrus> ajouterIntrus(int nombreIntrus) {
+    	List<Intrus> listIntrus = new ArrayList<>();
+    	for (int i = 0; i < nombreIntrus ; i++) {
+    		Intrus intrus = ajouterIntrus();
+    		if (intrus != null ) {
+    			listIntrus.add(intrus);
+    		}
+    	}
+		return listIntrus;
 	}
     
     /**
@@ -153,12 +195,29 @@ public class PersonnageManager {
      * @return L'intrus
      */
 	public Intrus ajouterIntrus() {
-		Coordonnee coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
+        Coordonnee coordonnee;
+        try {
+            coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
+        } catch (MaxTentativeAtteind e) {
+            return null;
+        }
 		Intrus intrus = new Intrus(coordonnee);
-		intrus.setDeplacement(DeplacementFactory.getDeplacement("Aleatoire", this, grille));
+		setDefautDeplacement(intrus);
 		Vision vision = new Vision(this, grille, GameConfiguration.NB_CASES_VISION);
 		intrus.setVision(vision);
 		personnages.add(intrus);
 		return intrus;
+	}
+	
+	public void setDefautDeplacement(Personnage personnage) {
+		if (personnage == null) {
+			return;
+		}
+		else if (personnage instanceof Gardien) {
+			personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
+		}
+		else if (personnage instanceof Intrus) {
+			personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
+		}
 	}
 }

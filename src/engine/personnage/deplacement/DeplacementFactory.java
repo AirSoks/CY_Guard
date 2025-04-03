@@ -35,6 +35,9 @@ public class DeplacementFactory {
         if ("Poursuite".equals(type)) {
             return new DeplacementPoursuite(personnages, grille);
         }
+        if ("Case".equals(type)) {
+            return new DeplacementCase(personnages, grille);
+        }
 
         Deplacement deplacement = deplacements.get(type);
         if (deplacement == null) {

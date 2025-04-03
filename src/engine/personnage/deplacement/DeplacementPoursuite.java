@@ -38,7 +38,7 @@ public class DeplacementPoursuite extends StrategieDeplacement {
         return new ArrayList<>(chemin);
     }
     
-    public void effacerChemin() {
+    private void effacerChemin() {
     	chemin.clear();
     }
     
@@ -167,11 +167,18 @@ public class DeplacementPoursuite extends StrategieDeplacement {
 	private void deplacerVersCible(Gardien gardien, Intrus cible) {
 		if (chemin != null && !chemin.isEmpty()) {
 			Coordonnee prochainPas = chemin.get(0);
-			Direction direction = Direction.getDirectionEntreCoordonnees(gardien.getCoordonnee(), prochainPas);
-			
-			gardien.setCoordonnee(chemin.get(0));
-	        updateAnimation(gardien, direction);
-	        contactPersonnage(chemin.get(0));
+			Coordonnee pasActuel = gardien.getCoordonnee();
+			if (pasActuel == null || prochainPas == null || pasActuel.equals(prochainPas)) {
+				return;
+			}
+			try {
+				Direction direction = Direction.getDirectionEntreCoordonnees(pasActuel, prochainPas);
+				gardien.setCoordonnee(chemin.get(0));
+				updateAnimation(gardien, direction);
+		        contactPersonnage(chemin.get(0));
+			} catch (Exception e) {
+                return;
+            }
 		}
 	}
 }

@@ -8,9 +8,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import config.GameConfiguration;
@@ -44,7 +50,7 @@ public class MainGUI extends JFrame implements Runnable{
 	/**
 	 * Grille du simulation
 	 */
-	private Grille grille;
+	private GrilleBuilder mapBuilder;
 	
 	/**
 	 * Gestionnaire des personnages
@@ -55,6 +61,10 @@ public class MainGUI extends JFrame implements Runnable{
 	 * L'interface d'affichage du simulation
 	 */
 	private GameDisplay dashboard;
+	
+	private Boolean active = false;
+	
+	private Map<String, JLabel> infoLabels = new HashMap<>();
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
@@ -68,31 +78,32 @@ public class MainGUI extends JFrame implements Runnable{
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		GrilleBuilder mapBuilder = new GrilleBuilder(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
+		mapBuilder = new GrilleBuilder(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
 		mapBuilder.build();
-	    this.grille = mapBuilder.getGrille();
 
-	    PersonnageManager.initInstance(grille);
+	    PersonnageManager.initInstance(mapBuilder.getGrille());
 	    this.manager = PersonnageManager.getInstance();
+	    manager.initPersonnages();
 	    
-	    manager.ajouterGardien(2);
-	    manager.ajouterIntrus(5);
-
-		dashboard = new GameDisplay(this.grille, manager);
-		dashboard.addMouseListener(new ClicsControls(grille, manager));
+	    setJMenuBar(new MenuBar(new ActionButton(this)));
+        
+		dashboard = new GameDisplay(mapBuilder.getGrille(), manager);
+		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager));
 		dashboard.setPreferredSize(preferredSize);
 		contentPane.add(dashboard,BorderLayout.CENTER);
 
-		JTextField textField = new JTextField();
-        textField.addKeyListener(new KeyControls());
-        contentPane.add(textField, BorderLayout.SOUTH);
+        contentPane.add(dashboard, BorderLayout.CENTER);
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		pack();
-		setVisible(true);
-		setPreferredSize(preferredSize);
-		setResizable(false);
-	}
+        JTextField invisibleTextField = new JTextField();
+        invisibleTextField.addKeyListener(new KeyControls());
+        contentPane.add(invisibleTextField, BorderLayout.SOUTH);
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        pack();
+        setVisible(true);
+        setPreferredSize(preferredSize);
+        setResizable(false);
+    }
 
 	/**
 	 * Boucle principale du jeu qui met à jour les déplacements des personnages
@@ -105,9 +116,23 @@ public class MainGUI extends JFrame implements Runnable{
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
 			}
-			manager.deplacerPersonnages();
+			if (active) {
+				manager.deplacerPersonnages();
+			}
 			dashboard.repaint();
 		}
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public GrilleBuilder getMapBuilder() {
+		return mapBuilder;
+	}
+	
+	public PersonnageManager getManager() {
+		return manager;
 	}
 
 	/**
@@ -192,7 +217,16 @@ public class MainGUI extends JFrame implements Runnable{
 	        List<Gardien> gardiens = manager.getGardiens(coordonnee);
 	        if (gardiens == null || gardiens.isEmpty()) { return; }
 	        Gardien gardien = gardiens.get(0);
-	        manager.setGardienActif(gardien);
+	        Gardien gardienActif = manager.getGardienActif();
+	        
+	        System.out.println("Gardien actif : " + gardienActif);
+	        System.out.println("Gardien : " + gardien);
+
+	        if (gardienActif != null && gardienActif.equals(gardien)) {
+	        	manager.removeGardienActif();
+	        } else {
+	            manager.setGardienActif(gardien);
+	        }
 	    }
 
 		@Override

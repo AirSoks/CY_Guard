@@ -67,14 +67,32 @@ public class PersonnageManager {
 		return gardienActif;
 	}
 
-	public void setGardienActif(Gardien newGardienActif) {
+	public void setGardienActif(Gardien newGardienActif){
+		if (newGardienActif == null) {
+			return;
+		}
+		removeGardienActif();
+		newGardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
+		newGardienActif.setDirection(null);
+		gardienActif = newGardienActif;
+	}
+	
+	public void removeGardienActif() {
+		System.out.println("On supp le gardien actif");
 		if (this.gardienActif != null) {
 			setDefautDeplacement(gardienActif);
 		}
-		this.gardienActif = newGardienActif;
-		if (gardienActif != null) {
-			this.gardienActif.setDeplacement(DeplacementFactory.getDeplacement("Manuel", this, grille));
+		this.gardienActif = null;
+	}
+	
+	
+	public void initPersonnages() {
+		this.gardienActif = null;
+		if (personnages != null) {
+			personnages = new ArrayList<>();
 		}
+	    ajouterGardien(GameConfiguration.NOMBRE_GARDIEN_INITIAL);
+	    ajouterIntrus(GameConfiguration.NOMBRE_INTRUS_INITIAL);
 	}
 	
 	/**
@@ -212,19 +230,12 @@ public class PersonnageManager {
 	}
 	
 	public void setDefautDeplacement(Personnage personnage) {
-		if (personnage == null) {
-			return;
-		}
-		else if (personnage instanceof Gardien) {
-			if (gardienActif == null) {
-				setGardienActif((Gardien) personnage);
-			}
-			else {
-				personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
-			}
-		}
-		else if (personnage instanceof Intrus) {
-			personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
-		}
+	    if (personnage == null) { return; }
+	    
+	    if (personnage instanceof Gardien) {
+	        personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
+	    } else if (personnage instanceof Intrus) {
+	        personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
+	    }
 	}
 }

@@ -27,10 +27,15 @@ public abstract class Personnage {
 	private Coordonnee coordonnee;
 	
 	/**
+	 * L'identifiant du personnage
+	 */
+	private int id;
+	
+	/**
 	 * Le nom du personnage
 	 */
 	private String name;
-	
+
 	/**
 	 * Le temps d'incocation du personnage
 	 */
@@ -138,4 +143,15 @@ public abstract class Personnage {
 			vision.observer(this);
 		}
     }
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+	
 }

@@ -1,22 +1,21 @@
 package config;
 
 public class GameConfiguration {
-	
-	public static final int WINDOW_WIDTH = 800;
-	public static final int WINDOW_HEIGHT = 800;
+
+	public static final int NB_LIGNE = 32;
+	public static final int NB_COLONNE = 32;
 	
 	public static final int BLOCK_SIZE = 25;
-	
 	public static final int GAME_SPEED = 500;
-
+	
+	public static final int WINDOW_WIDTH = BLOCK_SIZE*NB_COLONNE;
+	public static final int WINDOW_HEIGHT = BLOCK_SIZE*NB_LIGNE;
+	
 	public static final int VITESSE_INTRUS = 10;
 	public static final int VITESSE_GARDIENS = 12;
 	
 	public static final int DIFFICULTE = 3; // Choisir entre 1 et 3 (3 étant le plus difficile)
-	
-	public static final int NB_LIGNE = 32;
-	public static final int NB_COLONNE = 32;
-	
+
 	public static final int NB_LAC_MIN = 2;
 	public static final int NB_LAC_MAX = 3;
 	public static final int DENSITE_LAC_MIN = 20000;

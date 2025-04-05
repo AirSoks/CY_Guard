@@ -1,6 +1,5 @@
 package engine.personnage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import engine.map.Coordonnee;
@@ -25,11 +24,6 @@ public abstract class Personnage {
 	 * La coordonnée du personnage
 	 */
 	private Coordonnee coordonnee;
-	
-	/**
-	 * L'identifiant du personnage
-	 */
-	private int id;
 	
 	/**
 	 * Le nom du personnage

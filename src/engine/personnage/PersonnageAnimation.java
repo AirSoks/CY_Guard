@@ -1,7 +1,5 @@
 package engine.personnage;
 
-import java.awt.Image;
-
 import engine.map.Direction;
 
 /**

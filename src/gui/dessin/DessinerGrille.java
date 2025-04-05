@@ -120,7 +120,7 @@ public class DessinerGrille implements Dessiner {
         } else if (!leftLac && topLac && !rightLac && bottomLac) {
             return getImage("src/images/tiles/lac/l14.png");
         } else if (leftLac && !topLac && rightLac && !bottomLac) {
-            return getImage("src/images/tiles/lac/l12.png");
+            return getImage("src/images/tiles/lac/l15.png");
         } else {
             return getImage("src/images/tiles/lac/l13.png");
         }

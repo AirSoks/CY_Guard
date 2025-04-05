@@ -8,7 +8,6 @@ import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
-import engine.personnage.vision.VisionFactory;
 import engine.utilitaire.MaxTentativeAtteind;
 
 /**
@@ -186,7 +185,7 @@ public class PersonnageManager {
         }
 		Gardien gardien = new Gardien(coordonnee);
 		setDefautDeplacement(gardien);
-		Vision vision = VisionFactory.getVision(this, grille);
+		Vision vision = getVision();
 		gardien.setVision(vision);
 		personnages.add(gardien);
 		return gardien;
@@ -223,7 +222,7 @@ public class PersonnageManager {
         }
 		Intrus intrus = new Intrus(coordonnee);
 		setDefautDeplacement(intrus);
-		Vision vision = VisionFactory.getVision(this, grille);
+		Vision vision = getVision();
 		intrus.setVision(vision);
 		personnages.add(intrus);
 		return intrus;
@@ -237,5 +236,11 @@ public class PersonnageManager {
 	    } else if (personnage instanceof Intrus) {
 	        personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
 	    }
+	}
+	
+	private Vision getVision() {
+		Vision.initInstance(this, grille, GameConfiguration.NB_CASES_VISION);
+		Vision vision = Vision.getInstance();
+		return vision;
 	}
 }

@@ -31,4 +31,8 @@ public class GameDisplay extends JPanel {
         super.paintComponent(g);
         paintStrategy.paint(g);
     }
+
+	public PaintStrategy getPaintStrategy() {
+		return paintStrategy;
+	}
 }

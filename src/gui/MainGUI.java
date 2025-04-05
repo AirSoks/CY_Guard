@@ -4,19 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import config.GameConfiguration;
@@ -43,12 +37,12 @@ import engine.personnage.deplacement.DeplacementManuel;
 public class MainGUI extends JFrame implements Runnable{
 
 	/**
-	 * Dimension de la fenêtre du simulation
+	 * Dimension de la fenêtre de simulation
 	 */
 	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
 
 	/**
-	 * Grille du simulation
+	 * Grille de la simulation
 	 */
 	private GrilleBuilder mapBuilder;
 	
@@ -58,13 +52,11 @@ public class MainGUI extends JFrame implements Runnable{
 	private PersonnageManager manager;
 	
 	/**
-	 * L'interface d'affichage du simulation
+	 * L'interface d'affichage de la simulation
 	 */
 	private GameDisplay dashboard;
 	
 	private Boolean active = false;
-	
-	private Map<String, JLabel> infoLabels = new HashMap<>();
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
@@ -90,8 +82,6 @@ public class MainGUI extends JFrame implements Runnable{
 		dashboard = new GameDisplay(mapBuilder.getGrille(), manager);
 		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager));
 		dashboard.setPreferredSize(preferredSize);
-		contentPane.add(dashboard,BorderLayout.CENTER);
-
         contentPane.add(dashboard, BorderLayout.CENTER);
 
         JTextField invisibleTextField = new JTextField();
@@ -134,13 +124,16 @@ public class MainGUI extends JFrame implements Runnable{
 	public PersonnageManager getManager() {
 		return manager;
 	}
-
+	
+	public PaintStrategy getPaintStrategy() {
+		return dashboard.getPaintStrategy();
+	}
+	
 	/**
 	 * Classe interne pour gérer les contrôles clavier
 	 */
-	public class KeyControls implements KeyListener{
+	public class KeyControls extends KeyAdapter{
 
-		@Override
 		public void keyPressed(KeyEvent e) {
 		    int keyCode = e.getKeyCode();
 		    Gardien gardienActif = manager.getGardienActif();
@@ -175,17 +168,9 @@ public class MainGUI extends JFrame implements Runnable{
 			}
 			dashboard.repaint();
 		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
 	}
 	
-	public class ClicsControls implements MouseListener {
+	public class ClicsControls extends MouseAdapter {
 
 		/**
 		 * Grille du simulation
@@ -265,14 +250,6 @@ public class MainGUI extends JFrame implements Runnable{
 	        personnagePressed.setDeplacement(deplacementCase);
 	        
 	        personnagePressed = null;
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
 		}
 	}
 }

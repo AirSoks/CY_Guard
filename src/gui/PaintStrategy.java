@@ -14,6 +14,11 @@ import gui.dessin.DessinerVision;
 
 public class PaintStrategy {
 	
+    public final static String GRILLE = "GRILLE";
+    public final static String PERSONNAGES = "PERSONNAGES";
+    public final static String DEPLACEMENT = "DEPLACEMENT";
+    public final static String VISION = "VISION";
+	
     private List<Dessiner> dessins = new ArrayList<>();
 
     public PaintStrategy(Grille grille, PersonnageManager personnageManager) {
@@ -29,7 +34,7 @@ public class PaintStrategy {
         }
     }
     
-    public Dessiner getDessinParNom(String nom) {
+    private Dessiner getDessinParNom(String nom) {
         for (Dessiner dessin : dessins) {
             if (dessin.getNom().equals(nom.toUpperCase())) {
                 return dessin;
@@ -41,20 +46,14 @@ public class PaintStrategy {
     public void setDessinActif(String nom, boolean etat) {
         Dessiner dessin = getDessinParNom(nom);
         if (dessin != null) {
-            if (etat) {
-                dessin.setActive(etat);
-            }
+            dessin.setActive(etat);
         }
     }
 
     public void setPerformanceActif(String nom, boolean etat) {
         Dessiner dessin = getDessinParNom(nom);
         if (dessin != null) {
-        	if (dessin != null) {
-                if (etat) {
-                    dessin.setPerformance(etat);
-                }
-            }
+        	dessin.setPerformance(etat);
         }
     }
 }

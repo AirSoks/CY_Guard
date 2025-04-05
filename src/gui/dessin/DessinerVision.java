@@ -9,7 +9,6 @@ import engine.map.Coordonnee;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
-import engine.personnage.vision.Vision;
 
 public class DessinerVision implements Dessiner {
 	

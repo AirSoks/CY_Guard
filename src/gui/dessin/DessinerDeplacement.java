@@ -79,7 +79,6 @@ public class DessinerDeplacement implements Dessiner {
 
 	@Override
 	public void setActive(Boolean etat) {
-        System.out.println(etat);
 		this.dessiner = etat;
 	}
 

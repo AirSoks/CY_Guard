@@ -39,10 +39,9 @@ public class Grille {
 	
 	private Grille(int nbLigne, int nbColonne) {
 		init(nbLigne, nbColonne);
-		genererTerrain();
 	}
 	
-	private void genererTerrain() {
+	public void genererTerrain() {
         for (int i = 0; i < nbLigne; i++) {
             for (int j = 0; j < nbColonne; j++) {
                 Coordonnee position = new Coordonnee(i, j);

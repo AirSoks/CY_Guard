@@ -42,6 +42,9 @@ public class GameConfiguration {
 	public static final boolean PERMET_DEPLACEMENT_DIAGONNAL = true;
 	public static final int NB_CASES_VISION = 5;
     
+	public static final int NOMBRE_GARDIEN_INITIAL = 2;
+	public static final int NOMBRE_INTRUS_INITIAL = 6;
+	
     public final static String INTRUS_DEFAUT_DEPLACEMENT = "Aleatoire";
     public final static String GARDIEN_DEFAUT_DEPLACEMENT = "Poursuite";
 }

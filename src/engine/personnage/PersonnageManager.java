@@ -77,7 +77,6 @@ public class PersonnageManager {
 	}
 	
 	public void removeGardienActif() {
-		System.out.println("On supp le gardien actif");
 		if (this.gardienActif != null) {
 			setDefautDeplacement(gardienActif);
 		}

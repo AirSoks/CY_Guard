@@ -22,8 +22,7 @@ public class MenuBar extends JMenuBar {
     	addMenuCliquable("Pause");
     	addMenuCliquable("Restart");
         addMenuCliquable("Rebuild");
-
-        addOptionsMenu();
+        addMenuCliquable("Options");
         addAffichageMenu();
     }
 
@@ -44,14 +43,6 @@ public class MenuBar extends JMenuBar {
         
 		menu.addMouseListener(mouseAdapter);
         add(menu);
-    }
-
-    /**
-     * Ajoute le menu "Option" à la barre de menu.
-     */
-    private void addOptionsMenu() {
-        JMenu fileMenu = new JMenu("Options");
-        add(fileMenu);
     }
 
     /**

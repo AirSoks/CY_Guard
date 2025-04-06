@@ -10,7 +10,7 @@ import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 
-public class DessinerVision implements Dessiner {
+public class DessinerVision implements Dessiner, DOptionnelElement {
 	
     private PersonnageManager personnageManager;
     
@@ -56,9 +56,5 @@ public class DessinerVision implements Dessiner {
 	@Override
 	public void setActive(Boolean etat) {
 		this.dessiner = etat;
-	}
-
-	@Override
-	public void setPerformance(Boolean etat) {
 	}
 }

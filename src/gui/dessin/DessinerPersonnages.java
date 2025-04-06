@@ -14,11 +14,9 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.utilitaire.SimulationUtility;
 
-public class DessinerPersonnages implements Dessiner {
+public class DessinerPersonnages implements Dessiner, DPerformanceElement {
 	
     private PersonnageManager personnageManager;
-    
-    private boolean dessiner = true;
     private boolean performanceMode = false;
     
     private Map<String, Image> image = new HashMap<>();
@@ -36,8 +34,7 @@ public class DessinerPersonnages implements Dessiner {
 
     @Override
     public void paint(Graphics g) {
-        if (!dessiner) return;
-
+    	
         int blockSize = GameConfiguration.BLOCK_SIZE;
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
@@ -67,11 +64,6 @@ public class DessinerPersonnages implements Dessiner {
     @Override
 	public String getNom() {
 		return "PERSONNAGES";
-	}
-
-	@Override
-	public void setActive(Boolean etat) {
-		this.dessiner = etat;
 	}
 
 	@Override

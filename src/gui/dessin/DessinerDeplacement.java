@@ -12,7 +12,7 @@ import engine.personnage.deplacement.Deplacement;
 import engine.personnage.deplacement.DeplacementCase;
 import engine.personnage.deplacement.DeplacementPoursuite;
 
-public class DessinerDeplacement implements Dessiner {
+public class DessinerDeplacement implements Dessiner, DOptionnelElement {
 	
     private PersonnageManager personnageManager;
     
@@ -23,7 +23,7 @@ public class DessinerDeplacement implements Dessiner {
     }
 
     @Override
-    public void paint(Graphics g) {
+	public void paint(Graphics g) {
     	
     	if (!dessiner) return;
     	
@@ -80,9 +80,5 @@ public class DessinerDeplacement implements Dessiner {
 	@Override
 	public void setActive(Boolean etat) {
 		this.dessiner = etat;
-	}
-
-	@Override
-	public void setPerformance(Boolean etat) {
 	}
 }

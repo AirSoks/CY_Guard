@@ -16,38 +16,32 @@ public class ActionButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        JCheckBoxMenuItem sourceItem;
         switch (command) {
             case "Start": start(); break;
             case "Pause": pause(); break;
             case "Restart": restart(); break;
             case "Rebuild": rebuild(); break;
-            case "Déplacement": 
-            	sourceItem = (JCheckBoxMenuItem) e.getSource();
-            	if (sourceItem != null) {
-                	boolean selected = sourceItem.isSelected();
-                	setDeplacement(selected);
-            	} break;
-            case "Vision":
-            	sourceItem = (JCheckBoxMenuItem) e.getSource();
-            	if (sourceItem != null) {
-                	boolean selected = sourceItem.isSelected();
-                	setVision(selected);
-            	} break;
-            case "Grille":
-	        	sourceItem = (JCheckBoxMenuItem) e.getSource();
-	        	if (sourceItem != null) {
-	            	boolean selected = sourceItem.isSelected();
-	            	setPerformanceGrille(selected);
-	        	} break;
-            case "Personnage": 
-            	sourceItem = (JCheckBoxMenuItem) e.getSource();
-            	if (sourceItem != null) {
-                	boolean selected = sourceItem.isSelected();
-                	setPerformancePersonnage(selected);
-            	} break;
+            case "Déplacement": setDeplacement(isSelected(e)); break;
+            case "Vision": setVision(isSelected(e)); break;
+            case "Grille": setPerformanceGrille(isSelected(e)); break;
+            case "Personnage": setPerformancePersonnage(isSelected(e)); break;
+            case "Options": showOptions(); break;
+            case "Débutant": setNumberFileds(10,10,2,1,5); break;
+            case "Intermédiaire": setNumberFileds(20,20,5,2,5); break;
+            case "Difficile": setNumberFileds(32,32,10,3,5); break;
+            case "Extraterestre": setNumberFileds(60,60,15,5,8); break;
+            case "Personnalisé": break;
         }
     }
+	
+	private Boolean isSelected(ActionEvent e) {
+        JCheckBoxMenuItem sourceItem;
+		sourceItem = (JCheckBoxMenuItem) e.getSource();
+    	if (sourceItem != null) {
+        	return sourceItem.isSelected();
+    	}
+    	throw new ClassCastException("La source de l'événement n'est pas un JCheckBoxMenuItem");
+	}
 
 	private void start() {
 		mainFrame.setActive(true);
@@ -84,5 +78,21 @@ public class ActionButton implements ActionListener {
 	private void setPerformancePersonnage(Boolean etat) {
 		String personnagesNom = PaintStrategy.PERSONNAGES;
 		mainFrame.getPaintStrategy().setPerformanceActif(personnagesNom, etat);
+	}
+	
+	private void showOptions() {
+		OptionsPanel.initInstance(mainFrame, this);
+    	OptionsPanel dialog = OptionsPanel.getInstance();
+    	dialog.resetLocation(mainFrame);
+        dialog.setVisible(true);
+    }
+	
+	private void setNumberFileds(int largeur, int hauteur, int intrus, int gardien, int vision) {
+		OptionsPanel optionPanel = OptionsPanel.getInstance();
+		optionPanel.setTextLargeur(largeur);
+		optionPanel.setTextHauteur(hauteur);
+		optionPanel.setTextIntrus(intrus);
+		optionPanel.setTextGardien(gardien);
+		optionPanel.setTextVision(vision);
 	}
 }

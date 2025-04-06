@@ -15,11 +15,9 @@ import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
 import engine.utilitaire.SimulationUtility;
 
-public class DessinerGrille implements Dessiner {
+public class DessinerGrille implements Dessiner, DPerformanceElement {
 	
     private Grille grille;
-    
-    private boolean dessiner = true;
     private boolean performanceMode = false;
     
     private Map<String, Image> image = new HashMap<>();
@@ -36,8 +34,6 @@ public class DessinerGrille implements Dessiner {
     }
     @Override
     public void paint(Graphics g) {
-    	
-    	if (!dessiner) return;
     	
         int blockSize = GameConfiguration.BLOCK_SIZE;
         Case[][] cases = grille.getGrille();
@@ -129,11 +125,6 @@ public class DessinerGrille implements Dessiner {
     @Override
 	public String getNom() {
 		return "GRILLE";
-	}
-
-	@Override
-	public void setActive(Boolean etat) {
-		this.dessiner = etat;
 	}
 
 	@Override

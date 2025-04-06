@@ -41,6 +41,13 @@ public class Grille {
 		init(nbLigne, nbColonne);
 	}
 	
+	public static Grille getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("Grille non initialisée");
+		}
+		return instance;
+	}
+	
 	public void genererTerrain() {
         for (int i = 0; i < nbLigne; i++) {
             for (int j = 0; j < nbColonne; j++) {
@@ -49,13 +56,6 @@ public class Grille {
             }
         }
     }
-	
-	public static Grille getInstance() {
-		if (instance == null) {
-			throw new IllegalStateException("Grille non initialisée");
-		}
-		return instance;
-	}
 	
 	private void init(int nbLigne, int nbColonne) {
 		this.nbLigne = nbLigne;	

@@ -38,7 +38,6 @@ public class GrilleBuilder {
         this.grille = Grille.getInstance();
     }
 
-	// Il faut reinitialiser la grille
 	public Grille build() {
 		this.grille.genererTerrain();
         this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires();

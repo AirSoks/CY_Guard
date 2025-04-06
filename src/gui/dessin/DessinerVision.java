@@ -33,10 +33,10 @@ public class DessinerVision implements Dessiner, DOptionnelElement {
             	continue;
             }
             if (personnage instanceof Intrus) {
-            	g.setColor(new Color(0, 100, 0, 100));
+            	g.setColor(new Color(255, 182, 0, 100));
         	}
             else {
-                g.setColor(new Color(0, 255, 255, 100));
+                g.setColor(new Color(0, 90, 255, 100));
             }
             
             for (int i = 1; i < coordonneesVu.size(); i++) {

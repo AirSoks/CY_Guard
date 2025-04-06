@@ -1,4 +1,4 @@
-package gui;
+package gui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -11,6 +11,9 @@ import javax.swing.JTextField;
 import config.GameConfiguration;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.PersonnageManager;
+import gui.event.ActionButton;
+import gui.event.ClicsControls;
+import gui.event.KeyControls;
 
 /**
  * Classe principale de l'interface graphique du simulation

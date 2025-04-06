@@ -1,4 +1,4 @@
-package gui;
+package gui.champNombre;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -12,20 +12,16 @@ import javax.swing.JTextField;
 import engine.utilitaire.FieldWithNoNumber;
 
 @SuppressWarnings("serial")
-public class JNumberSelect extends JTextField{
+public class JNumberField extends JTextField{
 
 	private int nombreMinimal;
 	
 	private int nombreMaximal;
 	
-	private OptionsPanel parent;
-	
-	public JNumberSelect(OptionsPanel instance, int min, int max) {
+	public JNumberField(int min, int max) {
         super(String.valueOf(min));
         this.nombreMinimal = min;
         this.nombreMaximal = max;
-        this.parent = instance;
-        setColumns(1);
 
         addKeyListener(new NumberControls());
         addFocusListener(new FocusControls());
@@ -40,9 +36,6 @@ public class JNumberSelect extends JTextField{
             if (!Character.isDigit(c)) {
                 e.consume();
                 return;
-            }
-            if (parent != null ) {
-                parent.setSelectionCheckBoxPersonnalise();
             }
 		}
 	}
@@ -75,15 +68,9 @@ public class JNumberSelect extends JTextField{
             
             if (rotation == -1 && value < nombreMaximal) {
             	addNumber(true);
-            	if (parent != null ) {
-                    parent.setSelectionCheckBoxPersonnalise();
-                };
             	requestFocusInWindow();
             } else if (rotation == 1 && value > nombreMinimal) {
             	addNumber(false);
-            	if (parent != null ) {
-                    parent.setSelectionCheckBoxPersonnalise();
-                }
             	requestFocusInWindow();
             }
 		}

@@ -1,4 +1,4 @@
-package gui;
+package gui.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -8,6 +8,8 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import gui.event.ActionButton;
 
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {

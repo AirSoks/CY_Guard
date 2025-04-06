@@ -50,9 +50,9 @@ public class DessinerPersonnages implements Dessiner, DPerformanceElement {
                 }
                 else {
 	                if (personnage instanceof Gardien) {
-	    	            g.setColor(Color.pink);
+	    	            g.setColor(new Color(0, 90, 255));
 	    	        } else if (personnage instanceof Intrus) {
-	    	            g.setColor(Color.red);
+	    	            g.setColor(new Color(255, 182, 0));
 	    	        }
 	
 	    	        g.fillRect(x, y, blockSize, blockSize);

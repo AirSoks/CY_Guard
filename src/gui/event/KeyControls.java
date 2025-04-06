@@ -1,4 +1,4 @@
-package gui;
+package gui.event;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -7,6 +7,7 @@ import engine.map.Direction;
 import engine.personnage.Gardien;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementManuel;
+import gui.panel.GameDisplay;
 
 /**
  * Classe interne pour gérer les contrôles clavier

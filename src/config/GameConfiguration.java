@@ -6,7 +6,7 @@ public class GameConfiguration {
 	public static final int NB_COLONNE = 32;
 	
 	public static final int BLOCK_SIZE = 25;
-	public static final int GAME_SPEED = 500;
+	public static final int GAME_SPEED = 400;
 	
 	public static final int WINDOW_WIDTH = BLOCK_SIZE*NB_COLONNE;
 	public static final int WINDOW_HEIGHT = BLOCK_SIZE*NB_LIGNE;

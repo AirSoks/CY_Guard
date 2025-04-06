@@ -1,6 +1,6 @@
 package test;
 
-import gui.MainGUI;
+import gui.panel.MainGUI;
 
 /**
  * Cette classe permet de tester la simulation du gardien de parc

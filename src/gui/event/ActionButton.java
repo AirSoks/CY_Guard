@@ -1,9 +1,13 @@
-package gui;
+package gui.event;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBoxMenuItem;
+
+import gui.panel.MainGUI;
+import gui.panel.OptionsPanel;
+import gui.panel.PaintStrategy;
 
 public class ActionButton implements ActionListener {
 	

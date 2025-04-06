@@ -68,7 +68,7 @@ public class DessinerGrille implements Dessiner, DPerformanceElement {
                     } else if (obstacle instanceof Roche) {
                         g.setColor(Color.gray);
                     } else {
-                        g.setColor(Color.yellow);
+                        g.setColor(Color.green);
                     }
 
                     g.fillRect(col * blockSize, line * blockSize, blockSize, blockSize);

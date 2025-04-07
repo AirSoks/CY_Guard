@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 
 import gui.panel.MainGUI;
 import gui.panel.OptionsPanel;
@@ -49,9 +50,6 @@ public class ActionButton implements ActionListener {
             case "Difficile": setNumberFileds(32,32,10,3,5); break;
             case "Extraterestre": setNumberFileds(60,60,15,5,8); break;
             case "Personnalisé": break;
-            default :
-            	System.out.println(e);
-            	System.out.println(isSelected(e));
         }
     }
 	
@@ -62,8 +60,8 @@ public class ActionButton implements ActionListener {
      * @return true si la case à cocher est sélectionnée, false sinon
      */
 	private Boolean isSelected(ActionEvent e) {
-        JCheckBox sourceItem;
-		sourceItem = (JCheckBox) e.getSource();
+		JCheckBoxMenuItem sourceItem;
+		sourceItem = (JCheckBoxMenuItem) e.getSource();
     	if (sourceItem != null) {
         	return sourceItem.isSelected();
     	}

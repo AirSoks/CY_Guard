@@ -9,6 +9,6 @@ public class FieldWithNoNumber extends IllegalArgumentException {
      * @param field Le champs de texte non valide
      */
     public FieldWithNoNumber(String field) {
-        super("Le texte saisi n'est pas un nombre valide"+ field);
+        super("Le texte saisi n'est pas un nombre valide : "+ field);
     }
 }

@@ -1,4 +1,4 @@
-package gui.champNombre;
+package gui.numberField;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -17,6 +17,8 @@ public class JNumberField extends JTextField{
 	private int nombreMinimal;
 	
 	private int nombreMaximal;
+	
+	private static final int MAX_LENGTH = 9;
 	
 	public JNumberField(int min, int max) {
         super(String.valueOf(min));
@@ -103,14 +105,21 @@ public class JNumberField extends JTextField{
 	public int getNumber() {
 		String field = getText();
 		if (field.length() != 0) {
-	        try {
-	            int value = Integer.parseInt(field);
-	            return value;
-	        } catch (NumberFormatException ex) {
-	        	throw new FieldWithNoNumber(field);
-	        }
+			if (field.length() >= MAX_LENGTH) {
+				setNumber(nombreMaximal);
+				return nombreMaximal;
+			}
+			else {
+		        try {
+		            int value = Integer.parseInt(field);
+		            return value;
+		        } catch (NumberFormatException ex) {
+		        	throw new FieldWithNoNumber(field);
+		        }
+			}
 		}
-		return 0;
+		setNumber(nombreMinimal);
+		return nombreMinimal;
 	}
 	
 	public void setNumber(int value) {

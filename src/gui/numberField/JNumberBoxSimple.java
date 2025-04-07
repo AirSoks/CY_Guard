@@ -1,23 +1,20 @@
-package gui.champNombre;
+package gui.numberField;
 
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import gui.event.ActionButton;
-
 @SuppressWarnings("serial")
 public class JNumberBoxSimple extends JPanel {
     
     private JNumberField numberSelect;
 
-    public JNumberBoxSimple(String label, JNumberField numberSelect, ActionButton actionButton) {
+    public JNumberBoxSimple(String label, JNumberField numberSelect) {
     	setLayout(new GridLayout(1,1));
 
         JLabel jLabel = new JLabel(label);
         this.numberSelect = numberSelect;
-        this.numberSelect.addActionListener(actionButton);
         this.add(jLabel);
         this.add(numberSelect);
     }

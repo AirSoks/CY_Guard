@@ -9,14 +9,28 @@ import gui.panel.MainGUI;
 import gui.panel.OptionsPanel;
 import gui.panel.PaintStrategy;
 
+/**
+ * La classe ActionButton implémente l'interface ActionListener.
+ * Elle est responsable de gérer les actions déclenchées par tout les boutons ou menu cliquable.
+ */
 public class ActionButton implements ActionListener {
 	
     private MainGUI mainFrame;
 
+    /**
+     * Constructeur de la classe ActionButton
+     *
+     * @param parentFrame La fenêtre principale de l'application
+     */
     public ActionButton(MainGUI parentFrame) {
         this.mainFrame = parentFrame; 
     }
     
+    /**
+     * Gère les actions déclenchées par les boutons et les cases à cocher.
+     *
+     * @param e L'événement déclenché par l'utilisateur
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -41,6 +55,12 @@ public class ActionButton implements ActionListener {
         }
     }
 	
+    /**
+     * Vérifie si une case à cocher a été sélectionnée.
+     *
+     * @param e L'événement déclenché par l'utilisateur
+     * @return true si la case à cocher est sélectionnée, false sinon
+     */
 	private Boolean isSelected(ActionEvent e) {
         JCheckBox sourceItem;
 		sourceItem = (JCheckBox) e.getSource();
@@ -50,43 +70,78 @@ public class ActionButton implements ActionListener {
     	throw new ClassCastException("La source de l'événement n'est pas un JCheckBox");
 	}
 
+    /**
+     * Démarre l'application.
+     */
 	private void start() {
 		mainFrame.setActive(true);
 	}
 
+    /**
+     * Met en pause l'application.
+     */
 	private void pause() {
 		mainFrame.setActive(false);
 	}
 
+    /**
+     * Redémarre l'application.
+     */
 	private void restart() {
 		mainFrame.getManager().initPersonnages();
 	}
 	
+    /**
+     * Reconstruit la grille de jeu.
+     */
 	private void rebuild() {
 		mainFrame.getMapBuilder().build();
 		mainFrame.getManager().initPersonnages();
 	}
 
+    /**
+     * Active ou désactive le dessin des déplacements.
+     *
+     * @param etat L'état d'activation (true pour activer, false pour désactiver)
+     */
 	private void setDeplacement(Boolean etat) {
 		String deplacementNom = PaintStrategy.DEPLACEMENT;
 		mainFrame.getPaintStrategy().setDessinActif(deplacementNom, etat);
 	}
 
+    /**
+     * Active ou désactive le dessin de la vision.
+     *
+     * @param etat L'état d'activation (true pour activer, false pour désactiver)
+     */
 	private void setVision(Boolean etat) {
 		String visionNom = PaintStrategy.VISION;
 		mainFrame.getPaintStrategy().setDessinActif(visionNom, etat);
 	}
 
+    /**
+     * Active ou désactive le mode performance pour la grille.
+     *
+     * @param etat L'état d'activation (true pour activer, false pour désactiver)
+     */
 	private void setPerformanceGrille(Boolean etat) {
 		String gtilleNom = PaintStrategy.GRILLE;
 		mainFrame.getPaintStrategy().setPerformanceActif(gtilleNom, etat);
 	}
 
+    /**
+     * Active ou désactive le mode performance pour les personnages.
+     *
+     * @param etat L'état d'activation (true pour activer, false pour désactiver)
+     */
 	private void setPerformancePersonnage(Boolean etat) {
 		String personnagesNom = PaintStrategy.PERSONNAGES;
 		mainFrame.getPaintStrategy().setPerformanceActif(personnagesNom, etat);
 	}
 	
+    /**
+     * Affiche le panneau des options.
+     */
 	private void showOptions() {
 		OptionsPanel.initInstance(mainFrame, this);
     	OptionsPanel dialog = OptionsPanel.getInstance();
@@ -94,6 +149,15 @@ public class ActionButton implements ActionListener {
         dialog.setVisible(true);
     }
 	
+    /**
+     * Définit les paramètres de la grille de jeu.
+     *
+     * @param largeur La largeur de la grille
+     * @param hauteur La hauteur de la grille
+     * @param intrus Le nombre d'intrus
+     * @param gardien Le nombre de gardiens
+     * @param vision La distance de vision
+     */
 	private void setNumberFileds(int largeur, int hauteur, int intrus, int gardien, int vision) {
 		OptionsPanel optionPanel = OptionsPanel.getInstance();
 		optionPanel.setNumberLargeur(largeur);

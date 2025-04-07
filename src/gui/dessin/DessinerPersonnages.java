@@ -14,17 +14,33 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.utilitaire.SimulationUtility;
 
+/**
+ * La classe DessinerPersonnages implémente l'interface Dessiner et DPerformanceElement.
+ * Elle est responsable du dessin des personnages (Gardiens et Intrus) sur la grille de jeu.
+ */
 public class DessinerPersonnages implements Dessiner, DPerformanceElement {
 	
     private PersonnageManager personnageManager;
+    
     private boolean performanceMode = false;
     
     private Map<String, Image> image = new HashMap<>();
 
+    /**
+     * Constructeur de la classe DessinerPersonnages
+     *
+     * @param personnageManager Le gestionnaire des personnages
+     */
     public DessinerPersonnages(PersonnageManager personnageManager) {
         this.personnageManager = personnageManager;
     }
     
+    /**
+     * Obtient l'image correspondante à un chemin donné.
+     * 
+     * @param path Le chemin de l'image
+     * @return L'image correspondante
+     */
     public Image getImage(String path) {
         if (!image.containsKey(path)) {
             image.put(path, SimulationUtility.readImage(path));
@@ -32,6 +48,11 @@ public class DessinerPersonnages implements Dessiner, DPerformanceElement {
         return image.get(path);
     }
 
+    /**
+     * Dessine les personnages sur la grille de jeu.
+     *
+     * @param g L'objet Graphics utilisé pour dessiner
+     */
     @Override
     public void paint(Graphics g) {
     	
@@ -61,11 +82,21 @@ public class DessinerPersonnages implements Dessiner, DPerformanceElement {
         }
     }
     
+    /**
+     * Obtient le nom de l'élément à dessiner.
+     *
+     * @return Le nom de l'élément
+     */
     @Override
 	public String getNom() {
 		return "PERSONNAGES";
 	}
 
+    /**
+     * Active ou désactive le mode performance.
+     *
+     * @param etat L'état d'activation
+     */
 	@Override
 	public void setPerformance(Boolean etat) {
 		this.performanceMode = etat;

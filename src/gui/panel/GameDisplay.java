@@ -8,7 +8,7 @@ import engine.map.Grille;
 import engine.personnage.PersonnageManager;
 
 /**
- * Cette classe est le panneau dans lequel le parc (avec les obstacles) et les personnages (gardien et intrus) sont imprimés
+ * Cette classe est le panneau dans lequel le parc et les personnages sont imprimés
  * 
  * @author GLP_19
  * @see JPanel

@@ -45,6 +45,9 @@ public class MainGUI extends JFrame implements Runnable{
 	 */
 	private GameDisplay dashboard;
 	
+	/**
+	 * L'êtat de la simulation (true pour activé, false sinon)
+	 */
 	private Boolean active = false;
 
 	public MainGUI(String title) throws HeadlessException {

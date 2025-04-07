@@ -29,7 +29,7 @@ public class MenuBar extends JMenuBar {
     }
 
     /**
-     * Crée un JMenu cliquable et lui associe un MouseListener
+     * Crée un JMenu cliquable.
      */
     private void addMenuCliquable(String text) {
         JMenu menu = new JMenu(text);
@@ -48,7 +48,7 @@ public class MenuBar extends JMenuBar {
     }
 
     /**
-     * Ajoute le menu "Aide" à la barre de menu.
+     * Ajoute le menu "Affichage" à la barre de menu.
      */
     private void addAffichageMenu() {
         JMenu affichageMenu = new JMenu("Affichage");
@@ -67,7 +67,7 @@ public class MenuBar extends JMenuBar {
     }
     
     /**
-     * Ajoute un JMenuItem au menu spécifié et lui associe un gestionnaire d'actions.
+     * Ajoute un JMenuItem au menu spécifié.
      *
      * @param menu Le menu auquel ajouter le JMenuItem.
      * @param itemName Le nom de l'élément à ajouter au menu.

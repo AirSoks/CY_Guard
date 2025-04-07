@@ -45,12 +45,24 @@ public class OptionsPanel extends JDialog {
         setResizable(false);
     }
     
+    /**
+	 * Initialise l'instance de OptionsPanel si elle n'existe pas.
+	 *
+	 * @param parent La fenêtre principale qui est le parent de cette boîte de dialogue.
+	 * @param actionButton Le bouton d'action associé.
+	 */
 	public static void initInstance(JFrame parent, ActionButton actionButton) {
 		if (instance == null) {
 	        instance = new OptionsPanel(parent, actionButton);
 		}
     }
 	
+	/**
+	 * Retourne l'instance unique de OptionsPanel.
+	 *
+	 * @return L'instance de OptionsPanel.
+	 * @throws IllegalStateException si l'instance n'a pas été initialisée.
+	 */
 	public static OptionsPanel getInstance() {
 		if (instance == null) {
 			throw new IllegalStateException("Grille non initialisée");
@@ -58,6 +70,11 @@ public class OptionsPanel extends JDialog {
 		return instance;
 	}
 	
+	/**
+	 * Réinitialise la position de la boîte de dialogue par rapport à la fenêtre parente.
+	 *
+	 * @param parent La fenêtre principale qui est le parent de cette boîte de dialogue.
+	 */
 	public void resetLocation(JFrame parent) {
         pack();
         setLocationRelativeTo(parent);
@@ -65,6 +82,8 @@ public class OptionsPanel extends JDialog {
 
 	/**
 	 * Crée la mise en page de la boîte de dialogue en utilisant un GridBagLayout.
+	 *
+	 * @param actionButton Le bouton d'action associé.
 	 */
 	private void createLayout(ActionButton actionButton) {
 	    setLayout(new GridBagLayout());
@@ -84,6 +103,12 @@ public class OptionsPanel extends JDialog {
 	    add(creatOtherOptions(), contrainte);
 	}
     
+    /**
+	 * Crée le panneau de sélection de la difficulté.
+	 *
+	 * @param actionButton Le bouton d'action associé.
+	 * @return Le panneau de sélection de la difficulté.
+	 */
     private JPanel createDificultyPanel(ActionButton actionButton) {
     	JPanel difficulte = createSubOptionPanel("Difficulté");
     	JPanel radiosPanel = new JPanel(new GridLayout(5,0));
@@ -129,6 +154,11 @@ public class OptionsPanel extends JDialog {
     	return difficulte;
     }
     
+    /**
+	 * Crée le panneau d'initialisation.
+	 *
+	 * @return Le panneau d'initialisation.
+	 */
     private JPanel createInitialisationPanel() {
     	
     	JPanel initialisation = createSubOptionPanel("Initialisation");
@@ -202,6 +232,11 @@ public class OptionsPanel extends JDialog {
     	return initialisation;
     }
     
+    /**
+	 * Crée le panneau pour les autres options.
+	 *
+	 * @return Le panneau pour les autres options.
+	 */
     private JPanel creatOtherOptions() {
     	JPanel autresOption = createSubOptionPanel("Autres Options");
     	autresOption.setLayout(new GridLayout());
@@ -219,36 +254,67 @@ public class OptionsPanel extends JDialog {
     	return autresOption;
     }
     
+    /**
+	 * Crée un panneau avec une bordure et un titre spécifié.
+	 *
+	 * @param title Le titre du panneau.
+	 * @return Le panneau créé.
+	 */
     private JPanel createSubOptionPanel(String title) {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(title));
 		return panel;
     }
 
+    /**
+	 * Définit la valeur du champ de largeur.
+	 *
+	 * @param value La valeur à définir.
+	 */
 	public void setNumberLargeur(int value) {
 		if (value >= largeur.getJNumberSelect().getNombreMinimal() && value <= largeur.getJNumberSelect().getNombreMaximal()) {
 			this.largeur.getJNumberSelect().setText(String.valueOf(value));
 		}
 	}
 
+	/**
+	 * Définit la valeur du champ de hauteur.
+	 *
+	 * @param value La valeur à définir.
+	 */
 	public void setNumberHauteur(int value) {
 		if (value >= hauteur.getJNumberSelect().getNombreMinimal() && value <= hauteur.getJNumberSelect().getNombreMaximal()) {
 			this.hauteur.getJNumberSelect().setText(String.valueOf(value));
 		}
 	}
 
+	/**
+	 * Définit la valeur du champ de gardien.
+	 *
+	 * @param value La valeur à définir.
+	 */
 	public void setNumberGardien(int value) {
 		if (value >= gardien.getJNumberSelect().getNombreMinimal() && value <= gardien.getJNumberSelect().getNombreMaximal()) {
 			this.gardien.getJNumberSelect().setText(String.valueOf(value));
 		}
 	}
 
+	/**
+	 * Définit la valeur du champ d'intrus.
+	 *
+	 * @param value La valeur à définir.
+	 */
 	public void setNumberIntrus(int value) {
 		if (value >= intrus.getJNumberSelect().getNombreMinimal() && value <= intrus.getJNumberSelect().getNombreMaximal()) {
 			this.intrus.getJNumberSelect().setText(String.valueOf(value));
 		}
 	}
 
+	/**
+	 * Définit la valeur du champ de vision.
+	 *
+	 * @param value La valeur à définir.
+	 */
 	public void setNumberVision(int value) {
 		if (value >= vision.getJNumberSelect().getNombreMinimal() && value <= vision.getJNumberSelect().getNombreMaximal()) {
 			this.vision.getJNumberSelect().setText(String.valueOf(value));

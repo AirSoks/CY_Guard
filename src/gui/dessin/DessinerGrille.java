@@ -15,6 +15,10 @@ import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.Roche;
 import engine.utilitaire.SimulationUtility;
 
+/**
+ * La classe DessinerGrille implémente l'interface Dessiner et DPerformanceElement.
+ * Elle est responsable du dessin de la grille de jeu et de ses obstacles.
+ */
 public class DessinerGrille implements Dessiner, DPerformanceElement {
 	
     private Grille grille;
@@ -22,16 +26,33 @@ public class DessinerGrille implements Dessiner, DPerformanceElement {
     
     private Map<String, Image> image = new HashMap<>();
     
+    /**
+     * Constructeur de la classe DessinerGrille
+     *
+     * @param grille La grille du jeu
+     */
     public DessinerGrille(Grille grille) {
         this.grille = grille;
     }
 
+    /**
+     * Obtient l'image correspondante à un chemin donné.
+     * 
+     * @param path Le chemin de l'image
+     * @return L'image correspondante
+     */
     public Image getImage(String path) {
         if (!image.containsKey(path)) {
             image.put(path, SimulationUtility.readImage(path));
         }
         return image.get(path);
     }
+    
+    /**
+     * Dessine la grille de jeu et ses obstacles.
+     *
+     * @param g L'objet Graphics utilisé pour dessiner
+     */
     @Override
     public void paint(Graphics g) {
     	
@@ -50,7 +71,7 @@ public class DessinerGrille implements Dessiner, DPerformanceElement {
                     	Image tile = getImage("src/images/tiles/arbre.png");
                     	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
                     } else if (obstacle instanceof Lac) {
-                    	Image tile = getLacTile(line,col);
+                    	Image tile = getLacTile(line, col);
                     	g.drawImage(tile, col*blockSize, line*blockSize, blockSize, blockSize, null);
                     } else if (obstacle instanceof Roche) {
                     	Image tile = getImage("src/images/tiles/roche.png");
@@ -77,15 +98,23 @@ public class DessinerGrille implements Dessiner, DPerformanceElement {
         }
     }
 
+    /**
+     * Obtient l'image correspondante d'une tuile de lac en fonction de ses
+     * coordonnées et des tuiles adjacentes.
+     * 
+     * @param line La ligne de la tuile
+     * @param col La colonne de la tuile
+     * @return L'image correspondante de la tuile de lac
+     */
     public Image getLacTile(int line, int col) {
         Case[][] cases = grille.getGrille();
         int nbLigne = grille.getNbLigne();
         int nbColonne = grille.getNbColonne();
 
-        boolean leftLac = (col>0)&&(cases[line][col-1].getObstacle() instanceof Lac);
-        boolean topLac = (line>0)&&(cases[line-1][col].getObstacle() instanceof Lac);
-        boolean rightLac = (col<nbColonne-1)&&(cases[line][col+1].getObstacle() instanceof Lac);
-        boolean bottomLac = (line<nbLigne-1)&&(cases[line+1][col].getObstacle() instanceof Lac);
+        boolean leftLac = (col > 0) && (cases[line][col-1].getObstacle() instanceof Lac);
+        boolean topLac = (line > 0) && (cases[line-1][col].getObstacle() instanceof Lac);
+        boolean rightLac = (col < nbColonne-1) && (cases[line][col+1].getObstacle() instanceof Lac);
+        boolean bottomLac = (line < nbLigne-1) && (cases[line+1][col].getObstacle() instanceof Lac);
         
         if (leftLac && topLac && rightLac && bottomLac) {
         	return getImage("src/images/tiles/lac/l0.png");
@@ -122,11 +151,21 @@ public class DessinerGrille implements Dessiner, DPerformanceElement {
         }
     }
     
+    /**
+     * Obtient le nom de l'élément à dessiner.
+     *
+     * @return Le nom de l'élément
+     */
     @Override
 	public String getNom() {
 		return "GRILLE";
 	}
 
+    /**
+     * Active ou désactive le mode performance.
+     *
+     * @param etat L'état d'activation
+     */
 	@Override
 	public void setPerformance(Boolean etat) {
 		this.performanceMode = etat;

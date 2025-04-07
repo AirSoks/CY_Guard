@@ -10,19 +10,30 @@ import engine.personnage.deplacement.DeplacementManuel;
 import gui.panel.GameDisplay;
 
 /**
- * Classe interne pour gérer les contrôles clavier
+ * Classe interne pour gérer les contrôles clavier.
  */
-public class KeyControls extends KeyAdapter{
+public class KeyControls extends KeyAdapter {
 	
 	private PersonnageManager manager;
-	
 	private GameDisplay dashboard;
 	
+	/**
+	 * Constructeur de la classe KeyControls
+	 *
+	 * @param manager Le gestionnaire des personnages
+	 * @param dashboard Le tableau de bord du jeu
+	 */
 	public KeyControls(PersonnageManager manager, GameDisplay dashboard) {
 		this.manager = manager;
 		this.dashboard = dashboard;
 	}
 
+	/**
+	 * Gère les événements de pression de touche.
+	 *
+	 * @param e L'événement de pression de touche
+	 */
+	@Override
 	public void keyPressed(KeyEvent e) {
 	    int keyCode = e.getKeyCode();
 	    Gardien gardienActif = manager.getGardienActif();
@@ -38,7 +49,7 @@ public class KeyControls extends KeyAdapter{
         	gardienActif.setDirection(Direction.GAUCHE);
             break;
 
-        case KeyEvent.VK_RIGHT: // Flèche droit
+        case KeyEvent.VK_RIGHT: // Flèche droite
         case KeyEvent.VK_D:
         	gardienActif.setDirection(Direction.DROITE);
             break;

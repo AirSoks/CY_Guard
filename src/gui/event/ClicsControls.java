@@ -14,25 +14,40 @@ import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementCase;
 import engine.personnage.deplacement.DeplacementFactory;
 
+/**
+ * La classe ClicsControls étend MouseAdapter.
+ * Elle est responsable de gérer les événements de clics de souris sur la grille de jeu.
+ */
 public class ClicsControls extends MouseAdapter {
 
 	/**
-	 * Grille du simulation
+	 * Grille de la simulation.
 	 */
 	private Grille grille;
 	
 	/**
-	 * Gestionnaire des personnages
+	 * Gestionnaire des personnages.
 	 */
 	private PersonnageManager manager;
 	
 	private Personnage personnagePressed;
 
+    /**
+     * Constructeur de la classe ClicsControls
+     *
+     * @param grille La grille de la simulation
+     * @param manager Le gestionnaire des personnages
+     */
     public ClicsControls(Grille grille, PersonnageManager manager) {
         this.grille = grille;
         this.manager = manager;
     }
 
+    /**
+     * Gère les clics de souris sur la grille.
+     *
+     * @param e L'événement de clic de souris
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         int blockSize = GameConfiguration.BLOCK_SIZE;
@@ -55,6 +70,11 @@ public class ClicsControls extends MouseAdapter {
         }
     }
 
+    /**
+     * Gère les pressions de souris sur la grille.
+     *
+     * @param e L'événement de pression de souris
+     */
 	@Override
 	public void mousePressed(MouseEvent e) {
         int blockSize = GameConfiguration.BLOCK_SIZE;
@@ -70,6 +90,11 @@ public class ClicsControls extends MouseAdapter {
         personnagePressed = personnages.get(0);
 	}
 
+    /**
+     * Gère les relâchements de souris sur la grille.
+     *
+     * @param e L'événement de relâchement de souris
+     */
 	@Override
 	public void mouseReleased(MouseEvent e) {
         int blockSize = GameConfiguration.BLOCK_SIZE;

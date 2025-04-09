@@ -3,7 +3,6 @@ package gui.event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 
 import gui.panel.MainGUI;
@@ -45,10 +44,10 @@ public class ActionButton implements ActionListener {
             case "Grille": setPerformanceGrille(isSelected(e)); break;
             case "Personnage": setPerformancePersonnage(isSelected(e)); break;
             case "Options": showOptions(); break;
-            case "Débutant": setNumberFileds(10,10,2,1,5); break;
-            case "Intermédiaire": setNumberFileds(20,20,5,2,5); break;
-            case "Difficile": setNumberFileds(32,32,10,3,5); break;
-            case "Extraterestre": setNumberFileds(60,60,15,5,8); break;
+            case "Débutant": setNumberFileds(20,20,2,2,5); break;
+            case "Intermédiaire": setNumberFileds(30,30,5,2,5); break;
+            case "Difficile": setNumberFileds(35,35,10,3,5); break;
+            case "Extraterestre": setNumberFileds(40,40,15,5,8); break;
             case "Personnalisé": break;
         }
     }

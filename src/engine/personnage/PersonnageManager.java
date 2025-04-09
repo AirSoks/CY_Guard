@@ -96,20 +96,45 @@ public class PersonnageManager {
 	/**
 	 * Déplace tout les personnages de la grille
 	 */
-	public void deplacerPersonnages() {
-        for (Intrus intrus : getIntrus()) {
+	public void actionPersonnages() {
+		deplacerIntrus();
+		deplacerGardiens();
+		observerIntrus();
+		observerGardiens();
+    }
+	
+	private void deplacerIntrus() {
+		for (Intrus intrus : getIntrus()) {
         	if (intrus != null) {
         		intrus.deplacer();
         		intrus.observer();
         	}
         }
-        for (Gardien gardien : getGardiens()) {
+	}
+	
+	private void observerIntrus() {
+		for (Intrus intrus : getIntrus()) {
+        	if (intrus != null) {
+        		intrus.observer();
+        	}
+        }
+	}
+	
+	private void deplacerGardiens() {
+		for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
             	gardien.deplacer();
+        	}
+        }
+	}
+	
+	private void observerGardiens() {
+		for (Gardien gardien : getGardiens()) {
+        	if (gardien != null) {
         		gardien.observer();
         	}
         }
-    }
+	}
 
     public List<Personnage> getPersonnages() {
         return new ArrayList<>(personnages);

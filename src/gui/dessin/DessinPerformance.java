@@ -1,11 +1,11 @@
 package gui.dessin;
 
 /**
- * Interface DPerformanceElement.
+ * Interface DessinPerformance.
  * 
  * Cette interface définit une méthode pour activer ou désactiver un mode performance.
  */
-public interface DPerformanceElement {
+public interface DessinPerformance {
     
 	/**
      * Active ou désactive le mode performance.

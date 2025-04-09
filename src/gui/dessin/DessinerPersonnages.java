@@ -18,7 +18,7 @@ import engine.utilitaire.SimulationUtility;
  * La classe DessinerPersonnages implémente l'interface Dessiner et DPerformanceElement.
  * Elle est responsable du dessin des personnages (Gardiens et Intrus) sur la grille de jeu.
  */
-public class DessinerPersonnages implements Dessiner, DPerformanceElement {
+public class DessinerPersonnages implements Dessiner, DessinPerformance {
 	
     private PersonnageManager personnageManager;
     

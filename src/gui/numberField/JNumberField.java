@@ -29,7 +29,7 @@ public class JNumberField extends JTextField {
 	 * @param max La valeur maximale autorisée
 	 */
 	public JNumberField(int min, int max) {
-		super(String.valueOf(min));
+		super(String.valueOf(min),3);
 		this.nombreMinimal = min;
 		this.nombreMaximal = max;
 

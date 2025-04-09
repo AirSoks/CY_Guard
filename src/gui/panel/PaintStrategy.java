@@ -6,8 +6,8 @@ import java.util.List;
 
 import engine.map.Grille;
 import engine.personnage.PersonnageManager;
-import gui.dessin.DOptionnelElement;
-import gui.dessin.DPerformanceElement;
+import gui.dessin.DessinOptionnel;
+import gui.dessin.DessinPerformance;
 import gui.dessin.Dessiner;
 import gui.dessin.DessinerDeplacement;
 import gui.dessin.DessinerGrille;
@@ -47,16 +47,16 @@ public class PaintStrategy {
     
     public void setDessinActif(String nom, boolean etat) {
         Dessiner dessin = getDessinParNom(nom);
-        if (dessin != null && dessin instanceof DOptionnelElement) {
-        	DOptionnelElement dessinOptionel = (DOptionnelElement) dessin;
+        if (dessin != null && dessin instanceof DessinOptionnel) {
+        	DessinOptionnel dessinOptionel = (DessinOptionnel) dessin;
         	dessinOptionel.setActive(etat);
         }
     }
 
     public void setPerformanceActif(String nom, boolean etat) {
         Dessiner dessin = getDessinParNom(nom);
-        if (dessin != null && dessin instanceof DPerformanceElement) {
-        	DPerformanceElement dessinPerf = (DPerformanceElement) dessin;
+        if (dessin != null && dessin instanceof DessinPerformance) {
+        	DessinPerformance dessinPerf = (DessinPerformance) dessin;
         	dessinPerf.setPerformance(etat);
         }
     }

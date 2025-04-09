@@ -16,7 +16,7 @@ import engine.personnage.deplacement.DeplacementPoursuite;
  * La classe DessinerDeplacement implémente l'interface Dessiner et DOptionnelElement.
  * Elle est responsable du dessin des déplacements des personnages sur la grille de jeu.
  */
-public class DessinerDeplacement implements Dessiner, DOptionnelElement {
+public class DessinerDeplacement implements Dessiner, DessinOptionnel {
 	
     private PersonnageManager personnageManager;
     private boolean dessiner = true;

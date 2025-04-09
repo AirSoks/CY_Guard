@@ -1,11 +1,11 @@
 package gui.dessin;
 
 /**
- * Interface DOptionnelElement.
+ * Interface DessinOptionnel.
  * 
  * Cette interface définit une méthode pour activer ou désactiver un dessin.
  */
-public interface DOptionnelElement {
+public interface DessinOptionnel {
 	
     /**
      * Active ou désactive le dessin.

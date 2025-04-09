@@ -19,7 +19,7 @@ import engine.utilitaire.SimulationUtility;
  * La classe DessinerGrille implémente l'interface Dessiner et DPerformanceElement.
  * Elle est responsable du dessin de la grille de jeu et de ses obstacles.
  */
-public class DessinerGrille implements Dessiner, DPerformanceElement {
+public class DessinerGrille implements Dessiner, DessinPerformance {
 	
     private Grille grille;
     private boolean performanceMode = false;

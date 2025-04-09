@@ -99,7 +99,7 @@ public class MainGUI extends JFrame implements Runnable{
 				System.out.println(e.getMessage());
 			}
 			if (active) {
-				manager.deplacerPersonnages();
+				manager.actionPersonnages();
 			}
 			dashboard.repaint();
 		}

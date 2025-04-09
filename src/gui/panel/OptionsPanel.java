@@ -1,8 +1,11 @@
 package gui.panel;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -12,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import gui.event.ActionButton;
 import gui.numberField.JNumberBoxDouble;
@@ -136,21 +142,21 @@ public class OptionsPanel extends JDialog {
     	radiosPanel.add(personalise);
     	difficulte.add(radiosPanel);
     	
-    	JPanel labelPanel = new JPanel(new GridLayout(5, 0, 0, 4));
-    	labelPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+    	JPanel perameterPanel = new JPanel(new GridLayout(5, 0, 0, 4));
+    	perameterPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
     	
     	largeur = new JNumberBoxSimple("Largeur : ", new JNumberFieldRelative(5, 100, personalise));
-		labelPanel.add(largeur);
+    	perameterPanel.add(largeur);
 		hauteur = new JNumberBoxSimple("Hauteur : ", new JNumberFieldRelative(5, 100, personalise));
-		labelPanel.add(hauteur);
-		gardien = new JNumberBoxSimple("Intrus : ", new JNumberFieldRelative(1, 30, personalise));
-		labelPanel.add(gardien);
-		intrus = new JNumberBoxSimple("Gardiens : ", new JNumberFieldRelative(1, 10, personalise));
-		labelPanel.add(intrus);
+		perameterPanel.add(hauteur);
+		intrus = new JNumberBoxSimple("Intrus : ", new JNumberFieldRelative(1, 30, personalise));
+		perameterPanel.add(intrus);
+		gardien = new JNumberBoxSimple("Gardiens : ", new JNumberFieldRelative(1, 10, personalise));
+		perameterPanel.add(gardien);
 		vision = new JNumberBoxSimple("Vision : ",  new JNumberFieldRelative(1, 10, personalise));
-		labelPanel.add(vision);
-    	difficulte.add(labelPanel);
-    	
+		perameterPanel.add(vision);
+
+    	difficulte.add(perameterPanel);
     	return difficulte;
     }
     
@@ -240,17 +246,40 @@ public class OptionsPanel extends JDialog {
     private JPanel creatOtherOptions() {
     	JPanel autresOption = createSubOptionPanel("Autres Options");
     	autresOption.setLayout(new GridLayout());
-    	
-    	JPanel panel = new JPanel();
-    	panel.setLayout(new GridLayout(2,0));
-    	panel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
+    	JPanel panel1 = new JPanel();
+    	panel1.setLayout(new GridBagLayout());
+	    GridBagConstraints contrainte = new GridBagConstraints();
+	    
+    	JPanel panel2 = new JPanel();
+    	panel2.setLayout(new GridLayout(2,0));
+    	panel2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
     	
     	this.apparitionIntrus = new JCheckBox("Apparition des intrus");
     	this.communicationGardien = new JCheckBox("Communication entre gardien");
-    	panel.add(apparitionIntrus);
-    	panel.add(communicationGardien);
+    	panel2.add(apparitionIntrus);
+    	panel2.add(communicationGardien);
     	
-    	autresOption.add(panel);
+    	JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
+    	slider.setPreferredSize(new Dimension(100, 20));
+    	slider.setMajorTickSpacing(1);
+    	slider.setSnapToTicks(true);
+        
+        JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayout(0,2));
+        panel3.add(new JLabel("Vitesse du jeux : "));
+        panel3.setBorder(BorderFactory.createEmptyBorder(0, 9, 0, 0));
+        panel3.add(slider);
+
+	    contrainte.gridy = 0;
+	    contrainte.gridy = 0;
+        contrainte.weightx = 1;
+        contrainte.fill = GridBagConstraints.HORIZONTAL;
+        panel1.add(panel2, contrainte);
+
+	    contrainte.gridy = 0;
+	    contrainte.gridy = 1;
+        panel1.add(panel3, contrainte);
+    	autresOption.add(panel1);
     	return autresOption;
     }
     
@@ -273,7 +302,7 @@ public class OptionsPanel extends JDialog {
 	 */
 	public void setNumberLargeur(int value) {
 		if (value >= largeur.getJNumberSelect().getNombreMinimal() && value <= largeur.getJNumberSelect().getNombreMaximal()) {
-			this.largeur.getJNumberSelect().setText(String.valueOf(value));
+			this.largeur.getJNumberSelect().setNumber(value);
 		}
 	}
 
@@ -284,18 +313,7 @@ public class OptionsPanel extends JDialog {
 	 */
 	public void setNumberHauteur(int value) {
 		if (value >= hauteur.getJNumberSelect().getNombreMinimal() && value <= hauteur.getJNumberSelect().getNombreMaximal()) {
-			this.hauteur.getJNumberSelect().setText(String.valueOf(value));
-		}
-	}
-
-	/**
-	 * Définit la valeur du champ de gardien.
-	 *
-	 * @param value La valeur à définir.
-	 */
-	public void setNumberGardien(int value) {
-		if (value >= gardien.getJNumberSelect().getNombreMinimal() && value <= gardien.getJNumberSelect().getNombreMaximal()) {
-			this.gardien.getJNumberSelect().setText(String.valueOf(value));
+			this.hauteur.getJNumberSelect().setNumber(value);
 		}
 	}
 
@@ -306,7 +324,18 @@ public class OptionsPanel extends JDialog {
 	 */
 	public void setNumberIntrus(int value) {
 		if (value >= intrus.getJNumberSelect().getNombreMinimal() && value <= intrus.getJNumberSelect().getNombreMaximal()) {
-			this.intrus.getJNumberSelect().setText(String.valueOf(value));
+			this.intrus.getJNumberSelect().setNumber(value);
+		}
+	}
+
+	/**
+	 * Définit la valeur du champ de gardien.
+	 *
+	 * @param value La valeur à définir.
+	 */
+	public void setNumberGardien(int value) {
+		if (value >= gardien.getJNumberSelect().getNombreMinimal() && value <= gardien.getJNumberSelect().getNombreMaximal()) {
+			this.gardien.getJNumberSelect().setNumber(value);
 		}
 	}
 
@@ -317,7 +346,7 @@ public class OptionsPanel extends JDialog {
 	 */
 	public void setNumberVision(int value) {
 		if (value >= vision.getJNumberSelect().getNombreMinimal() && value <= vision.getJNumberSelect().getNombreMaximal()) {
-			this.vision.getJNumberSelect().setText(String.valueOf(value));
+			this.vision.getJNumberSelect().setNumber(value);
 		}
 	}
 }

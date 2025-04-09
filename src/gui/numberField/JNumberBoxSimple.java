@@ -1,6 +1,7 @@
 package gui.numberField;
 
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,12 +12,24 @@ public class JNumberBoxSimple extends JPanel {
     private JNumberField numberSelect;
 
     public JNumberBoxSimple(String label, JNumberField numberSelect) {
-    	setLayout(new GridLayout(1,1));
-
+    	setLayout(new GridBagLayout());
+	    GridBagConstraints contrainte = new GridBagConstraints();
         JLabel jLabel = new JLabel(label);
+        
+        contrainte.gridy = 0;
+        contrainte.gridx = 0;
+        contrainte.anchor = GridBagConstraints.WEST;
+        contrainte.weightx = 1;
+        contrainte.fill = GridBagConstraints.HORIZONTAL;
+        this.add(jLabel, contrainte);
+
+        contrainte.gridy = 0;
+        contrainte.gridx = 1;
+        contrainte.anchor = GridBagConstraints.EAST;
+        contrainte.weightx = 1;
+        contrainte.fill = GridBagConstraints.NONE;
         this.numberSelect = numberSelect;
-        this.add(jLabel);
-        this.add(numberSelect);
+        this.add(numberSelect, contrainte);
     }
 
     public JNumberField getJNumberSelect() {

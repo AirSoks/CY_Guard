@@ -11,8 +11,8 @@ public class GameConfiguration {
 	public static final int WINDOW_WIDTH = BLOCK_SIZE*NB_COLONNE;
 	public static final int WINDOW_HEIGHT = BLOCK_SIZE*NB_LIGNE;
 	
-	public static final int VITESSE_INTRUS = 10;
-	public static final int VITESSE_GARDIENS = 12;
+	public static final int VITESSE_INTRUS = 8;
+	public static final int VITESSE_GARDIENS = 10;
 	
 	public static final int DIFFICULTE = 3; // Choisir entre 1 et 3 (3 étant le plus difficile)
 

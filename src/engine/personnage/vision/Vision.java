@@ -62,6 +62,10 @@ public class Vision {
 		return distance;
 	}
 
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
 	public MapPasCoordonnee getMapPasCoordonnee() {
 		return mapPasCoordonnee;
 	}

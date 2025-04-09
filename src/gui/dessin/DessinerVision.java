@@ -14,7 +14,7 @@ import engine.personnage.PersonnageManager;
  * La classe DessinerVision implémente l'interface Dessiner et DOptionnelElement.
  * Elle est responsable du dessin des zones de vision des personnages sur la grille de jeu.
  */
-public class DessinerVision implements Dessiner, DOptionnelElement {
+public class DessinerVision implements Dessiner, DessinOptionnel {
 	
     private PersonnageManager personnageManager;
     

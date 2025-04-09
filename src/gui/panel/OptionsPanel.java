@@ -2,6 +2,7 @@ package gui.panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -9,7 +10,9 @@ import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -106,7 +109,12 @@ public class OptionsPanel extends JDialog {
 
 	    contrainte.gridy = 2;
 	    contrainte.gridx = 0;
-	    add(creatOtherOptions(), contrainte);
+	    add(createOtherOptionsPanel(), contrainte);
+	    
+
+	    contrainte.gridy = 3;
+	    contrainte.gridx = 0;
+	    add(createButtonPanel(), contrainte);
 	}
     
     /**
@@ -243,44 +251,73 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @return Le panneau pour les autres options.
 	 */
-    private JPanel creatOtherOptions() {
+    private JPanel createOtherOptionsPanel() {
     	JPanel autresOption = createSubOptionPanel("Autres Options");
-    	autresOption.setLayout(new GridLayout());
-    	JPanel panel1 = new JPanel();
-    	panel1.setLayout(new GridBagLayout());
+    	autresOption.setLayout(new GridBagLayout());
 	    GridBagConstraints contrainte = new GridBagConstraints();
 	    
-    	JPanel panel2 = new JPanel();
-    	panel2.setLayout(new GridLayout(2,0));
-    	panel2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
-    	
+    	JPanel checkBoxPanel = new JPanel();
+    	checkBoxPanel.setLayout(new GridLayout(2,0));
+    	checkBoxPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
     	this.apparitionIntrus = new JCheckBox("Apparition des intrus");
     	this.communicationGardien = new JCheckBox("Communication entre gardien");
-    	panel2.add(apparitionIntrus);
-    	panel2.add(communicationGardien);
-    	
-    	JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
-    	slider.setPreferredSize(new Dimension(100, 20));
-    	slider.setMajorTickSpacing(1);
-    	slider.setSnapToTicks(true);
-        
-        JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayout(0,2));
-        panel3.add(new JLabel("Vitesse du jeux : "));
-        panel3.setBorder(BorderFactory.createEmptyBorder(0, 9, 0, 0));
-        panel3.add(slider);
+    	checkBoxPanel.add(apparitionIntrus);
+    	checkBoxPanel.add(communicationGardien);
 
 	    contrainte.gridy = 0;
 	    contrainte.gridy = 0;
         contrainte.weightx = 1;
         contrainte.fill = GridBagConstraints.HORIZONTAL;
-        panel1.add(panel2, contrainte);
-
+        autresOption.add(checkBoxPanel, contrainte);
+        
+        
+        JPanel speedPanel = new JPanel();
+    	String[] vitesse = {"Rapide", "Normal", "Lent"};
+        JComboBox<String> comboBox = new JComboBox<>(vitesse);
+        comboBox.setPreferredSize(new Dimension(20, 20));
+        
+        speedPanel.setLayout(new GridLayout(0,2));
+        speedPanel.add(new JLabel("Vitesse du jeux : "));
+        speedPanel.setBorder(BorderFactory.createEmptyBorder(2, 9, 0, 8));
+        speedPanel.add(comboBox);
+        
 	    contrainte.gridy = 0;
 	    contrainte.gridy = 1;
-        panel1.add(panel3, contrainte);
-    	autresOption.add(panel1);
+	    autresOption.add(speedPanel, contrainte);
+        
+	    
+        JPanel zoomPanel = new JPanel();
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
+        slider.setPreferredSize(new Dimension(100, 20));
+        slider.setMajorTickSpacing(1);
+        slider.setSnapToTicks(true);
+
+        zoomPanel.setLayout(new GridLayout(0,2));
+        zoomPanel.add(new JLabel("Zoom de la carte : "));
+        zoomPanel.setBorder(BorderFactory.createEmptyBorder(2, 9, 0, 0));
+        zoomPanel.add(slider);
+        
+	    contrainte.gridy = 0;
+	    contrainte.gridy = 2;
+	    autresOption.add(zoomPanel, contrainte);
     	return autresOption;
+    }
+    
+    /**
+	 * Crée le panneau pour les boutons.
+	 *
+	 * @return Le panneau pour les boutons.
+	 */
+    private JPanel createButtonPanel() {
+    	JPanel buttonPanel = new JPanel(new GridLayout(1, 1, 10, 0));
+    	buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    	
+        JButton btnConfirmer = new JButton("Confirmer");
+        JButton btnAnnuler = new JButton("Annuler");
+        
+        buttonPanel.add(btnConfirmer);
+        buttonPanel.add(btnAnnuler);
+        return buttonPanel;
     }
     
     /**

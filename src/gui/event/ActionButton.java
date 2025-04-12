@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBoxMenuItem;
 
+import config.Settings;
 import gui.panel.MainGUI;
 import gui.panel.OptionsPanel;
 import gui.panel.PaintStrategy;
@@ -16,14 +17,17 @@ import gui.panel.PaintStrategy;
 public class ActionButton implements ActionListener {
 	
     private MainGUI mainFrame;
+    
+    private Settings settings;
 
     /**
      * Constructeur de la classe ActionButton
      *
      * @param parentFrame La fenêtre principale de l'application
      */
-    public ActionButton(MainGUI parentFrame) {
-        this.mainFrame = parentFrame; 
+    public ActionButton(MainGUI parentFrame, Settings settings) {
+        this.mainFrame = parentFrame;
+        this.settings = settings; 
     }
     
     /**
@@ -34,6 +38,7 @@ public class ActionButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
+        System.out.println(command);
         switch (command) {
             case "Start": start(); break;
             case "Pause": pause(); break;
@@ -49,10 +54,12 @@ public class ActionButton implements ActionListener {
             case "Difficile": setNumberFileds(35,35,10,3,5); break;
             case "Extraterestre": setNumberFileds(40,40,15,5,8); break;
             case "Personnalisé": break;
+            case "Confirmer" : confirmOption(e); break;
+            case "Défaut" : defautOption(e); break;
         }
     }
-	
-    /**
+
+	/**
      * Vérifie si une case à cocher a été sélectionnée.
      *
      * @param e L'événement déclenché par l'utilisateur
@@ -140,7 +147,7 @@ public class ActionButton implements ActionListener {
      * Affiche le panneau des options.
      */
 	private void showOptions() {
-		OptionsPanel.initInstance(mainFrame, this);
+		OptionsPanel.initInstance(mainFrame, this, settings);
     	OptionsPanel dialog = OptionsPanel.getInstance();
     	dialog.resetLocation(mainFrame);
         dialog.setVisible(true);
@@ -159,8 +166,30 @@ public class ActionButton implements ActionListener {
 		OptionsPanel optionPanel = OptionsPanel.getInstance();
 		optionPanel.setNumberLargeur(largeur);
 		optionPanel.setNumberHauteur(hauteur);
+		optionPanel.setLimitsObstacles(largeur, hauteur);
 		optionPanel.setNumberIntrus(intrus);
 		optionPanel.setNumberGardien(gardien);
 		optionPanel.setNumberVision(vision);
+	}
+	
+    private void confirmOption(ActionEvent e) {
+		OptionsPanel optionPanel = OptionsPanel.getInstance();
+		optionPanel.applySettings(settings);
+		optionPanel.dispose();
+		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
+		mainFrame.getMapBuilder().build();
+		mainFrame.getManager().initPersonnages();
+		mainFrame.redimensionner();
+	}
+    
+    private void defautOption(ActionEvent e) {
+		OptionsPanel optionPanel = OptionsPanel.getInstance();
+    	settings.resetToDefault();
+    	optionPanel.loadSettings(settings);
+		optionPanel.dispose();
+		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
+		mainFrame.getMapBuilder().build();
+		mainFrame.getManager().initPersonnages();
+		mainFrame.redimensionner();
 	}
 }

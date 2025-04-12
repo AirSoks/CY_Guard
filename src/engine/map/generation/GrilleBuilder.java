@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ConfigurationMapAleatoire;
+import config.Settings;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Direction;
@@ -12,6 +13,7 @@ import engine.map.obstacle.Lac;
 import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.ObstacleFactory;
 import engine.map.obstacle.Plaine;
+import engine.utilitaire.MaxTentativeAtteind;
 
 /**
  * Cette classe représente la construction de la grille
@@ -28,21 +30,27 @@ public class GrilleBuilder {
 	 */
 	private Grille grille;
 	
+	private Settings settings;
+	
 	/**
 	 * Les obstacles à construire avec leur spécificité
 	 */
 	private List<ObstacleBuilder> obstacleBuilders;
 	
-	public GrilleBuilder(int nbLigne, int nbColonne) {
-        Grille.initInstance(nbLigne, nbColonne);
-        this.grille = Grille.getInstance();
+	public GrilleBuilder(int nbLigne, int nbColonne, Settings settings) {
+        this.settings = settings;
+        this.grille = new Grille(nbLigne, nbColonne);
     }
 
-	public Grille build() {
-		this.grille.genererTerrain();
-        this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires();
+    public Grille build() {
+        this.grille.genererTerrain();
+        this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires(settings);
         genererObstacles();
         return grille;
+    }
+
+    public void redimensionner(int nouvelleLigne, int nouvelleColonne) {
+        this.grille.redimensionner(nouvelleLigne, nouvelleColonne);
     }
 
 	private void genererObstacles() {
@@ -59,31 +67,42 @@ public class GrilleBuilder {
 	 * @param builder Les paramètres de l'obstacle à placer
 	 */
 	private void placerObstacles(ObstacleBuilder builder) {
-		MapProbaCoordonnee mapProbaCoordonnee = builder.getMapProbaCoordonnee();
-		List<Coordonnee> coordonnees = getListCoordonneeGrille();
-		mapProbaCoordonnee.ajouterCoordonnes(100.0 / coordonnees.size(), coordonnees);
+	    MapProbaCoordonnee mapProbaCoordonnee = builder.getMapProbaCoordonnee();
+	    List<Coordonnee> coordonnees = getListCoordonneeGrille();
+	    mapProbaCoordonnee.ajouterCoordonnes(100.0 / coordonnees.size(), coordonnees);
 
-		int nbObstacle = builder.getNbObstacle();
-		Obstacle obstacle =  builder.getObstacle();
-		int densite = builder.getDensite();
-		int nbCaseDensite = builder.getNbCaseDensiteObstacle();
-		int obstaclesPlaces = 0;
+	    int nbObstacle = builder.getNbObstacle();
+	    Obstacle obstacle = builder.getObstacle();
+	    int densite = builder.getDensite();
+	    int nbCaseDensite = builder.getNbCaseDensiteObstacle();
+	    int obstaclesPlaces = 0;
 
-        while (obstaclesPlaces < nbObstacle) {
-    		// On prend une valeur aléatoire
-    		Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire(mapProbaCoordonnee.getListeAleatoire());
-    		if (grille.isCoordonneeValide(coordonneeAleatoire, "INGRILLE")) {
+	    int maxAttempts = grille.getNbLigne() * grille.getNbColonne() * 2;
+	    int attempts = 0;
 
-    			// On change la case avec le nouvelle obstacle et on supprime la coordonnée de la map
-    			grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
-    			mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
+	    while (obstaclesPlaces < nbObstacle) {
+	        attempts++;
+	        
+	        // Vérification du nombre de tentatives
+	        if (attempts > maxAttempts) {
+	            throw new MaxTentativeAtteind(maxAttempts);
+	        }
 
-        		List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
-    			augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
-                obstaclesPlaces++;
-        	}
-        }
-    }
+	        Coordonnee coordonneeAleatoire = mapProbaCoordonnee.getCoordonneeAleatoire(mapProbaCoordonnee.getListeAleatoire());
+	        if (grille.isCoordonneeValide(coordonneeAleatoire, "INGRILLE")) {
+	            // Placement de l'obstacle
+	            grille.getCase(coordonneeAleatoire).setObstacle(obstacle);
+	            mapProbaCoordonnee.supprimerCoordonnee(coordonneeAleatoire);
+
+	            // Mise à jour des probabilités adjacentes
+	            List<Coordonnee> coordonneeAdjacentes = getCoordonneeAdjacentes(coordonneeAleatoire, nbCaseDensite);
+	            augmenterProbabilite(mapProbaCoordonnee, coordonneeAdjacentes, densite);
+	            
+	            obstaclesPlaces++;
+	            attempts = 0; // Réinitialisation du compteur après un placement réussi
+	        }
+	    }
+	}
 
 	private List<Coordonnee> getListCoordonneeGrille() {
         List<Coordonnee> coordonnees = new ArrayList<>();

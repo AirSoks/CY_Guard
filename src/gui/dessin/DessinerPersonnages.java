@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Coordonnee;
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
@@ -19,7 +19,8 @@ import engine.utilitaire.SimulationUtility;
  * Elle est responsable du dessin des personnages (Gardiens et Intrus) sur la grille de jeu.
  */
 public class DessinerPersonnages implements Dessiner, DessinPerformance {
-	
+
+    private Settings settings;
     private PersonnageManager personnageManager;
     
     private boolean performanceMode = false;
@@ -31,8 +32,9 @@ public class DessinerPersonnages implements Dessiner, DessinPerformance {
      *
      * @param personnageManager Le gestionnaire des personnages
      */
-    public DessinerPersonnages(PersonnageManager personnageManager) {
+    public DessinerPersonnages(PersonnageManager personnageManager, Settings settings) {
         this.personnageManager = personnageManager;
+        this.settings = settings;
     }
     
     /**
@@ -56,7 +58,7 @@ public class DessinerPersonnages implements Dessiner, DessinPerformance {
     @Override
     public void paint(Graphics g) {
     	
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
             if (personnage != null) {

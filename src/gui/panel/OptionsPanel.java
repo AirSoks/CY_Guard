@@ -1,12 +1,12 @@
 package gui.panel;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.Hashtable;
+import java.awt.Insets;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -18,14 +18,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
+import config.Settings;
 import gui.event.ActionButton;
 import gui.numberField.JNumberBoxDouble;
 import gui.numberField.JNumberBoxSimple;
-import gui.numberField.JNumberFieldRelative;
+import gui.numberField.JNumberFieldRelativeToButton;
 
 @SuppressWarnings("serial")
 public class OptionsPanel extends JDialog {
@@ -39,6 +37,7 @@ public class OptionsPanel extends JDialog {
 	private JNumberBoxSimple largeur, hauteur, gardien, intrus, vision;
 	private JNumberBoxDouble casesLacs, casesArbres, casesRoches, elementsLacs, elementsArbres, elementsRoches;
 	private JCheckBox apparitionIntrus, communicationGardien;
+	private JComboBox<String> speedBox;
 
 	/**
 	 * Constructeur de la classe OptionsPanel.
@@ -46,9 +45,10 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @param parent La fenêtre principale qui est le parent de cette boîte de dialogue.
 	 */
-    private OptionsPanel(JFrame parent, ActionButton actionButton) {
+    private OptionsPanel(JFrame parent, ActionButton actionButton, Settings settings) {
         super(parent, "Options", true);
-        createLayout(actionButton);
+        createLayout(actionButton, settings);
+		setLimitsObstacles(30, 30);
         resetLocation(parent);
         setModal(false);
         setResizable(false);
@@ -60,9 +60,9 @@ public class OptionsPanel extends JDialog {
 	 * @param parent La fenêtre principale qui est le parent de cette boîte de dialogue.
 	 * @param actionButton Le bouton d'action associé.
 	 */
-	public static void initInstance(JFrame parent, ActionButton actionButton) {
+	public static void initInstance(JFrame parent, ActionButton actionButton, Settings settings) {
 		if (instance == null) {
-	        instance = new OptionsPanel(parent, actionButton);
+	        instance = new OptionsPanel(parent, actionButton, settings);
 		}
     }
 	
@@ -74,7 +74,7 @@ public class OptionsPanel extends JDialog {
 	 */
 	public static OptionsPanel getInstance() {
 		if (instance == null) {
-			throw new IllegalStateException("Grille non initialisée");
+			throw new IllegalStateException("OptionsPanel non initialisée");
 		}
 		return instance;
 	}
@@ -94,7 +94,7 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @param actionButton Le bouton d'action associé.
 	 */
-	private void createLayout(ActionButton actionButton) {
+	private void createLayout(ActionButton actionButton, Settings settings) {
 	    setLayout(new GridBagLayout());
 	    GridBagConstraints contrainte = new GridBagConstraints();
 	    
@@ -105,16 +105,16 @@ public class OptionsPanel extends JDialog {
 
 	    contrainte.gridy = 1;
 	    contrainte.gridx = 0;
-	    add(createInitialisationPanel(), contrainte);
+	    add(createInitialisationPanel(settings), contrainte);
 
 	    contrainte.gridy = 2;
 	    contrainte.gridx = 0;
-	    add(createOtherOptionsPanel(), contrainte);
+	    add(createOtherOptionsPanel(settings), contrainte);
 	    
 
 	    contrainte.gridy = 3;
 	    contrainte.gridx = 0;
-	    add(createButtonPanel(), contrainte);
+	    add(createButtonPanel(actionButton, settings), contrainte);
 	}
     
     /**
@@ -128,11 +128,11 @@ public class OptionsPanel extends JDialog {
     	JPanel radiosPanel = new JPanel(new GridLayout(5,0));
     	ButtonGroup buttonGroup = new ButtonGroup();
     	
-    	this.debutant = new JRadioButton("Débutant", true);
+    	this.debutant = new JRadioButton("Débutant", false);
     	this.debutant.addActionListener(actionButton);
     	buttonGroup.add(debutant);
     	radiosPanel.add(debutant);
-    	this.intermediaire = new JRadioButton("Intermédiaire", false);
+    	this.intermediaire = new JRadioButton("Intermédiaire", true);
     	this.intermediaire.addActionListener(actionButton);
     	buttonGroup.add(intermediaire);
     	radiosPanel.add(intermediaire);
@@ -152,17 +152,23 @@ public class OptionsPanel extends JDialog {
     	
     	JPanel perameterPanel = new JPanel(new GridLayout(5, 0, 0, 4));
     	perameterPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
-    	
-    	largeur = new JNumberBoxSimple("Largeur : ", new JNumberFieldRelative(5, 100, personalise));
+    	largeur = new JNumberBoxSimple("Largeur : ", new JNumberFieldRelativeToButton(Settings.NB_LARGEUR_MIN, Settings.NB_LARGEUR_MAX, personalise));
+		largeur.getJNumberSelect().addFocusListener(new FocusControls());
+		largeur.getJNumberSelect().setNumber(30);
     	perameterPanel.add(largeur);
-		hauteur = new JNumberBoxSimple("Hauteur : ", new JNumberFieldRelative(5, 100, personalise));
+		hauteur = new JNumberBoxSimple("Hauteur : ", new JNumberFieldRelativeToButton(Settings.NB_HAUTEUR_MIN, Settings.NB_HAUTEUR_MAX, personalise));
+		hauteur.getJNumberSelect().addFocusListener(new FocusControls());
 		perameterPanel.add(hauteur);
-		intrus = new JNumberBoxSimple("Intrus : ", new JNumberFieldRelative(1, 30, personalise));
+		hauteur.getJNumberSelect().setNumber(30);
+		intrus = new JNumberBoxSimple("Intrus : ", new JNumberFieldRelativeToButton(Settings.NB_INTRUS_MIN, Settings.NB_INTRUS_MAX, personalise));
 		perameterPanel.add(intrus);
-		gardien = new JNumberBoxSimple("Gardiens : ", new JNumberFieldRelative(1, 10, personalise));
+		intrus.getJNumberSelect().setNumber(5);
+		gardien = new JNumberBoxSimple("Gardiens : ", new JNumberFieldRelativeToButton(Settings.NB_GARDIEN_MIN, Settings.NB_GARDIEN_MAX, personalise));
 		perameterPanel.add(gardien);
-		vision = new JNumberBoxSimple("Vision : ",  new JNumberFieldRelative(1, 10, personalise));
+		gardien.getJNumberSelect().setNumber(2);
+		vision = new JNumberBoxSimple("Vision : ",  new JNumberFieldRelativeToButton(Settings.NB_VISION_MIN, Settings.NB_VISION_MAX, personalise));
 		perameterPanel.add(vision);
+		vision.getJNumberSelect().setNumber(5);
 
     	difficulte.add(perameterPanel);
     	return difficulte;
@@ -173,7 +179,7 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @return Le panneau d'initialisation.
 	 */
-    private JPanel createInitialisationPanel() {
+    private JPanel createInitialisationPanel(Settings settings) {
     	
     	JPanel initialisation = createSubOptionPanel("Initialisation");
     	initialisation.setLayout(new GridLayout(2,0));
@@ -189,9 +195,9 @@ public class OptionsPanel extends JDialog {
     	casesPanel2.add(labelCasesArbres);
     	casesPanel2.add(labelCasesRoches);
     	
-    	casesLacs = new JNumberBoxDouble("min : ", "max : ", 50, 500);
-    	casesArbres = new JNumberBoxDouble("min : ", "max : ", 50, 500);
-    	casesRoches = new JNumberBoxDouble("min : ", "max : ", 50, 500);
+    	casesLacs = new JNumberBoxDouble("min : ", "max : ", 0, 1);
+    	casesArbres = new JNumberBoxDouble("min : ", "max : ", 0, 1);
+    	casesRoches = new JNumberBoxDouble("min : ", "max : ", 0, 1);
     	casesPanel.add(casesLacs);
     	casesPanel.add(casesArbres);
     	casesPanel.add(casesRoches);
@@ -214,9 +220,9 @@ public class OptionsPanel extends JDialog {
     	JPanel elementsPanel = new JPanel(new GridLayout(3, 1));
     	JPanel elementsPanel2 = new JPanel(new GridLayout(3, 0, 0, 8));
     	
-    	elementsLacs = new JNumberBoxDouble("min : ", "max : ", 1, 10);
-    	elementsArbres = new JNumberBoxDouble("min : ", "max : ", 1, 10);
-    	elementsRoches = new JNumberBoxDouble("min : ", "max : ", 1, 10);
+    	elementsLacs = new JNumberBoxDouble("min : ", "max : ", 0, 1);
+    	elementsArbres = new JNumberBoxDouble("min : ", "max : ", 0, 1);
+    	elementsRoches = new JNumberBoxDouble("min : ", "max : ", 0, 1);
     	elementsPanel.add(elementsLacs);
     	elementsPanel.add(elementsArbres);
     	elementsPanel.add(elementsRoches);
@@ -243,6 +249,7 @@ public class OptionsPanel extends JDialog {
     	
     	initialisation.add(cases);
     	initialisation.add(elements);
+    	
     	return initialisation;
     }
     
@@ -251,7 +258,7 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @return Le panneau pour les autres options.
 	 */
-    private JPanel createOtherOptionsPanel() {
+    private JPanel createOtherOptionsPanel(Settings settings) {
     	JPanel autresOption = createSubOptionPanel("Autres Options");
     	autresOption.setLayout(new GridBagLayout());
 	    GridBagConstraints contrainte = new GridBagConstraints();
@@ -259,8 +266,8 @@ public class OptionsPanel extends JDialog {
     	JPanel checkBoxPanel = new JPanel();
     	checkBoxPanel.setLayout(new GridLayout(2,0));
     	checkBoxPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
-    	this.apparitionIntrus = new JCheckBox("Apparition des intrus");
-    	this.communicationGardien = new JCheckBox("Communication entre gardien");
+    	this.apparitionIntrus = new JCheckBox("Apparition des intrus", settings.getApparitionIntrus());
+    	this.communicationGardien = new JCheckBox("Communication entre gardien", settings.getCommunicationGardien());
     	checkBoxPanel.add(apparitionIntrus);
     	checkBoxPanel.add(communicationGardien);
 
@@ -272,34 +279,20 @@ public class OptionsPanel extends JDialog {
         
         
         JPanel speedPanel = new JPanel();
-    	String[] vitesse = {"Rapide", "Normal", "Lent"};
-        JComboBox<String> comboBox = new JComboBox<>(vitesse);
-        comboBox.setPreferredSize(new Dimension(20, 20));
+    	String[] vitesse = {Settings.SPEED_RAPIDE, Settings.SPEED_NORMAL, Settings.SPEED_LENT};
+        this.speedBox = new JComboBox<>(vitesse);
+        speedBox.setSelectedItem(Settings.SPEED_NORMAL);
+        this.speedBox.setPreferredSize(new Dimension(20, 20));
         
         speedPanel.setLayout(new GridLayout(0,2));
         speedPanel.add(new JLabel("Vitesse du jeux : "));
         speedPanel.setBorder(BorderFactory.createEmptyBorder(2, 9, 0, 8));
-        speedPanel.add(comboBox);
+        speedPanel.add(speedBox);
         
 	    contrainte.gridy = 0;
 	    contrainte.gridy = 1;
 	    autresOption.add(speedPanel, contrainte);
-        
-	    
-        JPanel zoomPanel = new JPanel();
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
-        slider.setPreferredSize(new Dimension(100, 20));
-        slider.setMajorTickSpacing(1);
-        slider.setSnapToTicks(true);
 
-        zoomPanel.setLayout(new GridLayout(0,2));
-        zoomPanel.add(new JLabel("Zoom de la carte : "));
-        zoomPanel.setBorder(BorderFactory.createEmptyBorder(2, 9, 0, 0));
-        zoomPanel.add(slider);
-        
-	    contrainte.gridy = 0;
-	    contrainte.gridy = 2;
-	    autresOption.add(zoomPanel, contrainte);
     	return autresOption;
     }
     
@@ -308,16 +301,112 @@ public class OptionsPanel extends JDialog {
 	 *
 	 * @return Le panneau pour les boutons.
 	 */
-    private JPanel createButtonPanel() {
-    	JPanel buttonPanel = new JPanel(new GridLayout(1, 1, 10, 0));
-    	buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    	
-        JButton btnConfirmer = new JButton("Confirmer");
-        JButton btnAnnuler = new JButton("Annuler");
+    private JPanel createButtonPanel(ActionButton actionButton, Settings settings) {
+    	JPanel buttonPanel = new JPanel(new GridLayout(0, 3, 2, 2));
+
+        JButton confirmer = new JButton("Confirmer");
+        JButton annuler = new JButton("Annuler");
+        JButton defaut = new JButton("Défaut");
+        confirmer.setPreferredSize(new Dimension(40, 30));
+        annuler.setPreferredSize(new Dimension(40, 30));
+        defaut.setPreferredSize(new Dimension(40, 30));
+        confirmer.setMargin(new Insets(0,5,0,5));
+        annuler.setMargin(new Insets(0,5,0,5));
+        defaut.setMargin(new Insets(0,5,0,5));
+
+        buttonPanel.add(confirmer);
+        confirmer.addActionListener(actionButton);
         
-        buttonPanel.add(btnConfirmer);
-        buttonPanel.add(btnAnnuler);
+        buttonPanel.add(annuler);
+
+        buttonPanel.add(defaut);
+        defaut.addActionListener(actionButton);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(4, 2, 6, 2));
+        
         return buttonPanel;
+    }
+    
+    /**
+     * Charge les paramètres depuis une instance de Settings dans OptionPanel.
+     *
+     * @param settings L'instance de Settings contenant les valeurs à charger.
+     */
+    public void loadSettings(Settings settings) {
+
+        setNumberLargeur(settings.getLargeur());
+        setNumberHauteur(settings.getHauteur());
+        setNumberIntrus(settings.getIntrus());
+        setNumberGardien(settings.getGardien());
+        setNumberVision(settings.getVision());
+        
+        personalise.setSelected(true);
+        setLimitsObstacles(settings.getLargeur(), settings.getHauteur());
+
+        casesLacs.setNumbers(settings.getCases_lacs_min(), settings.getCases_lacs_max());
+        casesArbres.setNumbers(settings.getCases_arbres_min(), settings.getCases_arbres_max());
+        casesRoches.setNumbers(settings.getCases_roches_min(), settings.getCases_roches_max());
+
+        elementsLacs.setNumbers(settings.getElements_lacs_min(), settings.getElements_lacs_max());
+        elementsArbres.setNumbers(settings.getElements_arbres_min(), settings.getElements_arbres_max());
+        elementsRoches.setNumbers(settings.getElements_roches_min(), settings.getElements_roches_max());
+
+        apparitionIntrus.setSelected(settings.getApparitionIntrus());
+        communicationGardien.setSelected(settings.getCommunicationGardien());
+
+        String speed;
+        if (settings.getSpeed() == Settings.SPEED_LENT_VALUE) {
+            speed = Settings.SPEED_LENT;
+        } else if (settings.getSpeed() == Settings.SPEED_NORMAL_VALUE) {
+            speed = Settings.SPEED_NORMAL;
+        } else {
+            speed = Settings.SPEED_RAPIDE;
+        }
+        speedBox.setSelectedItem(speed);
+    }
+    
+    public void applySettings(Settings settings) {
+
+        settings.setLargeur(largeur.getJNumberSelect().getNumber());
+        settings.setHauteur(hauteur.getJNumberSelect().getNumber());
+        settings.setIntrus(intrus.getJNumberSelect().getNumber());
+        settings.setGardien(gardien.getJNumberSelect().getNumber());
+        settings.setVision(vision.getJNumberSelect().getNumber());
+
+        settings.setCases_lacs_min(casesLacs.getJNumberMin().getNumber());
+        settings.setCases_lacs_max(casesLacs.getJNumberMax().getNumber());
+        
+        settings.setCases_arbres_min(casesArbres.getJNumberMin().getNumber());
+        settings.setCases_arbres_max(casesArbres.getJNumberMax().getNumber());
+        
+        settings.setCases_roches_min(casesRoches.getJNumberMin().getNumber());
+        settings.setCases_roches_max(casesRoches.getJNumberMax().getNumber());
+
+        settings.setElements_lacs_min(elementsLacs.getJNumberMin().getNumber());
+        settings.setElements_lacs_max(elementsLacs.getJNumberMax().getNumber());
+        
+        settings.setElements_arbres_min(elementsArbres.getJNumberMin().getNumber());
+        settings.setElements_arbres_max(elementsArbres.getJNumberMax().getNumber());
+        
+        settings.setElements_roches_min(elementsRoches.getJNumberMin().getNumber());
+        settings.setElements_roches_max(elementsRoches.getJNumberMax().getNumber());
+
+        settings.setApparitionIntrus(apparitionIntrus.isSelected());
+        settings.setCommunicationGardien(communicationGardien.isSelected());
+
+        String selectedSpeed = (String) speedBox.getSelectedItem();
+        switch(selectedSpeed) {
+            case Settings.SPEED_LENT:
+                settings.setSpeed(Settings.SPEED_LENT_VALUE);
+                break;
+            case Settings.SPEED_NORMAL:
+                settings.setSpeed(Settings.SPEED_NORMAL_VALUE);
+                break;
+            case Settings.SPEED_RAPIDE:
+                settings.setSpeed(Settings.SPEED_RAPIDE_VALUE);
+                break;
+            default:
+                settings.setSpeed(Settings.SPEED_NORMAL_VALUE);
+        }
     }
     
     /**
@@ -384,6 +473,32 @@ public class OptionsPanel extends JDialog {
 	public void setNumberVision(int value) {
 		if (value >= vision.getJNumberSelect().getNombreMinimal() && value <= vision.getJNumberSelect().getNombreMaximal()) {
 			this.vision.getJNumberSelect().setNumber(value);
+		}
+	}
+	
+	public void setLimitsObstacles(int largeur, int hauteur) {
+		int totalCases = largeur*hauteur;
+
+        casesLacs.setLimits(0, totalCases/30);
+        casesLacs.setNumbers(totalCases/40, totalCases/30);
+        casesArbres.setLimits(0, totalCases/10);
+        casesArbres.setNumbers(totalCases/17, totalCases/10);
+        casesRoches.setLimits(0, totalCases/20);
+        casesRoches.setNumbers(totalCases/70, totalCases/20);
+
+        elementsLacs.setLimits(0, totalCases/300);
+        elementsLacs.setNumbers(totalCases/400, totalCases/300);
+        elementsArbres.setLimits(0, 1);
+        elementsArbres.setNumbers(1, 1);
+        elementsRoches.setLimits(0, totalCases/200);
+        elementsRoches.setNumbers(totalCases/400, totalCases/200);
+	}
+	
+	
+	public class FocusControls extends FocusAdapter {
+		
+		public void focusLost(FocusEvent e) {
+			setLimitsObstacles(largeur.getJNumberSelect().getNumber(), hauteur.getJNumberSelect().getNumber());
 		}
 	}
 }

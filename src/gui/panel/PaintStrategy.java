@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.Settings;
 import engine.map.Grille;
 import engine.personnage.PersonnageManager;
 import gui.dessin.DessinOptionnel;
@@ -23,11 +24,11 @@ public class PaintStrategy {
 	
     private List<Dessiner> dessins = new ArrayList<>();
 
-    public PaintStrategy(Grille grille, PersonnageManager personnageManager) {
-    	dessins.add(new DessinerGrille(grille));
-    	dessins.add(new DessinerPersonnages(personnageManager));
-        dessins.add(new DessinerDeplacement(personnageManager));
-        dessins.add(new DessinerVision(personnageManager));
+    public PaintStrategy(Grille grille, PersonnageManager personnageManager, Settings settings) {
+    	dessins.add(new DessinerGrille(grille, settings));
+    	dessins.add(new DessinerPersonnages(personnageManager, settings));
+        dessins.add(new DessinerDeplacement(personnageManager, settings));
+        dessins.add(new DessinerVision(personnageManager, settings));
     }
 
     public void paint(Graphics g) {

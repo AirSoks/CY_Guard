@@ -10,12 +10,9 @@ import javax.swing.JPanel;
 public class JNumberBoxDouble extends JPanel{
 		
 	private JNumberField numberMin, numberMax;
-	private int min, max;
 	
 	public JNumberBoxDouble(String label1, String label2, int min, int max) {
 		setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 2));
-		this.min = min;
-		this.max = max;
 		
 		this.numberMin = new JNumberField(min, max);
 		this.numberMax = new JNumberField(min, max);
@@ -27,14 +24,40 @@ public class JNumberBoxDouble extends JPanel{
         
         numberMin.addFocusListener(new FocusControlsMin());
         numberMax.addFocusListener(new FocusControlsMax());
-        
-        initBox();
-	}
 
-	private void initBox() {
 		numberMin.setNumber(min);
 		numberMax.setNumber(max);
 	}
+
+	public void setLimits(int cases_lacs_min, int cases_lacs_max) {
+		if (cases_lacs_min <= cases_lacs_max ) {
+			numberMin.setLimits(cases_lacs_min, cases_lacs_max);
+			numberMax.setLimits(cases_lacs_min, cases_lacs_max);
+		}
+		else {
+			numberMin.setLimits(cases_lacs_min, cases_lacs_min);
+			numberMax.setLimits(cases_lacs_min, cases_lacs_min);
+		}
+		
+	}
+	
+	public void setNumbers(int cases_lacs_min, int cases_lacs_max) {
+		numberMin.setNumber(cases_lacs_min);
+		numberMax.setNumber(cases_lacs_max);
+	}
+	
+	public void showLimits() {
+		numberMin.showLimitsMin();
+		numberMax.showLimitsMax();
+	}
+	
+    public JNumberField getJNumberMin() {
+        return numberMin;
+    }
+    
+    public JNumberField getJNumberMax() {
+        return numberMax;
+    }
 	
 	public class FocusControlsMin extends FocusAdapter {
 		
@@ -57,5 +80,5 @@ public class JNumberBoxDouble extends JPanel{
 				numberMax.setNumber(minActual);
             }
 	    }
-	}	
+	}
 }

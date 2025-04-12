@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Coordonnee;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
@@ -17,8 +17,10 @@ import engine.personnage.deplacement.DeplacementPoursuite;
  * Elle est responsable du dessin des déplacements des personnages sur la grille de jeu.
  */
 public class DessinerDeplacement implements Dessiner, DessinOptionnel {
-	
+
+    private Settings settings;
     private PersonnageManager personnageManager;
+    
     private boolean dessiner = true;
     
     /**
@@ -26,8 +28,9 @@ public class DessinerDeplacement implements Dessiner, DessinOptionnel {
      *
      * @param personnageManager Le gestionnaire des personnages
      */
-    public DessinerDeplacement(PersonnageManager personnageManager) {
+    public DessinerDeplacement(PersonnageManager personnageManager, Settings settings) {
         this.personnageManager = personnageManager;
+        this.settings = settings;
     }
 
     /**
@@ -40,7 +43,7 @@ public class DessinerDeplacement implements Dessiner, DessinOptionnel {
     	
     	if (!dessiner) { return; }
     	
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
             Deplacement deplacement = personnage.getDeplacement();

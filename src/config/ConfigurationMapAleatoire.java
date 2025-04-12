@@ -25,36 +25,37 @@ public class ConfigurationMapAleatoire {
 	 * générées aléatoirement dans les limites définies par la config du simulation.
 	 * @return Une liste d'ObstacleBuilder, chacun représentant un obstacle configuré pour la map
 	 */
-	public static List<ObstacleBuilder> genererObstaclesAleatoires() {
+	public static List<ObstacleBuilder> genererObstaclesAleatoires(Settings settings) {
+		
         List<ObstacleBuilder> obstacleBuilders = new ArrayList<>();
         
         // Génération des Lacs
-        int nbLacs = getValeurAleatoire(GameConfiguration.NB_LAC_MIN, GameConfiguration.NB_LAC_MAX);
+        int nbLacs = getValeurAleatoire(settings.getElements_lacs_min(), settings.getElements_lacs_max());
         for (int i = 0; i < nbLacs; i++) {
             Obstacle lac = ObstacleFactory.getObstacle("Lac");
-            int densiteLac = getValeurAleatoire(GameConfiguration.DENSITE_LAC_MIN, GameConfiguration.DENSITE_LAC_MAX);
-            int totalCaseLac = getValeurAleatoire(GameConfiguration.TOTAL_CASE_LAC_MIN, GameConfiguration.TOTAL_CASE_LAC_MAX);
-            int nbCaseDensiteLac = GameConfiguration.NB_CASE_DENSITE_LAC;
+            int densiteLac = getValeurAleatoire(Settings.DENSITE_LAC_MIN, Settings.DENSITE_LAC_MAX);
+            int totalCaseLac = getValeurAleatoire(settings.getCases_lacs_min(), settings.getCases_lacs_max());
+            int nbCaseDensiteLac = Settings.NB_CASE_DENSITE_LAC;
             
             obstacleBuilders.add(new ObstacleBuilder(lac, densiteLac, totalCaseLac, nbCaseDensiteLac));
         }
 
         // Génération des Roches
-        int nbRoches = getValeurAleatoire(GameConfiguration.NB_ROCHE_MIN, GameConfiguration.NB_ROCHE_MAX);
+        int nbRoches = getValeurAleatoire(settings.getElements_roches_min(), settings.getElements_roches_max());
         for (int i = 0; i < nbRoches; i++) {
         	Obstacle roche = ObstacleFactory.getObstacle("Roche");
-            int densiteRoche = getValeurAleatoire(GameConfiguration.DENSITE_ROCHE_MIN, GameConfiguration.DENSITE_ROCHE_MAX);
-            int totalCaseRoche = getValeurAleatoire(GameConfiguration.TOTAL_CASE_ROCHE_MIN, GameConfiguration.TOTAL_CASE_ROCHE_MAX);
-            int nbCaseDensiteRoche = GameConfiguration.NB_CASE_DENSITE_ROCHE;
+            int densiteRoche = getValeurAleatoire(Settings.DENSITE_ROCHE_MIN, Settings.DENSITE_ROCHE_MAX);
+            int totalCaseRoche = getValeurAleatoire(settings.getCases_roches_min(), settings.getCases_roches_min());
+            int nbCaseDensiteRoche = Settings.NB_CASE_DENSITE_ROCHE;
         	
             obstacleBuilders.add(new ObstacleBuilder(roche, densiteRoche, totalCaseRoche, nbCaseDensiteRoche));
         }
 
         // Génération des Arbres
         Obstacle arbre = ObstacleFactory.getObstacle("Arbre");
-        int densiteArbre = getValeurAleatoire(GameConfiguration.DENSITE_ARBRE_MIN, GameConfiguration.DENSITE_ARBRE_MAX);
-        int totalCaseArbre = getValeurAleatoire(GameConfiguration.TOTAL_CASE_ARBRE_MIN, GameConfiguration.TOTAL_CASE_ARBRE_MAX);
-        int nbCaseDensiteArbre = GameConfiguration.NB_CASE_DENSITE_ARBRE;
+        int densiteArbre = getValeurAleatoire(Settings.DENSITE_ARBRE_MIN, Settings.DENSITE_ARBRE_MAX);
+        int totalCaseArbre = getValeurAleatoire(settings.getCases_arbres_min(), settings.getCases_arbres_max());
+        int nbCaseDensiteArbre = Settings.NB_CASE_DENSITE_ARBRE;
         
         obstacleBuilders.add(new ObstacleBuilder(arbre, densiteArbre, totalCaseArbre, nbCaseDensiteArbre));
 

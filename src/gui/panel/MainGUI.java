@@ -8,7 +8,7 @@ import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.PersonnageManager;
 import gui.event.ActionButton;
@@ -24,11 +24,8 @@ import gui.event.KeyControls;
  */
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements Runnable{
-
-	/**
-	 * Dimension de la fenêtre de simulation
-	 */
-	private static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,GameConfiguration.WINDOW_HEIGHT);
+	
+	private static Settings settings;
 
 	/**
 	 * Grille de la simulation
@@ -59,21 +56,22 @@ public class MainGUI extends JFrame implements Runnable{
 	 * Initialise l'interface graphique et les élements du jeu
 	 */
 	private void init() {
+		
+		settings = new Settings();
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		mapBuilder = new GrilleBuilder(GameConfiguration.NB_LIGNE, GameConfiguration.NB_COLONNE);
+		mapBuilder = new GrilleBuilder(settings.getHauteur(), settings.getLargeur(), settings);
 		mapBuilder.build();
 
-	    PersonnageManager.initInstance(mapBuilder.getGrille());
+	    PersonnageManager.initInstance(mapBuilder.getGrille(), settings);
 	    this.manager = PersonnageManager.getInstance();
 	    manager.initPersonnages();
 	    
-	    setJMenuBar(new MenuBar(new ActionButton(this)));
+	    setJMenuBar(new MenuBar(new ActionButton(this, settings)));
         
-		dashboard = new GameDisplay(mapBuilder.getGrille(), manager);
-		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager));
-		dashboard.setPreferredSize(preferredSize);
+		dashboard = new GameDisplay(mapBuilder.getGrille(), manager, settings);
+		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager, settings));
         contentPane.add(dashboard, BorderLayout.CENTER);
 
         JTextField invisibleTextField = new JTextField();
@@ -81,12 +79,17 @@ public class MainGUI extends JFrame implements Runnable{
         contentPane.add(invisibleTextField, BorderLayout.SOUTH);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        pack();
+        redimensionner();
         setVisible(true);
-        setPreferredSize(preferredSize);
         setResizable(false);
     }
 
+	public void redimensionner() {
+		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height()));
+		dashboard.revalidate();
+	    pack();
+	}
+	
 	/**
 	 * Boucle principale du jeu qui met à jour les déplacements des personnages
 	 */
@@ -94,7 +97,7 @@ public class MainGUI extends JFrame implements Runnable{
 	public void run() {
 		while(true) {
 			try {
-				Thread.sleep(GameConfiguration.GAME_SPEED);
+				Thread.sleep(settings.getSpeed());
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
 			}
@@ -119,5 +122,9 @@ public class MainGUI extends JFrame implements Runnable{
 	
 	public PaintStrategy getPaintStrategy() {
 		return dashboard.getPaintStrategy();
+	}
+	
+	public GameDisplay getDashboard() {
+		return dashboard;
 	}
 }

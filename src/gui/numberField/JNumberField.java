@@ -95,21 +95,24 @@ public class JNumberField extends JTextField {
 			}
 		}
 	}
-
+	
+	public void setLimits(int nombreMinimal, int nombreMaximal) {
+		this.nombreMinimal = nombreMinimal;
+		this.nombreMaximal = nombreMaximal;
+		if (getNumber() < nombreMinimal) {
+			setNumber(nombreMinimal);
+		}
+		if (getNumber() > nombreMaximal) {
+			setNumber(nombreMaximal);
+		}
+	}
+	
 	public int getNombreMinimal() {
 		return nombreMinimal;
 	}
 
-	public void setNombreMinimal(int nombreMinimal) {
-		this.nombreMinimal = nombreMinimal;
-	}
-
 	public int getNombreMaximal() {
 		return nombreMaximal;
-	}
-
-	public void setNombreMaximal(int nombreMaximal) {
-		this.nombreMaximal = nombreMaximal;
 	}
 
 	/**
@@ -155,6 +158,16 @@ public class JNumberField extends JTextField {
 	 * @param value La valeur numérique à définir
 	 */
 	public void setNumber(int value) {
-		setText(String.valueOf(value));
+		if (value <= nombreMaximal && value >= nombreMinimal) {
+			setText(String.valueOf(value));
+		}
+	}
+	
+	public void showLimitsMin() {
+		setNumber(nombreMinimal);
+	}
+	
+	public void showLimitsMax() {
+		setNumber(nombreMaximal);
 	}
 }

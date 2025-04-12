@@ -3,7 +3,7 @@ package engine.personnage;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
@@ -20,6 +20,8 @@ import engine.utilitaire.MaxTentativeAtteind;
  * @see Grille
  */
 public class PersonnageManager {
+	
+	private Settings settings;
 	
 	/**
 	 * Utilisation d'un singleton
@@ -41,8 +43,8 @@ public class PersonnageManager {
      */
     private Gardien gardienActif;
 
-	public static void initInstance(Grille grille) {
-        instance = new PersonnageManager(grille);
+	public static void initInstance(Grille grille, Settings settings) {
+        instance = new PersonnageManager(grille, settings);
     }
 	
     public static PersonnageManager getInstance() {
@@ -52,7 +54,8 @@ public class PersonnageManager {
 		return instance;
 	}
 
-	private PersonnageManager(Grille grille) {
+	private PersonnageManager(Grille grille, Settings settings) {
+		this.settings = settings;
 		this.grille = grille;
 	}
 
@@ -89,8 +92,8 @@ public class PersonnageManager {
 		if (personnages != null) {
 			personnages = new ArrayList<>();
 		}
-	    ajouterGardien(GameConfiguration.NOMBRE_GARDIEN_INITIAL);
-	    ajouterIntrus(GameConfiguration.NOMBRE_INTRUS_INITIAL);
+	    ajouterGardien(settings.getGardien());
+	    ajouterIntrus(settings.getIntrus());
 	}
 	
 	/**
@@ -256,14 +259,14 @@ public class PersonnageManager {
 	    if (personnage == null) { return; }
 	    
 	    if (personnage instanceof Gardien) {
-	        personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
+	        personnage.setDeplacement(DeplacementFactory.getDeplacement(Settings.GARDIEN_DEFAUT_DEPLACEMENT, this, grille));
 	    } else if (personnage instanceof Intrus) {
-	        personnage.setDeplacement(DeplacementFactory.getDeplacement(GameConfiguration.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
+	        personnage.setDeplacement(DeplacementFactory.getDeplacement(Settings.INTRUS_DEFAUT_DEPLACEMENT, this, grille));
 	    }
 	}
 	
 	private Vision getVision() {
-		Vision.initInstance(this, grille, GameConfiguration.NB_CASES_VISION);
+		Vision.initInstance(this, grille, settings.getVision());
 		Vision vision = Vision.getInstance();
 		return vision;
 	}

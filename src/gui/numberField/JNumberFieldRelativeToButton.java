@@ -8,11 +8,11 @@ import java.awt.event.MouseWheelEvent;
 import javax.swing.JToggleButton;
 
 @SuppressWarnings("serial")
-public class JNumberFieldRelative extends JNumberField{
+public class JNumberFieldRelativeToButton extends JNumberField{
 	
 	private JToggleButton buttonRelative;
 
-	public JNumberFieldRelative(int min, int max, JToggleButton button) {
+	public JNumberFieldRelativeToButton(int min, int max, JToggleButton button) {
 		super(min, max);
 		addKeyListener(new NumberControls());
         addMouseWheelListener(new WheelControls());

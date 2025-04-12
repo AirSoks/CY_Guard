@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Case;
 import engine.map.Coordonnee;
 import engine.map.Grille;
@@ -31,6 +31,8 @@ public class ClicsControls extends MouseAdapter {
 	private PersonnageManager manager;
 	
 	private Personnage personnagePressed;
+	
+	private Settings settings;
 
     /**
      * Constructeur de la classe ClicsControls
@@ -38,9 +40,10 @@ public class ClicsControls extends MouseAdapter {
      * @param grille La grille de la simulation
      * @param manager Le gestionnaire des personnages
      */
-    public ClicsControls(Grille grille, PersonnageManager manager) {
+    public ClicsControls(Grille grille, PersonnageManager manager, Settings settings) {
         this.grille = grille;
         this.manager = manager;
+        this.settings = settings;
     }
 
     /**
@@ -50,7 +53,7 @@ public class ClicsControls extends MouseAdapter {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
         int colonne = e.getX() / blockSize;
         int ligne = e.getY() / blockSize;
         
@@ -77,7 +80,7 @@ public class ClicsControls extends MouseAdapter {
      */
 	@Override
 	public void mousePressed(MouseEvent e) {
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
         int colonne = e.getX() / blockSize;
         int ligne = e.getY() / blockSize;
         
@@ -97,7 +100,7 @@ public class ClicsControls extends MouseAdapter {
      */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
         int colonne = e.getX() / blockSize;
         int ligne = e.getY() / blockSize;
         

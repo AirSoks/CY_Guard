@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Coordonnee;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
@@ -15,7 +15,8 @@ import engine.personnage.PersonnageManager;
  * Elle est responsable du dessin des zones de vision des personnages sur la grille de jeu.
  */
 public class DessinerVision implements Dessiner, DessinOptionnel {
-	
+
+    private Settings settings;
     private PersonnageManager personnageManager;
     
     private boolean dessiner = true;
@@ -25,8 +26,9 @@ public class DessinerVision implements Dessiner, DessinOptionnel {
      *
      * @param personnageManager Le gestionnaire des personnages
      */
-    public DessinerVision(PersonnageManager personnageManager) {
+    public DessinerVision(PersonnageManager personnageManager, Settings settings) {
         this.personnageManager = personnageManager;
+        this.settings = settings;
     }
 
     /**
@@ -39,7 +41,7 @@ public class DessinerVision implements Dessiner, DessinOptionnel {
     	
     	if (!dessiner) { return; }
 
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
 
         for (Personnage personnage : personnageManager.getPersonnages()) {
             List<Coordonnee> coordonneesVu = personnage.getCoordonneesVu();

@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import config.GameConfiguration;
+import config.Settings;
 import engine.map.Case;
 import engine.map.Grille;
 import engine.map.obstacle.Arbre;
@@ -20,7 +20,8 @@ import engine.utilitaire.SimulationUtility;
  * Elle est responsable du dessin de la grille de jeu et de ses obstacles.
  */
 public class DessinerGrille implements Dessiner, DessinPerformance {
-	
+
+    private Settings settings;
     private Grille grille;
     private boolean performanceMode = false;
     
@@ -31,8 +32,9 @@ public class DessinerGrille implements Dessiner, DessinPerformance {
      *
      * @param grille La grille du jeu
      */
-    public DessinerGrille(Grille grille) {
+    public DessinerGrille(Grille grille, Settings settings) {
         this.grille = grille;
+        this.settings = settings;
     }
 
     /**
@@ -56,7 +58,7 @@ public class DessinerGrille implements Dessiner, DessinPerformance {
     @Override
     public void paint(Graphics g) {
     	
-        int blockSize = GameConfiguration.BLOCK_SIZE;
+        int blockSize = settings.getBlock_size();
         Case[][] cases = grille.getGrille();
         int nbLigne = grille.getNbLigne();
         int nbColonne = grille.getNbColonne();

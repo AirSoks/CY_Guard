@@ -14,11 +14,6 @@ import engine.utilitaire.MaxTentativeAtteind;
 public class Grille {
 	
 	/**
-	 * Utilisation d'un singleton
-	 */
-	private static Grille instance;
-	
-	/**
 	 * La matrice de case qui représente la grille
 	 */
 	private Case[][] cases;
@@ -32,20 +27,24 @@ public class Grille {
 	 * Le nombre de colonne de cette grille
 	 */
 	private int nbColonne;
-
-	public static void initInstance(int nbLigne, int nbColonne) {
-        instance = new Grille(nbLigne, nbColonne);
+	
+	public Grille(int nbLigne, int nbColonne) {
+        init(nbLigne, nbColonne);
+        genererTerrain();
     }
 	
-	private Grille(int nbLigne, int nbColonne) {
-		init(nbLigne, nbColonne);
+	public void redimensionner(int nouvelleLigne, int nouvelleColonne) {
+        if (nouvelleLigne <= 0 || nouvelleColonne <= 0) {
+            throw new IllegalArgumentException("Dimensions invalides");
+        }
+        init(nouvelleLigne, nouvelleColonne);
+        genererTerrain();
 	}
 	
-	public static Grille getInstance() {
-		if (instance == null) {
-			throw new IllegalStateException("Grille non initialisée");
-		}
-		return instance;
+	private void init(int nbLigne, int nbColonne) {
+		this.nbLigne = nbLigne;	
+		this.nbColonne = nbColonne;
+		this.cases = new Case[nbLigne][nbColonne];
 	}
 	
 	public void genererTerrain() {
@@ -56,12 +55,6 @@ public class Grille {
             }
         }
     }
-	
-	private void init(int nbLigne, int nbColonne) {
-		this.nbLigne = nbLigne;	
-		this.nbColonne = nbColonne;
-		this.cases = new Case[nbLigne][nbColonne];
-	}
 	
 	public int getNbLigne() {
 		return nbLigne;

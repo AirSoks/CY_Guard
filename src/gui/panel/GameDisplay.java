@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import config.Settings;
 import engine.map.Grille;
 import engine.personnage.PersonnageManager;
 
@@ -22,8 +23,8 @@ public class GameDisplay extends JPanel {
 
     private PaintStrategy paintStrategy;
 
-    public GameDisplay(Grille grille, PersonnageManager personnages) {
-        this.paintStrategy = new PaintStrategy(grille, personnages);
+    public GameDisplay(Grille grille, PersonnageManager personnages, Settings settings) {
+        this.paintStrategy = new PaintStrategy(grille, personnages, settings);
     }
 
     @Override

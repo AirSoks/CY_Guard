@@ -72,11 +72,11 @@ public class MenuBar extends JMenuBar {
      * @param menu Le menu auquel ajouter le JMenuItem.
      * @param itemName Le nom de l'élément à ajouter au menu.
      */
-    private void addMenuItem(JMenu menu, String itemName) {
-        JMenuItem item = new JMenuItem(itemName);
-        item.addActionListener(actionButton);
-        menu.add(item);
-    }
+//    private void addMenuItem(JMenu menu, String itemName) {
+//        JMenuItem item = new JMenuItem(itemName);
+//        item.addActionListener(actionButton);
+//        menu.add(item);
+//    }
     
     /**
      * Ajoute un JCheckBoxMenuItem au menu spécifié et lui associe un gestionnaire d'actions.

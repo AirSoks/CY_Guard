@@ -318,7 +318,8 @@ public class OptionsPanel extends JDialog {
         confirmer.addActionListener(actionButton);
         
         buttonPanel.add(annuler);
-
+        annuler.addActionListener(actionButton);
+        
         buttonPanel.add(defaut);
         defaut.addActionListener(actionButton);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(4, 2, 6, 2));
@@ -326,11 +327,6 @@ public class OptionsPanel extends JDialog {
         return buttonPanel;
     }
     
-    /**
-     * Charge les paramètres depuis une instance de Settings dans OptionPanel.
-     *
-     * @param settings L'instance de Settings contenant les valeurs à charger.
-     */
     public void loadSettings(Settings settings) {
 
         setNumberLargeur(settings.getLargeur());

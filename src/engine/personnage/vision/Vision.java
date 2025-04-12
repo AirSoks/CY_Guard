@@ -46,7 +46,7 @@ public class Vision {
 	}
     
 	public static void initInstance(PersonnageManager personnageManager, Grille grille, int distance) {
-		if (instance == null){
+		if (instance == null || instance.getDistance() != distance){
 	        instance = new Vision(personnageManager, grille, distance);
 		}
     }

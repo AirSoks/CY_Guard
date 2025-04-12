@@ -55,6 +55,7 @@ public class ActionButton implements ActionListener {
             case "Extraterestre": setNumberFileds(40,40,15,5,8); break;
             case "Personnalisé": break;
             case "Confirmer" : confirmOption(e); break;
+            case "Annuler" : cancelOption(e); break;
             case "Défaut" : defautOption(e); break;
         }
     }
@@ -181,6 +182,12 @@ public class ActionButton implements ActionListener {
 		mainFrame.getManager().initPersonnages();
 		mainFrame.redimensionner();
 	}
+    
+    private void cancelOption(ActionEvent e) {
+    	OptionsPanel optionPanel = OptionsPanel.getInstance();
+    	optionPanel.loadSettings(settings);
+		optionPanel.dispose();
+    }
     
     private void defautOption(ActionEvent e) {
 		OptionsPanel optionPanel = OptionsPanel.getInstance();

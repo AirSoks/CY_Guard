@@ -25,6 +25,11 @@ import gui.event.KeyControls;
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements Runnable{
 	
+	private final static int INVISIBLE_TEXT_FIELD_SIZE = 0;
+	
+	/**
+	 * Settings de la simulation
+	 */
 	private static Settings settings;
 
 	/**
@@ -65,7 +70,7 @@ public class MainGUI extends JFrame implements Runnable{
 		mapBuilder.build();
 
 	    PersonnageManager.initInstance(mapBuilder.getGrille(), settings);
-	    this.manager = PersonnageManager.getInstance();
+	    manager = PersonnageManager.getInstance();
 	    manager.initPersonnages();
 	    
 	    setJMenuBar(new MenuBar(new ActionButton(this, settings)));
@@ -76,6 +81,7 @@ public class MainGUI extends JFrame implements Runnable{
         contentPane.add(dashboard, BorderLayout.CENTER);
 
         JTextField invisibleTextField = new JTextField();
+        invisibleTextField.setPreferredSize(new Dimension(0,INVISIBLE_TEXT_FIELD_SIZE));
         invisibleTextField.addKeyListener(new KeyControls(manager, dashboard));
         dashboard.add(invisibleTextField, BorderLayout.SOUTH);
         
@@ -89,7 +95,7 @@ public class MainGUI extends JFrame implements Runnable{
     }
 
 	public void redimensionner() {
-		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height()));
+		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height() + INVISIBLE_TEXT_FIELD_SIZE));
 		dashboard.revalidate();
 	    pack();
 	}

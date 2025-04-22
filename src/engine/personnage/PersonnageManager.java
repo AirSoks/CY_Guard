@@ -42,6 +42,11 @@ public class PersonnageManager {
      * Le gardien actif, qui peut être controlé par le joueur
      */
     private Gardien gardienActif;
+    
+    /**
+     * Les gardien et intrus initial de la simulation
+     */
+    private int nbIntrusInitial, nbGardienInitial;
 
 	public static void initInstance(Grille grille, Settings settings) {
         instance = new PersonnageManager(grille, settings);
@@ -104,6 +109,7 @@ public class PersonnageManager {
 		deplacerGardiens();
 		observerIntrus();
 		observerGardiens();
+		reSpawnIntrus();
     }
 	
 	private void deplacerIntrus() {
@@ -137,6 +143,16 @@ public class PersonnageManager {
         		gardien.observer();
         	}
         }
+	}
+	
+	private void reSpawnIntrus() {
+		if (!settings.getApparitionIntrus()) {
+			return;
+		}
+		List<Intrus> nbIntrus = getIntrus();
+		if (nbIntrusInitial > nbIntrus.size()) {
+			ajouterIntrus();
+		}
 	}
 
     public List<Personnage> getPersonnages() {
@@ -188,6 +204,7 @@ public class PersonnageManager {
      * @return Le gardien
      */
     public List<Gardien> ajouterGardien(int nombreGardien) {
+    	nbGardienInitial = nombreGardien;
     	List<Gardien> listGardiens = new ArrayList<>();
     	for (int i = 0; i < nombreGardien ; i++) {
     		Gardien gardien = ajouterGardien();
@@ -225,6 +242,7 @@ public class PersonnageManager {
      * @return Le gardien
      */
     public List<Intrus> ajouterIntrus(int nombreIntrus) {
+    	nbIntrusInitial = nombreIntrus;
     	List<Intrus> listIntrus = new ArrayList<>();
     	for (int i = 0; i < nombreIntrus ; i++) {
     		Intrus intrus = ajouterIntrus();

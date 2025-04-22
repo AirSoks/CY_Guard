@@ -72,11 +72,15 @@ public class MainGUI extends JFrame implements Runnable{
         
 		dashboard = new GameDisplay(mapBuilder.getGrille(), manager, settings);
 		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager, settings));
+		dashboard.setLayout(new BorderLayout());
         contentPane.add(dashboard, BorderLayout.CENTER);
 
         JTextField invisibleTextField = new JTextField();
         invisibleTextField.addKeyListener(new KeyControls(manager, dashboard));
-        contentPane.add(invisibleTextField, BorderLayout.SOUTH);
+        dashboard.add(invisibleTextField, BorderLayout.SOUTH);
+        
+        SidePanel sidePanel = new SidePanel();
+        contentPane.add(sidePanel, BorderLayout.EAST);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         redimensionner();

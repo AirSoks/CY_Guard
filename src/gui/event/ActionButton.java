@@ -38,7 +38,6 @@ public class ActionButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        System.out.println(command);
         switch (command) {
             case "Start": start(); break;
             case "Pause": pause(); break;
@@ -100,8 +99,10 @@ public class ActionButton implements ActionListener {
      * Reconstruit la grille de jeu.
      */
 	private void rebuild() {
+		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
 		mainFrame.getMapBuilder().build();
 		mainFrame.getManager().initPersonnages();
+		mainFrame.redimensionner();
 	}
 
     /**
@@ -177,10 +178,6 @@ public class ActionButton implements ActionListener {
 		OptionsPanel optionPanel = OptionsPanel.getInstance();
 		optionPanel.applySettings(settings);
 		optionPanel.dispose();
-		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
-		mainFrame.getMapBuilder().build();
-		mainFrame.getManager().initPersonnages();
-		mainFrame.redimensionner();
 	}
     
     private void cancelOption(ActionEvent e) {
@@ -194,9 +191,5 @@ public class ActionButton implements ActionListener {
     	settings.resetToDefault();
     	optionPanel.loadSettings(settings);
 		optionPanel.dispose();
-		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
-		mainFrame.getMapBuilder().build();
-		mainFrame.getManager().initPersonnages();
-		mainFrame.redimensionner();
 	}
 }

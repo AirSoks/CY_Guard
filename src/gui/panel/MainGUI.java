@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import config.Settings;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.PersonnageManager;
-import engine.utilitaire.chrono.ChronoSimulation;
+import engine.utilitaire.ChronoSimulation;
 import gui.event.ActionButton;
 import gui.event.ClicsControls;
 import gui.event.KeyControls;
@@ -27,7 +27,7 @@ import gui.event.KeyControls;
 public class MainGUI extends JFrame implements Runnable{
 	
 	private final static int INVISIBLE_TEXT_FIELD_SIZE = 0;
-	private final static int SIDE_PANEL_SIZE = 200;
+	private final static int SIDE_PANEL_SIZE = 225;
 	
 	/**
 	 * Settings de la simulation
@@ -69,7 +69,7 @@ public class MainGUI extends JFrame implements Runnable{
 	 */
 	private void init() {
 		this.settings = new Settings();
-		this.chrono = new ChronoSimulation();
+		this.chrono = ChronoSimulation.getInstance();
 		
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -82,9 +82,13 @@ public class MainGUI extends JFrame implements Runnable{
 	    manager.initPersonnages();
 	    
 	    setJMenuBar(new MenuBar(new ActionButton(this, settings)));
+
+        SidePanel sidePanel = new SidePanel(this);
+        sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_SIZE,0));
+        contentPane.add(sidePanel, BorderLayout.EAST);
         
 		dashboard = new GameDisplay(mapBuilder.getGrille(), manager, settings);
-		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager, settings));
+		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager, settings, sidePanel));
 		dashboard.setLayout(new BorderLayout());
         contentPane.add(dashboard, BorderLayout.CENTER);
 
@@ -92,10 +96,6 @@ public class MainGUI extends JFrame implements Runnable{
         invisibleTextField.setPreferredSize(new Dimension(0,INVISIBLE_TEXT_FIELD_SIZE));
         invisibleTextField.addKeyListener(new KeyControls(manager, dashboard));
         contentPane.add(invisibleTextField, BorderLayout.SOUTH);
-        
-        SidePanel sidePanel = new SidePanel(this);
-        sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_SIZE,0));
-        contentPane.add(sidePanel, BorderLayout.EAST);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         redimensionner();
@@ -122,7 +122,6 @@ public class MainGUI extends JFrame implements Runnable{
 			}
 			if (active) {
 	            chrono.start();
-	            chrono.tick();
 	            manager.actionPersonnages();
 	        } else {
 	            chrono.pause();

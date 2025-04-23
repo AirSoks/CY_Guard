@@ -6,6 +6,7 @@ import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.personnage.deplacement.Deplacement;
 import engine.personnage.vision.Vision;
+import engine.utilitaire.ChronoSimulation;
 import engine.utilitaire.GenerateurNom;
 
 /**
@@ -71,7 +72,7 @@ public abstract class Personnage {
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
 		this.name = GenerateurNom.genererNom();
-		this.tempsInvocation = System.currentTimeMillis();
+		this.tempsInvocation = ChronoSimulation.getInstance().getSimulationSecond();
 		this.animation = new PersonnageAnimation(this);
 	}
 

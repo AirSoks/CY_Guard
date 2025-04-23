@@ -13,6 +13,7 @@ import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.DeplacementCase;
 import engine.personnage.deplacement.DeplacementFactory;
+import gui.panel.SidePanel;
 
 /**
  * La classe ClicsControls étend MouseAdapter.
@@ -33,6 +34,8 @@ public class ClicsControls extends MouseAdapter {
 	private Personnage personnagePressed;
 	
 	private Settings settings;
+	
+	private SidePanel sidePanel;
 
     /**
      * Constructeur de la classe ClicsControls
@@ -40,10 +43,11 @@ public class ClicsControls extends MouseAdapter {
      * @param grille La grille de la simulation
      * @param manager Le gestionnaire des personnages
      */
-    public ClicsControls(Grille grille, PersonnageManager manager, Settings settings) {
+    public ClicsControls(Grille grille, PersonnageManager manager, Settings settings, SidePanel sidePanel) {
         this.grille = grille;
         this.manager = manager;
         this.settings = settings;
+        this.sidePanel = sidePanel;
     }
 
     /**
@@ -91,6 +95,8 @@ public class ClicsControls extends MouseAdapter {
         List<Personnage> personnages = manager.getPersonnages(coordonnee);
         if (personnages == null || personnages.isEmpty()) { return; }
         personnagePressed = personnages.get(0);
+        
+        sidePanel.updatePersoClique(personnagePressed);
 	}
 
     /**

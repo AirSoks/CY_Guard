@@ -44,9 +44,11 @@ public class PersonnageManager {
     private Gardien gardienActif;
     
     /**
-     * Les gardien et intrus initial de la simulation
+     * Les gardiens et intrus initial de la simulation
      */
     private int nbIntrusInitial, nbGardienInitial;
+    
+    private int nbIntrusCapture;
 
 	public static void initInstance(Grille grille, Settings settings) {
         instance = new PersonnageManager(grille, settings);
@@ -67,6 +69,10 @@ public class PersonnageManager {
 	public void retirerPersonnage(Personnage personnage) {
 		if (personnage != null && personnages.contains(personnage)) {
 	        this.personnages.remove(personnage);
+	        
+	        if (personnage instanceof Intrus) {
+	        	nbIntrusCapture += 1;
+	        }
 	    }
 	}
 
@@ -93,7 +99,8 @@ public class PersonnageManager {
 	
 	
 	public void initPersonnages() {
-		this.gardienActif = null;
+		nbIntrusCapture = 0;
+		gardienActif = null;
 		if (personnages != null) {
 			personnages = new ArrayList<>();
 		}
@@ -289,4 +296,9 @@ public class PersonnageManager {
 		Vision vision = Vision.getInstance();
 		return vision;
 	}
+
+	public int getNbIntrusCapture() {
+		return nbIntrusCapture;
+	}
+	
 }

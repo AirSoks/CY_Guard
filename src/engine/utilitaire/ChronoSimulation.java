@@ -1,17 +1,19 @@
-package engine.utilitaire.chrono;
+package engine.utilitaire;
 public class ChronoSimulation {
+	
+	private static ChronoSimulation instance;
 	
     private long startTime = 0;
     private long totalTime = 0;
     private boolean running = false;
 
-    private ChronoListener listener;
-    private int lastSecondNotified = -1;
-
-    public void setListener(ChronoListener listener) {
-        this.listener = listener;
+    public static ChronoSimulation getInstance() {
+        if (instance == null) {
+            instance = new ChronoSimulation();
+        }
+        return instance;
     }
-
+    
     public void start() {
         if (!running) {
             startTime = System.currentTimeMillis();
@@ -29,9 +31,7 @@ public class ChronoSimulation {
     public void reset() {
         totalTime = 0;
         startTime = 0;
-        lastSecondNotified = -1;
         running = false;
-        tick();
     }
 
     public long getSimulationMiliseconds() {
@@ -44,14 +44,6 @@ public class ChronoSimulation {
 
     public int getSimulationSecond() {
         return (int) (getSimulationMiliseconds() / 1000);
-    }
-
-    public void tick() {
-        int currentSecond = getSimulationSecond();
-        if (listener != null && currentSecond != lastSecondNotified) {
-            lastSecondNotified = currentSecond;
-            listener.onNewSecond(currentSecond);
-        }
     }
 
     public boolean isRunning() {

@@ -12,13 +12,13 @@ import java.util.Random;
  */
 public class GenerateurNom {
     private static final List<String> PRENOMS = Arrays.asList(
-        "Emma", "Liam", "Olivia", "Noah", "Ava", "Quentin", "Sophia", "Redouane",
-        "Isabella", "Valentin", "Mia", "James", "Charlotte", "Joe", "Amelia"
+        "Emma", "Liam", "Olivia", "Noah", "Eva", "Julie", "Sophia", "Chloé",
+        "Lisa", "Alexis", "Mia", "James", "Léo", "Joe", "Maria"
     );
 
     private static final List<String> NOMS = Arrays.asList(
-        "Smith", "Johnson", "Brown", "Taylor", "Miller", "Wilson", "Rodriguez", "Anderson",
-        "Thomas", "Jackson", "Roberts", "Harris", "Martin", "Thompson", "Garcia"
+        "Smith", "Rey", "Brown", "Taylor", "Miller", "Wilson", "Martin", "Jean",
+        "Petit", "Gillet", "Duval", "Harris", "Martin", "Morel", "Garcia"
     );
 
     private static final Random RANDOM = new Random();

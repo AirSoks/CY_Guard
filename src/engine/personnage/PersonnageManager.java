@@ -97,8 +97,10 @@ public class PersonnageManager {
 		if (personnages != null) {
 			personnages = new ArrayList<>();
 		}
-	    ajouterGardien(settings.getGardien());
-	    ajouterIntrus(settings.getIntrus());
+    	nbGardienInitial = settings.getGardien();
+	    ajouterGardien(nbGardienInitial);
+    	nbIntrusInitial = settings.getIntrus();
+	    ajouterIntrus(nbIntrusInitial);
 	}
 	
 	/**
@@ -204,7 +206,6 @@ public class PersonnageManager {
      * @return Le gardien
      */
     public List<Gardien> ajouterGardien(int nombreGardien) {
-    	nbGardienInitial = nombreGardien;
     	List<Gardien> listGardiens = new ArrayList<>();
     	for (int i = 0; i < nombreGardien ; i++) {
     		Gardien gardien = ajouterGardien();

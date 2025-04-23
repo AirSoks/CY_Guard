@@ -99,7 +99,7 @@ public class OptionsPanel extends JDialog {
 	    GridBagConstraints contrainte = new GridBagConstraints();
 	    
 	    contrainte.gridy = 0;
-	    contrainte.gridy = 0;
+	    contrainte.gridx = 0;
 	    contrainte.fill = GridBagConstraints.HORIZONTAL;
 	    add(createDificultyPanel(actionButton), contrainte);
 	    

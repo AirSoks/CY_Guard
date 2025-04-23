@@ -92,6 +92,7 @@ public class ActionButton implements ActionListener {
      * Redémarre l'application.
      */
 	private void restart() {
+		mainFrame.getChrono().reset();
 		mainFrame.getManager().initPersonnages();
 	}
 	
@@ -99,6 +100,7 @@ public class ActionButton implements ActionListener {
      * Reconstruit la grille de jeu.
      */
 	private void rebuild() {
+		mainFrame.getChrono().reset();
 		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
 		mainFrame.getMapBuilder().build();
 		mainFrame.getManager().initPersonnages();

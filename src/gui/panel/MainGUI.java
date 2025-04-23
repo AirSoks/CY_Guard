@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import config.Settings;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.PersonnageManager;
+import engine.utilitaire.chrono.ChronoSimulation;
 import gui.event.ActionButton;
 import gui.event.ClicsControls;
 import gui.event.KeyControls;
@@ -26,11 +27,12 @@ import gui.event.KeyControls;
 public class MainGUI extends JFrame implements Runnable{
 	
 	private final static int INVISIBLE_TEXT_FIELD_SIZE = 0;
+	private final static int SIDE_PANEL_SIZE = 200;
 	
 	/**
 	 * Settings de la simulation
 	 */
-	private static Settings settings;
+	private Settings settings;
 
 	/**
 	 * Grille de la simulation
@@ -51,6 +53,11 @@ public class MainGUI extends JFrame implements Runnable{
 	 * L'êtat de la simulation (true pour activé, false sinon)
 	 */
 	private Boolean active = false;
+	
+	/**
+	 * Temps écoulé de la simulation (en ms)
+	 */
+	private ChronoSimulation chrono;
 
 	public MainGUI(String title) throws HeadlessException {
 		super(title);
@@ -61,8 +68,9 @@ public class MainGUI extends JFrame implements Runnable{
 	 * Initialise l'interface graphique et les élements du jeu
 	 */
 	private void init() {
+		this.settings = new Settings();
+		this.chrono = new ChronoSimulation();
 		
-		settings = new Settings();
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
@@ -83,9 +91,10 @@ public class MainGUI extends JFrame implements Runnable{
         JTextField invisibleTextField = new JTextField();
         invisibleTextField.setPreferredSize(new Dimension(0,INVISIBLE_TEXT_FIELD_SIZE));
         invisibleTextField.addKeyListener(new KeyControls(manager, dashboard));
-        dashboard.add(invisibleTextField, BorderLayout.SOUTH);
+        contentPane.add(invisibleTextField, BorderLayout.SOUTH);
         
-        SidePanel sidePanel = new SidePanel();
+        SidePanel sidePanel = new SidePanel(this);
+        sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_SIZE,0));
         contentPane.add(sidePanel, BorderLayout.EAST);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -95,13 +104,13 @@ public class MainGUI extends JFrame implements Runnable{
     }
 
 	public void redimensionner() {
-		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height() + INVISIBLE_TEXT_FIELD_SIZE));
+		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height()));
 		dashboard.revalidate();
 	    pack();
 	}
 	
 	/**
-	 * Boucle principale du jeu qui met à jour les déplacements des personnages
+	 * Boucle principale du jeu qui met à jour les personnages
 	 */
 	@Override
 	public void run() {
@@ -112,14 +121,24 @@ public class MainGUI extends JFrame implements Runnable{
 				System.out.println(e.getMessage());
 			}
 			if (active) {
-				manager.actionPersonnages();
-			}
+	            chrono.start();
+	            chrono.tick();
+	            manager.actionPersonnages();
+	        } else {
+	            chrono.pause();
+	        }
 			dashboard.repaint();
 		}
 	}
 
 	public void setActive(Boolean active) {
 		this.active = active;
+		if (active) {
+            chrono.start();
+		}
+		else {
+	        chrono.pause();
+		}
 	}
 
 	public GrilleBuilder getMapBuilder() {
@@ -136,5 +155,9 @@ public class MainGUI extends JFrame implements Runnable{
 	
 	public GameDisplay getDashboard() {
 		return dashboard;
+	}
+
+	public ChronoSimulation getChrono() {
+		return chrono;
 	}
 }

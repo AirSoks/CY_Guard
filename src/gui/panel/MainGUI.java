@@ -8,6 +8,8 @@ import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
+
 import config.Settings;
 import engine.map.generation.GrilleBuilder;
 import engine.personnage.PersonnageManager;
@@ -15,6 +17,7 @@ import engine.utilitaire.ChronoSimulation;
 import gui.event.ActionButton;
 import gui.event.ClicsControls;
 import gui.event.KeyControls;
+import log.LoggerUtility;
 
 /**
  * Classe principale de l'interface graphique du simulation
@@ -25,6 +28,8 @@ import gui.event.KeyControls;
  */
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements Runnable{
+	
+	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
 	
 	private final static int INVISIBLE_TEXT_FIELD_SIZE = 0;
 	private final static int SIDE_PANEL_SIZE = 225;
@@ -114,6 +119,7 @@ public class MainGUI extends JFrame implements Runnable{
 	 */
 	@Override
 	public void run() {
+		logger.info("Lancement du thread");
 		while(true) {
 			try {
 				Thread.sleep(settings.getSpeed());

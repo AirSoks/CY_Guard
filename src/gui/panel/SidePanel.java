@@ -118,53 +118,52 @@ public class SidePanel extends JPanel{
 	}
 	
 	 /**
-		 * Crée un panneau avec une bordure et un titre spécifié.
-		 *
-		 * @param title Le titre du panneau.
-		 * @return Le panneau créé.
-		 */
-	    private JPanel createSubOptionPanel(String title) {
-	        JPanel panel = new JPanel();
-	        panel.setBorder(BorderFactory.createTitledBorder(title));
-			return panel;
-	    }
-	    
-	    public void removePersoClique() {
-	    	TitledBorder border = (TitledBorder) infoPerso.getBorder();
-	    	border.setTitle("Cliquez sur un personnage");
-	    	persoNoms.setText(null);
-			invocationTime.setText(null);
-			cibleRepere.setText(null);
-			intrusCapture.setText(null);
-	    }
-	    
-	    public void updatePersoClique(Personnage personnage) {
-	    	personnageClique = personnage;
-	    	TitledBorder border = (TitledBorder) infoPerso.getBorder();
-	    	border.setTitle("Cliquez sur un personnage");
-	    	String name = personnage.getName();
-	    	int tempsInvocation = (int) personnage.getTempsInvocation();
-	    	int secondesEcoulees = mainFrame.getChrono().getSimulationSecond() - tempsInvocation;
+	 * Crée un panneau avec une bordure et un titre spécifié.
+	 *
+	 * @param title Le titre du panneau.
+	 * @return Le panneau créé.
+	 */
+    private JPanel createSubOptionPanel(String title) {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(title));
+		return panel;
+    }
+    
+    public void removePersoClique() {
+    	TitledBorder border = (TitledBorder) infoPerso.getBorder();
+    	border.setTitle("Cliquez sur un personnage");
+    	persoNoms.setText(null);
+		invocationTime.setText(null);
+		cibleRepere.setText(null);
+		intrusCapture.setText(null);
+    }
+    
+    public void updatePersoClique(Personnage personnage) {
+    	personnageClique = personnage;
+    	TitledBorder border = (TitledBorder) infoPerso.getBorder();
+    	border.setTitle("Informations du personnage");
+    	String name = personnage.getName();
+    	int tempsInvocation = (int) personnage.getTempsInvocation();
+    	int secondesEcoulees = mainFrame.getChrono().getSimulationSecond() - tempsInvocation;
 
-	    	persoNoms.setText("Nom : " + name);
-	    	invocationTime.setText("Temps d'apparition : " + secondesEcoulees + "s");
-	    	
-	    	int nbCible = 0;
-	    	int nbCapture = 0;
-	    	if (personnage instanceof Gardien) {
-	    		Gardien gardien = (Gardien) personnage;
-		    	nbCible = gardien.getCibles().size();
-		    	nbCapture = gardien.getNbIntrusCapture();
-				cibleRepere.setText("Cible reperé : " + nbCible);
-				intrusCapture.setText("Intrus capturé : "+ nbCapture);
-	    	}
-	    	else if (personnage instanceof Intrus) {
-	    		Intrus intrus = (Intrus) personnage;
-		    	nbCible = intrus.getCibles().size();
-				cibleRepere.setText("Cible reperé : " + nbCible);
-				intrusCapture.setText("");
-	    	}
-	    	
-	    }
-
+    	persoNoms.setText("Nom : " + name);
+    	invocationTime.setText("Temps d'apparition : " + secondesEcoulees + "s");
+    	
+    	int nbCible = 0;
+    	int nbCapture = 0;
+    	if (personnage instanceof Gardien) {
+    		Gardien gardien = (Gardien) personnage;
+	    	nbCible = gardien.getCibles().size();
+	    	nbCapture = gardien.getNbIntrusCapture();
+			cibleRepere.setText("Cible reperé : " + nbCible);
+			intrusCapture.setText("Intrus capturé : "+ nbCapture);
+    	}
+    	else if (personnage instanceof Intrus) {
+    		Intrus intrus = (Intrus) personnage;
+	    	nbCible = intrus.getCibles().size();
+			cibleRepere.setText("Cible reperé : " + nbCible);
+			intrusCapture.setText("");
+    	}
+    	
+    }
 }

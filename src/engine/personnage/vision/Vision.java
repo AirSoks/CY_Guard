@@ -70,47 +70,63 @@ public class Vision {
 		return mapPasCoordonnee;
 	}
 	
-    public void observer(Personnage personnage) {
-        if (personnage instanceof Gardien) {
-        	Gardien gardien = (Gardien) personnage;
-            List<Intrus> intrusVisibles = recupererIntrusVisibles(gardien);
-            for (Intrus intrus : intrusVisibles) {
-                if (!gardien.getCibles().contains(intrus)) {
-                    gardien.ajouterCible(intrus);
-                }
-            }
-        } 
-        else if (personnage instanceof Intrus) {
-        	Intrus intrus = (Intrus) personnage;
-            List<Gardien> gardiensVisibles = recupererGardiensVisibles(intrus);
-            for (Gardien gardien : gardiensVisibles) {
-                intrus.ajouterCible(gardien);
-            }
-        }
-    }
+	public List<Personnage> observer(Personnage personnage) {
+	    List<Personnage> tousVisibles = new ArrayList<>();
 
-	private List<Gardien> recupererGardiensVisibles(Personnage personnage) {
-    	observer(personnage.getCoordonnee());
-    	
-    	personnage.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
-        List<Gardien> listeGardiens = new ArrayList<>();
-        
-        for (Gardien gardien : personnageManager.getGardiens()) {
-            if (personnage.getCoordonneesVu().contains(gardien.getCoordonnee())) {
-            	listeGardiens.add(gardien);
-            }
-        }
-        return listeGardiens;
-    }
+	    if (personnage instanceof Gardien) {
+	        Gardien gardien = (Gardien) personnage;
+	        
+	        List<Intrus> intrusVisibles = recupererIntrusVisibles(gardien);
+	        for (Intrus intrus : intrusVisibles) {
+	            if (!gardien.getCibles().contains(intrus)) {
+	                gardien.ajouterCible(intrus);
+	            }
+	        }
+	        tousVisibles.addAll(intrusVisibles);
 
-	private List<Intrus> recupererIntrusVisibles(Personnage personnage) {
-	    observer(personnage.getCoordonnee());
+	        List<Gardien> gardiensVisibles = recupererGardiensVisibles(gardien);
+	        tousVisibles.addAll(gardiensVisibles);
 
-	    personnage.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
+	    } else if (personnage instanceof Intrus) {
+	        Intrus intrus = (Intrus) personnage;
+
+	        List<Gardien> gardiensVisibles = recupererGardiensVisibles(intrus);
+	        for (Gardien gardien : gardiensVisibles) {
+	            if (!intrus.getCibles().contains(gardien)) {
+	                intrus.ajouterCible(gardien);
+	            }
+	        }
+	        tousVisibles.addAll(gardiensVisibles);
+
+	        List<Intrus> intrusVisibles = recupererIntrusVisibles(intrus);
+	        tousVisibles.addAll(intrusVisibles);
+	    }
+	    
+	    return tousVisibles;
+	}
+
+	private List<Gardien> recupererGardiensVisibles(Personnage observateur) {
+	    observer(observateur.getCoordonnee());
+	    
+	    observateur.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
+	    List<Gardien> listeGardiens = new ArrayList<>();
+	    
+	    for (Gardien gardien : personnageManager.getGardiens()) {
+	        if (!gardien.equals(observateur) && observateur.getCoordonneesVu().contains(gardien.getCoordonnee())) {
+	            listeGardiens.add(gardien);
+	        }
+	    }
+	    return listeGardiens;
+	}
+
+	private List<Intrus> recupererIntrusVisibles(Personnage observateur) {
+	    observer(observateur.getCoordonnee());
+
+	    observateur.setCoordonneesVu(mapPasCoordonnee.getAllCoordonnees());
 	    List<Intrus> listeIntrus = new ArrayList<>();
 	    
 	    for (Intrus intrus : personnageManager.getIntrus()) {
-	        if (personnage.getCoordonneesVu().contains(intrus.getCoordonnee())) {
+	        if (!intrus.equals(observateur) && observateur.getCoordonneesVu().contains(intrus.getCoordonnee())) {
 	            listeIntrus.add(intrus);
 	        }
 	    }

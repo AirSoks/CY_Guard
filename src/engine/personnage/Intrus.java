@@ -30,7 +30,6 @@ public class Intrus extends Personnage {
     }
 
     public Gardien getCible() {
-    	// Donner la cible la plus proche afin que l'intrus s'en éloigne
         return null;
     }
 }

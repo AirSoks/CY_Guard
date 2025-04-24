@@ -73,29 +73,38 @@ public class MainGUI extends JFrame implements Runnable{
 	 * Initialise l'interface graphique et les élements du jeu
 	 */
 	private void init() {
+		logger.debug("Initialisation des settings et du chrono");
 		this.settings = new Settings();
 		this.chrono = ChronoSimulation.getInstance();
 		
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
+		logger.debug("Construction de la grille de jeu (hauteur=" + settings.getHauteur()
+        + ", largeur=" + settings.getLargeur() + ")");
 		mapBuilder = new GrilleBuilder(settings.getHauteur(), settings.getLargeur(), settings);
 		mapBuilder.build();
+		logger.info("Grille construite avec succès");
 
+		logger.debug("Initialisation des Personnages");
 	    PersonnageManager.initInstance(mapBuilder.getGrille(), settings);
 	    manager = PersonnageManager.getInstance();
 	    manager.initPersonnages();
+	    logger.info("Personnages initialisés (nombre = " + manager.getPersonnages().size() + ")");
 	    
 	    setJMenuBar(new MenuBar(new ActionButton(this, settings)));
+	    logger.trace("MenuBar ajouté");
 
         SidePanel sidePanel = new SidePanel(this);
         sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_SIZE,0));
         contentPane.add(sidePanel, BorderLayout.EAST);
+        logger.trace("SidePanel positionné à l'est");
         
 		dashboard = new GameDisplay(mapBuilder.getGrille(), manager, settings);
 		dashboard.addMouseListener(new ClicsControls(mapBuilder.getGrille(), manager, settings, sidePanel));
 		dashboard.setLayout(new BorderLayout());
         contentPane.add(dashboard, BorderLayout.CENTER);
+        logger.trace("GameDisplay ajouté au centre");
 
         JTextField invisibleTextField = new JTextField();
         invisibleTextField.setPreferredSize(new Dimension(0,INVISIBLE_TEXT_FIELD_SIZE));
@@ -106,9 +115,12 @@ public class MainGUI extends JFrame implements Runnable{
         redimensionner();
         setVisible(true);
         setResizable(false);
+        logger.info("Fenêtre configurée et affichée");
     }
 
 	public void redimensionner() {
+		logger.debug("Redimensionnement du dashboard (largeur=" + settings.getWindow_width()
+        + ", hauteur=" + settings.getWindow_height() + ")");
 		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height()));
 		dashboard.revalidate();
 	    pack();
@@ -124,13 +136,15 @@ public class MainGUI extends JFrame implements Runnable{
 			try {
 				Thread.sleep(settings.getSpeed());
 			} catch (InterruptedException e) {
-				System.out.println(e.getMessage());
+				logger.error("Thread interrompu : " + e.getMessage(), e);
 			}
 			if (active) {
 	            chrono.start();
 	            manager.actionPersonnages();
+	            
 	        } else {
 	            chrono.pause();
+	            
 	        }
 			dashboard.repaint();
 		}
@@ -140,9 +154,11 @@ public class MainGUI extends JFrame implements Runnable{
 		this.active = active;
 		if (active) {
             chrono.start();
+            
 		}
 		else {
 	        chrono.pause();
+	        
 		}
 	}
 

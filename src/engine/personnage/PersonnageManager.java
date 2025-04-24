@@ -49,6 +49,11 @@ public class PersonnageManager {
     private int nbIntrusInitial, nbGardienInitial;
     
     private int nbIntrusCapture;
+    
+    /**
+     * True si les gardiens peuvent communiquer, sinon false
+     */
+    private Boolean commGardien;
 
 	public static void initInstance(Grille grille, Settings settings) {
         instance = new PersonnageManager(grille, settings);
@@ -100,10 +105,10 @@ public class PersonnageManager {
 	
 	public void initPersonnages() {
 		nbIntrusCapture = 0;
+		commGardien = settings.getCommunicationGardien();
 		gardienActif = null;
-		if (personnages != null) {
-			personnages = new ArrayList<>();
-		}
+		
+		personnages = new ArrayList<>();
     	nbGardienInitial = settings.getGardien();
 	    ajouterGardien(nbGardienInitial);
     	nbIntrusInitial = settings.getIntrus();
@@ -149,11 +154,38 @@ public class PersonnageManager {
 	private void observerGardiens() {
 		for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
-        		gardien.observer();
+        		List<Personnage> personnageTrouve = gardien.observer();
+        		if (personnageTrouve != null && !personnageTrouve.isEmpty() && commGardien) {
+        			communiquerIntrusTrouve(gardien, personnageTrouve);
+        		}
         	}
         }
 	}
 	
+	private void communiquerIntrusTrouve(Gardien gardien, List<Personnage> personnageTrouve) {
+	    if (gardien != null && personnageTrouve != null && !personnageTrouve.isEmpty()) {
+
+	        List<Intrus> listIntrusObserver = new ArrayList<>();
+	        List<Gardien> listGardiensObserver = new ArrayList<>();
+
+	        for (Personnage personnage : personnageTrouve) {
+	            if (personnage instanceof Gardien) {
+	                listGardiensObserver.add((Gardien) personnage);
+	            } else if (personnage instanceof Intrus) {
+	                listIntrusObserver.add((Intrus) personnage);
+	            }
+	        }
+
+	        for (Gardien gardienTrouve : listGardiensObserver) {
+                for (Intrus intrusTrouve : listIntrusObserver) {
+                    if (!gardienTrouve.getCibles().contains(intrusTrouve)) {
+                        gardienTrouve.ajouterCible(intrusTrouve);
+                    }
+                }
+            }
+	    }
+	}
+
 	private void reSpawnIntrus() {
 		if (!settings.getApparitionIntrus()) {
 			return;

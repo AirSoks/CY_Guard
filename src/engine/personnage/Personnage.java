@@ -133,10 +133,11 @@ public abstract class Personnage {
 		}
     }
 	
-	public void observer() {
+	public List<Personnage> observer() {
 		if (vision != null) {
-			vision.observer(this);
+			return vision.observer(this);
 		}
+		return null;
     }
 
 	@Override
@@ -147,6 +148,11 @@ public abstract class Personnage {
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
+	}
+	
+	@Override
+	public String toString() {
+	    return "[Name=" + name + "]";
 	}
 	
 }

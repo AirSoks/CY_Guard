@@ -60,20 +60,16 @@ public abstract class Personnage {
      * Les coordonnées visibles pas le personnage
      */
     private List<Coordonnee> coordonneesVu;
-    
-	public PersonnageAnimation getAnimation() {
-		return animation;
-	}
-
-	public void setAnimation(PersonnageAnimation animation) {
-		this.animation = animation;
-	}
 
 	public Personnage(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
 		this.name = GenerateurNom.genererNom();
 		this.tempsInvocation = ChronoSimulation.getInstance().getSimulationSecond();
 		this.animation = new PersonnageAnimation(this);
+	}
+	
+	public PersonnageAnimation getAnimation() {
+		return animation;
 	}
 
     public Direction getDirection() {

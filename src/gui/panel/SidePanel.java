@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -22,7 +23,7 @@ public class SidePanel extends JPanel{
 	
 	private MainGUI mainFrame;
 	
-	private JPanel infoGeneral, infoPerso, infoPersoRelatif, chart; 
+	private JPanel infoGeneral, infoPerso, chart; 
 	private JLabel chronoLabel, nbIntrusCapture, nbIntrus, nbGardien;
 	private JLabel persoNoms, invocationTime, cibleRepere, intrusCapture;
 	
@@ -42,7 +43,6 @@ public class SidePanel extends JPanel{
 		infoGeneral.setLayout(new GridLayout(4,0));
 		infoPerso = createSubOptionPanel("Informations du personnage");
 		infoPerso.setLayout(new GridLayout(4,0));
-		infoPersoRelatif = new JPanel();
 		chart = new JPanel();
 		
 		chronoLabel = new JLabel("Temps : 00:00");
@@ -95,26 +95,46 @@ public class SidePanel extends JPanel{
 		});
 		updateTimer.start();
 		
-		infoPersoRelatif.add(new JLabel("InfoPersoRelatif"));
 		chart.add(new JLabel("chart"));
 
-	    contrainte.gridy = 0;
-	    contrainte.gridx = 0;
-	    contrainte.weightx = 1;
-	    contrainte.fill = GridBagConstraints.HORIZONTAL;
+		contrainte.gridx = 0;
+		contrainte.fill = GridBagConstraints.HORIZONTAL;
+		contrainte.weightx = 1;
+
+		// espace
+		contrainte.gridy = 0;
+		contrainte.weighty = 1;
+		add(Box.createVerticalStrut(0), contrainte);
+
+		// infoGeneral
+		contrainte.gridy = 1;
+		contrainte.weighty = 0;
 		add(infoGeneral, contrainte);
-		
-	    contrainte.gridy = 1;
-	    contrainte.gridx = 0;
+
+		// espace
+		contrainte.gridy = 2;
+		contrainte.weighty = 1;
+		add(Box.createVerticalStrut(0), contrainte);
+
+		// infoPerso
+		contrainte.gridy = 3;
+		contrainte.weighty = 0;
 		add(infoPerso, contrainte);
 
-	    contrainte.gridy = 2;
-	    contrainte.gridx = 0;
-		add(infoPersoRelatif, contrainte);
+		// espace
+		contrainte.gridy = 4;
+		contrainte.weighty = 1;
+		add(Box.createVerticalStrut(0), contrainte);
 
-	    contrainte.gridy = 3;
-	    contrainte.gridx = 0;
+		// chart
+		contrainte.gridy = 5;
+		contrainte.weighty = 0;
 		add(chart, contrainte);
+
+		// espace
+		contrainte.gridy = 6;
+		contrainte.weighty = 1;
+		add(Box.createVerticalStrut(0), contrainte);
 	}
 	
 	 /**

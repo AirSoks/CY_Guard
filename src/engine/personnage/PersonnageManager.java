@@ -49,11 +49,6 @@ public class PersonnageManager {
     private int nbIntrusInitial, nbGardienInitial;
     
     private int nbIntrusCapture;
-    
-    /**
-     * True si les gardiens peuvent communiquer, sinon false
-     */
-    private Boolean commGardien;
 
 	public static void initInstance(Grille grille, Settings settings) {
         instance = new PersonnageManager(grille, settings);
@@ -105,7 +100,6 @@ public class PersonnageManager {
 	
 	public void initPersonnages() {
 		nbIntrusCapture = 0;
-		commGardien = settings.getCommunicationGardien();
 		gardienActif = null;
 		
 		personnages = new ArrayList<>();
@@ -155,7 +149,7 @@ public class PersonnageManager {
 		for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
         		List<Personnage> personnageTrouve = gardien.observer();
-        		if (personnageTrouve != null && !personnageTrouve.isEmpty() && commGardien) {
+        		if (personnageTrouve != null && !personnageTrouve.isEmpty() && settings.getCommunicationGardien()) {
         			communiquerIntrusTrouve(gardien, personnageTrouve);
         		}
         	}

@@ -3,12 +3,16 @@ package engine.personnage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import config.Settings;
 import engine.map.Coordonnee;
 import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
 import engine.utilitaire.MaxTentativeAtteind;
+import gui.panel.MainGUI;
+import log.LoggerUtility;
 
 /**
  * Cette classe sert à la gestion des personnages
@@ -20,6 +24,8 @@ import engine.utilitaire.MaxTentativeAtteind;
  * @see Grille
  */
 public class PersonnageManager {
+	
+	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
 	
 	private Settings settings;
 	
@@ -56,6 +62,7 @@ public class PersonnageManager {
 	
     public static PersonnageManager getInstance() {
     	if (instance == null) {
+    		logger.error("PersonnageManager non initialisée");
 			throw new IllegalStateException("PersonnageManager non initialisée");
 		}
 		return instance;
@@ -99,6 +106,7 @@ public class PersonnageManager {
 	
 	
 	public void initPersonnages() {
+		logger.info("Initialisation des personnages");
 		nbIntrusCapture = 0;
 		gardienActif = null;
 		
@@ -107,6 +115,7 @@ public class PersonnageManager {
 	    ajouterGardien(nbGardienInitial);
     	nbIntrusInitial = settings.getIntrus();
 	    ajouterIntrus(nbIntrusInitial);
+	    logger.debug("Gardiens initial: " + nbGardienInitial + ", Intrus initial: " + nbIntrusInitial);
 	}
 	
 	/**
@@ -149,6 +158,7 @@ public class PersonnageManager {
 		for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
         		List<Personnage> personnageTrouve = gardien.observer();
+        		logger.trace("Gardien " + gardien + " a observé: " + personnageTrouve);
         		if (personnageTrouve != null && !personnageTrouve.isEmpty() && settings.getCommunicationGardien()) {
         			communiquerIntrusTrouve(gardien, personnageTrouve);
         		}
@@ -186,6 +196,7 @@ public class PersonnageManager {
 		}
 		List<Intrus> nbIntrus = getIntrus();
 		if (nbIntrusInitial > nbIntrus.size()) {
+			logger.debug("Respawn d'un intrus");
 			ajouterIntrus();
 		}
 	}
@@ -246,6 +257,7 @@ public class PersonnageManager {
     			listGardiens.add(gardien);
     		}
     	}
+    	logger.info("Gardiens ajoutés: " + listGardiens.size());
 		return listGardiens;
 	}
 	
@@ -259,6 +271,7 @@ public class PersonnageManager {
         try {
             coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
         } catch (MaxTentativeAtteind e) {
+        	logger.error("Échec placement Gardien: trop de tentatives");
             return null;
         }
 		Gardien gardien = new Gardien(coordonnee);
@@ -266,6 +279,7 @@ public class PersonnageManager {
 		Vision vision = getVision();
 		gardien.setVision(vision);
 		personnages.add(gardien);
+		logger.debug("Gardien ajouté en " + coordonnee);
 		return gardien;
 	}
     
@@ -284,6 +298,7 @@ public class PersonnageManager {
     			listIntrus.add(intrus);
     		}
     	}
+    	logger.info("Intrus ajoutés: " + listIntrus.size());
 		return listIntrus;
 	}
     
@@ -297,6 +312,7 @@ public class PersonnageManager {
         try {
             coordonnee = grille.getCoordonneeAleatoireValide("DEPLACEMENT");
         } catch (MaxTentativeAtteind e) {
+        	logger.error("Échec placement Intrus: trop de tentatives");
             return null;
         }
 		Intrus intrus = new Intrus(coordonnee);
@@ -304,6 +320,7 @@ public class PersonnageManager {
 		Vision vision = getVision();
 		intrus.setVision(vision);
 		personnages.add(intrus);
+		logger.debug("Intrus ajouté en " + coordonnee);
 		return intrus;
 	}
 	

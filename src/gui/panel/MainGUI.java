@@ -80,11 +80,8 @@ public class MainGUI extends JFrame implements Runnable{
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		logger.debug("Construction de la grille de jeu (hauteur=" + settings.getHauteur()
-        + ", largeur=" + settings.getLargeur() + ")");
 		mapBuilder = new GrilleBuilder(settings.getHauteur(), settings.getLargeur(), settings);
 		mapBuilder.build();
-		logger.info("Grille construite avec succès");
 
 		logger.debug("Initialisation des Personnages");
 	    PersonnageManager.initInstance(mapBuilder.getGrille(), settings);
@@ -119,8 +116,7 @@ public class MainGUI extends JFrame implements Runnable{
     }
 
 	public void redimensionner() {
-		logger.debug("Redimensionnement du dashboard (largeur=" + settings.getWindow_width()
-        + ", hauteur=" + settings.getWindow_height() + ")");
+		logger.debug("Redimensionnement du dashboard (largeur=" + settings.getWindow_width()+ ", hauteur=" + settings.getWindow_height() + ")");
 		dashboard.setPreferredSize(new Dimension(settings.getWindow_width(), settings.getWindow_height()));
 		dashboard.revalidate();
 	    pack();

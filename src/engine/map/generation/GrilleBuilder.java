@@ -3,6 +3,8 @@ package engine.map.generation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import config.ConfigurationMapAleatoire;
 import config.Settings;
 import engine.map.Case;
@@ -14,6 +16,8 @@ import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.ObstacleFactory;
 import engine.map.obstacle.Plaine;
 import engine.utilitaire.MaxTentativeAtteind;
+import gui.panel.MainGUI;
+import log.LoggerUtility;
 
 /**
  * Cette classe représente la construction de la grille
@@ -24,6 +28,8 @@ import engine.utilitaire.MaxTentativeAtteind;
  * @see ObstacleBuilder
  */
 public class GrilleBuilder {
+	
+	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
 	
 	/**
 	 * La grille qui doit être construite
@@ -40,24 +46,32 @@ public class GrilleBuilder {
 	public GrilleBuilder(int nbLigne, int nbColonne, Settings settings) {
         this.settings = settings;
         this.grille = new Grille(nbLigne, nbColonne);
+        logger.info("Construction de la grille de jeu (hauteur=" + settings.getHauteur() + ", largeur=" + settings.getLargeur() + ")");
     }
 
     public Grille build() {
+    	logger.info("Début de la construction de la grille");
         this.grille.genererTerrain();
+        logger.debug("Terrain généré : " + grille.getNbLigne() + "×" + grille.getNbColonne());
         this.obstacleBuilders = ConfigurationMapAleatoire.genererObstaclesAleatoires(settings);
         genererObstacles();
+        logger.info("Construction de la grille terminée");
         return grille;
     }
 
     public void redimensionner(int nouvelleLigne, int nouvelleColonne) {
+    	logger.info("Redimensionnement de la grille vers " + nouvelleLigne + "×" + nouvelleColonne);
         this.grille.redimensionner(nouvelleLigne, nouvelleColonne);
     }
 
 	private void genererObstacles() {
+		logger.debug("Début de la génération des obstacles");
         for (ObstacleBuilder builder : obstacleBuilders) {
+        	logger.debug("Placement de " + builder.getNbObstacle() + " obstacles de type " + builder.getObstacle().getType());
             placerObstacles(builder);
         }
         remplissageTrou();
+        logger.debug("Fin de la génération des obstacles");
     }
 
 	/**

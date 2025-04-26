@@ -148,14 +148,6 @@ public class MainGUI extends JFrame implements Runnable{
 
 	public void setActive(Boolean active) {
 		this.active = active;
-		if (active) {
-            chrono.start();
-            
-		}
-		else {
-	        chrono.pause();
-	        
-		}
 	}
 
 	public GrilleBuilder getMapBuilder() {

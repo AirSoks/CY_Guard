@@ -3,6 +3,8 @@ package engine.personnage.vision;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import engine.map.Coordonnee;
 import engine.map.Direction;
 import engine.map.Grille;
@@ -11,8 +13,12 @@ import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.MapPasCoordonnee;
+import gui.panel.MainGUI;
+import log.LoggerUtility;
 
 public class Vision {
+	
+	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
 	
 	/**
 	 * Utilisation d'un singleton
@@ -79,6 +85,7 @@ public class Vision {
 	        List<Intrus> intrusVisibles = recupererIntrusVisibles(gardien);
 	        for (Intrus intrus : intrusVisibles) {
 	            if (!gardien.getCibles().contains(intrus)) {
+	        		logger.trace("Gardien " + gardien + " a observé: " + intrus);
 	                gardien.ajouterCible(intrus);
 	            }
 	        }
@@ -93,6 +100,7 @@ public class Vision {
 	        List<Gardien> gardiensVisibles = recupererGardiensVisibles(intrus);
 	        for (Gardien gardien : gardiensVisibles) {
 	            if (!intrus.getCibles().contains(gardien)) {
+	        		logger.trace("Intrus " + intrus + " a observé: " + gardien);
 	                intrus.ajouterCible(gardien);
 	            }
 	        }

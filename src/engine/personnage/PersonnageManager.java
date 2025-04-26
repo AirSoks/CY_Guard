@@ -158,7 +158,6 @@ public class PersonnageManager {
 		for (Gardien gardien : getGardiens()) {
         	if (gardien != null) {
         		List<Personnage> personnageTrouve = gardien.observer();
-        		logger.trace("Gardien " + gardien + " a observé: " + personnageTrouve);
         		if (personnageTrouve != null && !personnageTrouve.isEmpty() && settings.getCommunicationGardien()) {
         			communiquerIntrusTrouve(gardien, personnageTrouve);
         		}
@@ -183,6 +182,7 @@ public class PersonnageManager {
 	        for (Gardien gardienTrouve : listGardiensObserver) {
                 for (Intrus intrusTrouve : listIntrusObserver) {
                     if (!gardienTrouve.getCibles().contains(intrusTrouve)) {
+                		logger.trace("Gardien " + gardien + " a communiqué au gardien " + gardienTrouve + " l'intrus :" + intrusTrouve);
                         gardienTrouve.ajouterCible(intrusTrouve);
                     }
                 }

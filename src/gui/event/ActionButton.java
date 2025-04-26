@@ -94,17 +94,17 @@ public class ActionButton implements ActionListener {
 	private void restart() {
 		mainFrame.getChrono().reset();
 		mainFrame.getManager().initPersonnages();
+		mainFrame.getSidePanel().resetSerie();
 	}
 	
     /**
      * Reconstruit la grille de jeu.
      */
 	private void rebuild() {
-		mainFrame.getChrono().reset();
 		mainFrame.getMapBuilder().redimensionner(settings.getHauteur(), settings.getLargeur());
 		mainFrame.getMapBuilder().build();
-		mainFrame.getManager().initPersonnages();
 		mainFrame.redimensionner();
+		restart();
 	}
 
     /**

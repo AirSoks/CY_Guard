@@ -13,7 +13,6 @@ import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.MapPasCoordonnee;
-import gui.panel.MainGUI;
 import log.LoggerUtility;
 
 public class Vision {

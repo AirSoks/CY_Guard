@@ -16,7 +16,6 @@ import engine.map.obstacle.Obstacle;
 import engine.map.obstacle.ObstacleFactory;
 import engine.map.obstacle.Plaine;
 import engine.utilitaire.MaxTentativeAtteind;
-import gui.panel.MainGUI;
 import log.LoggerUtility;
 
 /**

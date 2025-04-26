@@ -1,5 +1,6 @@
 package gui.panel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -14,6 +15,14 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
@@ -27,6 +36,9 @@ public class SidePanel extends JPanel{
 	private JLabel chronoLabel, nbIntrusCapture, nbIntrus, nbGardien;
 	private JLabel persoNoms, invocationTime, cibleRepere, intrusCapture;
 	
+	private XYSeries serie;
+	private ChartPanel chartIntrusCapture;
+	
 	private Personnage personnageClique;
 	
 	public SidePanel(MainGUI parent) {
@@ -37,6 +49,7 @@ public class SidePanel extends JPanel{
 
 	private void init() {
     	GridBagConstraints contrainte = new GridBagConstraints();
+    	serie = new XYSeries("Intrus capturés");
     	personnageClique = null;
     	
 		infoGeneral = createSubOptionPanel("Informations générales");
@@ -67,6 +80,9 @@ public class SidePanel extends JPanel{
 		
 		removePersoClique();
 		
+		chartIntrusCapture = new ChartPanel(getChart());
+		chartIntrusCapture.setPreferredSize(new Dimension(0,175));
+		
 		Timer updateTimer = new Timer(100, new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
@@ -91,11 +107,11 @@ public class SidePanel extends JPanel{
 		        		removePersoClique();
 		        	}
 		        }
+		        updateSerie((int)seconds, nbCapture);
+		        chartIntrusCapture = new ChartPanel(getChart());
 		    }
 		});
 		updateTimer.start();
-		
-		chart.add(new JLabel("chart"));
 
 		contrainte.gridx = 0;
 		contrainte.fill = GridBagConstraints.HORIZONTAL;
@@ -129,7 +145,7 @@ public class SidePanel extends JPanel{
 		// chart
 		contrainte.gridy = 5;
 		contrainte.weighty = 0;
-		add(chart, contrainte);
+		add(chartIntrusCapture, contrainte);
 
 		// espace
 		contrainte.gridy = 6;
@@ -184,6 +200,23 @@ public class SidePanel extends JPanel{
 			cibleRepere.setText("Cible reperé : " + nbCible);
 			intrusCapture.setText("");
     	}
-    	
+    }
+
+	public void updateSerie(int seconds, int intrusCapture) {
+		if (serie.getMaxX() != seconds) {
+	        serie.add(seconds, intrusCapture);
+	    }
+    }
+	
+	public void resetSerie() {
+		serie.clear();
+	}
+	
+	public JFreeChart getChart() {
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(serie);
+        
+        JFreeChart chart = ChartFactory.createXYLineChart("","Temps (secondes)","Intrus capturés", dataset, PlotOrientation.VERTICAL, true, true, false);
+        return chart;
     }
 }

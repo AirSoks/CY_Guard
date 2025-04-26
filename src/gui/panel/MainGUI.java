@@ -55,6 +55,11 @@ public class MainGUI extends JFrame implements Runnable{
 	private GameDisplay dashboard;
 	
 	/**
+	 * L'interface d'affichage du panel d'information
+	 */
+	private SidePanel sidePanel;
+	
+	/**
 	 * L'êtat de la simulation (true pour activé, false sinon)
 	 */
 	private Boolean active = false;
@@ -92,7 +97,7 @@ public class MainGUI extends JFrame implements Runnable{
 	    setJMenuBar(new MenuBar(new ActionButton(this, settings)));
 	    logger.trace("MenuBar ajouté");
 
-        SidePanel sidePanel = new SidePanel(this);
+        sidePanel = new SidePanel(this);
         sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_SIZE,0));
         contentPane.add(sidePanel, BorderLayout.EAST);
         logger.trace("SidePanel positionné à l'est");
@@ -168,5 +173,9 @@ public class MainGUI extends JFrame implements Runnable{
 
 	public ChronoSimulation getChrono() {
 		return chrono;
+	}
+	
+	public SidePanel getSidePanel() {
+		return sidePanel;
 	}
 }

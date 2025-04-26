@@ -2,7 +2,6 @@ package engine.utilitaire;
 
 import org.apache.log4j.Logger;
 
-import gui.panel.MainGUI;
 import log.LoggerUtility;
 
 public class ChronoSimulation {

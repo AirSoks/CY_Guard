@@ -11,7 +11,6 @@ import engine.map.Grille;
 import engine.personnage.deplacement.DeplacementFactory;
 import engine.personnage.vision.Vision;
 import engine.utilitaire.MaxTentativeAtteind;
-import gui.panel.MainGUI;
 import log.LoggerUtility;
 
 /**

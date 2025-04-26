@@ -18,7 +18,7 @@ import log.LoggerUtility;
 
 public class Vision {
 	
-	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
+	private static Logger logger = LoggerUtility.getLogger(Vision.class, "html");
 	
 	/**
 	 * Utilisation d'un singleton

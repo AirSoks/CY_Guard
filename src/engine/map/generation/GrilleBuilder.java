@@ -29,7 +29,7 @@ import log.LoggerUtility;
  */
 public class GrilleBuilder {
 	
-	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
+	private static Logger logger = LoggerUtility.getLogger(GrilleBuilder.class, "html");
 	
 	/**
 	 * La grille qui doit être construite

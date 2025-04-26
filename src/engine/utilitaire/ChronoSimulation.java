@@ -7,7 +7,7 @@ import log.LoggerUtility;
 
 public class ChronoSimulation {
 	
-	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
+	private static Logger logger = LoggerUtility.getLogger(ChronoSimulation.class, "html");
 	
 	private static ChronoSimulation instance;
 	

@@ -25,7 +25,7 @@ import log.LoggerUtility;
  */
 public class PersonnageManager {
 	
-	private static Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
+	private static Logger logger = LoggerUtility.getLogger(PersonnageManager.class, "html");
 	
 	private Settings settings;
 	

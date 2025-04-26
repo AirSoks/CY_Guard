@@ -32,7 +32,7 @@ public class SidePanel extends JPanel{
 	
 	private MainGUI mainFrame;
 	
-	private JPanel infoGeneral, infoPerso, chart; 
+	private JPanel infoGeneral, infoPerso; 
 	private JLabel chronoLabel, nbIntrusCapture, nbIntrus, nbGardien;
 	private JLabel persoNoms, invocationTime, cibleRepere, intrusCapture;
 	
@@ -56,7 +56,6 @@ public class SidePanel extends JPanel{
 		infoGeneral.setLayout(new GridLayout(4,0));
 		infoPerso = createSubOptionPanel("Informations du personnage");
 		infoPerso.setLayout(new GridLayout(4,0));
-		chart = new JPanel();
 		
 		chronoLabel = new JLabel("Temps : 00:00");
 		nbIntrusCapture = new JLabel("Nombre d'intrus capturé : " + mainFrame.getManager().getNbIntrusCapture());

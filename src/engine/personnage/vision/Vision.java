@@ -15,8 +15,22 @@ import engine.personnage.PersonnageManager;
 import engine.personnage.deplacement.MapPasCoordonnee;
 import log.LoggerUtility;
 
+/**
+ * Classe responsable pour la vision des personnages  
+ * 
+ * @author GLP_19
+ * @see Personnage
+ * @see Gardien
+ * @see Intrus
+ * @see PersonnageManager
+ * @see Grille
+ * @see Direction
+ */
 public class Vision {
 	
+	/**
+     * Les logs de la simulation
+     */
 	private static Logger logger = LoggerUtility.getLogger(Vision.class, "html");
 	
 	/**
@@ -50,6 +64,9 @@ public class Vision {
     	this.distance = distance;
 	}
     
+    /**
+	 * Initialise la vision
+	 */
 	public static void initInstance(PersonnageManager personnageManager, Grille grille, int distance) {
 		if (instance == null || instance.getDistance() != distance){
 	        instance = new Vision(personnageManager, grille, distance);
@@ -75,6 +92,12 @@ public class Vision {
 		return mapPasCoordonnee;
 	}
 	
+	/**
+	 * Retourne les personnages visible par ce personnage
+	 * 
+	 * @param personnage qui regarde
+	 * @return liste des personnages vue
+	 */
 	public List<Personnage> observer(Personnage personnage) {
 	    List<Personnage> tousVisibles = new ArrayList<>();
 
@@ -112,6 +135,12 @@ public class Vision {
 	    return tousVisibles;
 	}
 
+	/**
+	 * Cherche les gardiens visible par observateur
+	 * 
+	 * @param observateur personnage qui regarde
+	 * @return liste des gardiens vue
+	 */
 	private List<Gardien> recupererGardiensVisibles(Personnage observateur) {
 	    observer(observateur.getCoordonnee());
 	    
@@ -126,6 +155,12 @@ public class Vision {
 	    return listeGardiens;
 	}
 
+	/**
+	 * Cherche les intrus visible par observateur
+	 * 
+	 * @param observateur personnage qui regarde
+	 * @return liste des intrus vue
+	 */
 	private List<Intrus> recupererIntrusVisibles(Personnage observateur) {
 	    observer(observateur.getCoordonnee());
 
@@ -140,6 +175,11 @@ public class Vision {
 	    return listeIntrus;
 	}
     
+	/**
+	 * Calcule les cases visibles autour de centre
+	 * 
+	 * @param centre position de depart
+	 */
 	private void observer(Coordonnee centre) {
 	    List<Boolean> directionsValides = new ArrayList<>();
 	    for (int i = 0; i < 8; i++) {
@@ -190,6 +230,14 @@ public class Vision {
         return coordonneeAdjacentes;
     }
     
+    /**
+     * Mettre a jour la visibilité
+     * 
+     * @param centre point de départ
+     * @param autre case à tester
+     * @param directions liste des directions valide
+     * @return liste mise a jour de la visibilité
+     */
     public List<Boolean> updateVisibilite(Coordonnee centre, Coordonnee autre, List<Boolean> directions){
     	if (centre == null || autre == null || directions == null || directions.size() != 8) {
     	    throw new IllegalArgumentException();
@@ -205,6 +253,13 @@ public class Vision {
 		return directions;
     }
     
+    /**
+     * Retourne l'indice de direction de c1 vers c2
+     * 
+     * @param c1 point de départ
+     * @param c2 point d'arrivée
+     * @return int indice entre 0 et 7, ou -1 si pas aligné
+     */
     private int getIndexDirection(Coordonnee c1, Coordonnee c2) {
         int deltaLigne = c2.getLigne() - c1.getLigne();
         int deltaColonne = c2.getColonne() - c1.getColonne();

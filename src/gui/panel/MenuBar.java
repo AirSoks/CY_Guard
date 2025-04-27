@@ -11,6 +11,17 @@ import javax.swing.JMenuItem;
 
 import gui.event.ActionButton;
 
+/**
+ * Menu de l'interface graphique du simulation.
+ * Elle gère les boutons principaux.
+ * 
+ * @author GLP_19
+ * @see MainGUI
+ * @see ActionButton
+ * @see JMenu
+ * @see JMenuBar
+ * @see JMenuItem
+ */
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
 	
@@ -19,7 +30,6 @@ public class MenuBar extends JMenuBar {
     public MenuBar(ActionButton actionButton) {
     	this.actionButton = actionButton;
 
-        // Ajouter les JMenu cliquables avec le même ActionListener
     	addMenuCliquable("Start");
     	addMenuCliquable("Pause");
     	addMenuCliquable("Restart");
@@ -65,18 +75,6 @@ public class MenuBar extends JMenuBar {
 
         add(affichageMenu);
     }
-    
-    /**
-     * Ajoute un JMenuItem au menu spécifié.
-     *
-     * @param menu Le menu auquel ajouter le JMenuItem.
-     * @param itemName Le nom de l'élément à ajouter au menu.
-     */
-//    private void addMenuItem(JMenu menu, String itemName) {
-//        JMenuItem item = new JMenuItem(itemName);
-//        item.addActionListener(actionButton);
-//        menu.add(item);
-//    }
     
     /**
      * Ajoute un JCheckBoxMenuItem au menu spécifié et lui associe un gestionnaire d'actions.

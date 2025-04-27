@@ -35,6 +35,9 @@ public class GrilleBuilder {
 	 */
 	private Grille grille;
 	
+	/**
+     * Les settings de la simulation
+     */
 	private Settings settings;
 	
 	/**

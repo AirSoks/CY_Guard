@@ -20,8 +20,8 @@ import gui.event.KeyControls;
 import log.LoggerUtility;
 
 /**
- * Classe principale de l'interface graphique du simulation
- * Il gère les interactions utilisateur
+ * Classe principale de l'interface graphique du simulation.
+ * Elle gère les interactions utilisateur.
  * 
  * @author GLP_19
  * @see GameDisplay

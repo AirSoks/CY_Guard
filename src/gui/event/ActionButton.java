@@ -16,8 +16,14 @@ import gui.panel.PaintStrategy;
  */
 public class ActionButton implements ActionListener {
 	
+	/**
+	 * Classe principale de l'interface graphique
+	 */
     private MainGUI mainFrame;
     
+    /**
+     * Les settings de la simulation
+     */
     private Settings settings;
 
     /**

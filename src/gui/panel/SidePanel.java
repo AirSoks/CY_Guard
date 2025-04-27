@@ -18,7 +18,6 @@ import javax.swing.border.TitledBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -27,9 +26,21 @@ import engine.personnage.Gardien;
 import engine.personnage.Intrus;
 import engine.personnage.Personnage;
 
+/**
+ * Panneau latéral affichant des informations générales et spécifiques sur les personnages.
+ * 
+ * Ce panneau est mis à jour régulièrement par un Timer.
+ *
+ * @author GLP_19
+ * @see MainGUI
+ * @see Personnage
+ */
 @SuppressWarnings("serial")
 public class SidePanel extends JPanel{
 	
+	/**
+	 * Classe principale de l'interface graphique
+	 */
 	private MainGUI mainFrame;
 	
 	private JPanel infoGeneral, infoPerso; 
@@ -46,7 +57,10 @@ public class SidePanel extends JPanel{
         this.mainFrame = parent;
 		init();
 	}
-
+	
+	/**
+     * Initialise tous les composants graphiques du panneau.
+     */
 	private void init() {
     	GridBagConstraints contrainte = new GridBagConstraints();
     	serie = new XYSeries("Intrus capturés");
@@ -164,6 +178,9 @@ public class SidePanel extends JPanel{
 		return panel;
     }
     
+    /**
+     * Supprime les informations affichées lorsqu'aucun personnage n'est sélectionné.
+     */
     public void removePersoClique() {
     	TitledBorder border = (TitledBorder) infoPerso.getBorder();
     	border.setTitle("Cliquez sur un personnage");
@@ -173,6 +190,11 @@ public class SidePanel extends JPanel{
 		intrusCapture.setText(null);
     }
     
+    /**
+     * Met à jour les informations affichées du personnage cliqué.
+     *
+     * @param personnage Le personnage sélectionné.
+     */
     public void updatePersoClique(Personnage personnage) {
     	personnageClique = personnage;
     	TitledBorder border = (TitledBorder) infoPerso.getBorder();
@@ -201,21 +223,37 @@ public class SidePanel extends JPanel{
     	}
     }
 
-	public void updateSerie(int seconds, int intrusCapture) {
-		if (serie.getMaxX() != seconds) {
-	        serie.add(seconds, intrusCapture);
-	    }
+    /**
+     * Ajoute une nouvelle donnée à la série du graphique si nécessaire.
+     *
+     * @param seconds Temps écoulé en secondes.
+     * @param intrusCapture Nombre d'intrus capturés.
+     */
+    public void updateSerie(int seconds, int intrusCapture) {
+        if (serie.getMaxX() != seconds) {
+            serie.add(seconds, intrusCapture);
+        }
     }
-	
-	public void resetSerie() {
-		serie.clear();
-	}
-	
-	public JFreeChart getChart() {
+
+    /**
+     * Réinitialise les données du graphique.
+     */
+    public void resetSerie() {
+        serie.clear();
+    }
+
+    /**
+     * Génère un graphique à partir des données actuelles de la série.
+     *
+     * @return Le graphique généré.
+     */
+    public JFreeChart getChart() {
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(serie);
-        
-        JFreeChart chart = ChartFactory.createXYLineChart("","Temps (secondes)","Intrus capturés", dataset, PlotOrientation.VERTICAL, true, true, false);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "", "Temps (secondes)", "Intrus capturés",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
         return chart;
     }
 }

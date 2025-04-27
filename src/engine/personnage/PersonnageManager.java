@@ -24,8 +24,14 @@ import log.LoggerUtility;
  */
 public class PersonnageManager {
 	
+	/**
+     * Les logs de la simulation
+     */
 	private static Logger logger = LoggerUtility.getLogger(PersonnageManager.class, "html");
 	
+	/**
+     * Les settings de la simulation
+     */
 	private Settings settings;
 	
 	/**
@@ -53,7 +59,15 @@ public class PersonnageManager {
      */
     private int nbIntrusInitial, nbGardienInitial;
     
+    /**
+     * Le nombre d'intrus total capturé
+     */
     private int nbIntrusCapture;
+    
+    /**
+     * Le déplacement des intrus, si 0 le gardien n'avancera pas, sinon il avance
+     */
+    private int deplacementIntrus;
 
 	public static void initInstance(Grille grille, Settings settings) {
         instance = new PersonnageManager(grille, settings);
@@ -103,11 +117,14 @@ public class PersonnageManager {
 		this.gardienActif = null;
 	}
 	
-	
+	/**
+	 * Initialise les personnages de la grille
+	 */
 	public void initPersonnages() {
 		logger.info("Initialisation des personnages");
 		nbIntrusCapture = 0;
 		gardienActif = null;
+		deplacementIntrus = 0;
 		
 		personnages = new ArrayList<>();
     	nbGardienInitial = settings.getGardien();
@@ -121,7 +138,12 @@ public class PersonnageManager {
 	 * Déplace tout les personnages de la grille
 	 */
 	public void actionPersonnages() {
-		deplacerIntrus();
+		deplacementIntrus += 1;
+		deplacementIntrus = deplacementIntrus %4;
+		if (deplacementIntrus != 0) {
+			deplacerIntrus();
+		}
+		
 		deplacerGardiens();
 		observerIntrus();
 		observerGardiens();

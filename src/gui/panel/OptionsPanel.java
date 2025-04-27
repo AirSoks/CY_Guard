@@ -25,6 +25,16 @@ import gui.numberField.JNumberBoxDouble;
 import gui.numberField.JNumberBoxSimple;
 import gui.numberField.JNumberFieldRelativeToButton;
 
+/**
+ * Fenêtre de dialogue permettant la configuration des options de la simulation.
+ * 
+ * @author GLP_19
+ * @see Settings
+ * @see ActionButton
+ * @see JNumberBoxSimple
+ * @see JNumberBoxDouble
+ * @see JNumberFieldRelativeToButton
+ */
 @SuppressWarnings("serial")
 public class OptionsPanel extends JDialog {
 	
@@ -326,8 +336,10 @@ public class OptionsPanel extends JDialog {
         return buttonPanel;
     }
     
+    /**
+	 * Récupère les settings pour les transférer au SidePanel
+	 */
     public void loadSettings(Settings settings) {
-
         setNumberLargeur(settings.getLargeur());
         setNumberHauteur(settings.getHauteur());
         setNumberIntrus(settings.getIntrus());
@@ -359,8 +371,10 @@ public class OptionsPanel extends JDialog {
         speedBox.setSelectedItem(speed);
     }
     
+    /**
+	 * Applique les options du panel à settings
+	 */
     public void applySettings(Settings settings) {
-
         settings.setLargeur(largeur.getJNumberSelect().getNumber());
         settings.setHauteur(hauteur.getJNumberSelect().getNumber());
         settings.setIntrus(intrus.getJNumberSelect().getNumber());
@@ -471,6 +485,12 @@ public class OptionsPanel extends JDialog {
 		}
 	}
 	
+	/**
+	 * Définit les valeurs minimal et maximal des obstacles suivant la taille de la grille
+	 *
+	 * @param largeur La largeur de la grille
+	 * @param hauteur La hauteur de la grille
+	 */
 	public void setLimitsObstacles(int largeur, int hauteur) {
 		int totalCases = largeur*hauteur;
 
@@ -489,9 +509,24 @@ public class OptionsPanel extends JDialog {
         elementsRoches.setNumbers(totalCases/400, totalCases/200);
 	}
 	
-	
+	/**
+     * Classe interne permettant de mettre à jour dynamiquement les limites des obstacles
+     * du terrain lorsque l'utilisateur modifie la largeur ou la hauteur de la carte.
+     * 
+     * Cette classe est déclenchée à la perte de focus sur les champs de saisie
+     * correspondants.
+     *
+     * @author GLP_19
+     * @see FocusAdapter
+     */
 	public class FocusControls extends FocusAdapter {
 		
+		/**
+         * Méthode appelée lorsque le champ perd le focus.
+         * Elle ajuste les limites d'obstacles en fonction des dimensions de la carte.
+         *
+         * @param e L'événement de focus.
+         */
 		public void focusLost(FocusEvent e) {
 			setLimitsObstacles(largeur.getJNumberSelect().getNumber(), hauteur.getJNumberSelect().getNumber());
 		}

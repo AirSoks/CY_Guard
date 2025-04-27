@@ -28,6 +28,9 @@ import log.LoggerUtility;
  */
 public class GrilleBuilder {
 	
+	/**
+     * Les logs de la simulation
+     */
 	private static Logger logger = LoggerUtility.getLogger(GrilleBuilder.class, "html");
 	
 	/**

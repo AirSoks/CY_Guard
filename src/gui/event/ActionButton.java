@@ -13,6 +13,10 @@ import gui.panel.PaintStrategy;
 /**
  * La classe ActionButton implémente l'interface ActionListener.
  * Elle est responsable de gérer les actions déclenchées par tout les boutons ou menu cliquable.
+ * 
+ * @author GLP_19
+ * @see MainGUI
+ * @see Settings
  */
 public class ActionButton implements ActionListener {
 	

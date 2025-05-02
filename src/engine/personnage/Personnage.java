@@ -1,154 +1,149 @@
 package engine.personnage;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import engine.map.Coordonnee;
-import engine.map.Direction;
-import engine.personnage.deplacement.Deplacement;
-import engine.personnage.vision.Vision;
-import engine.utilitaire.ChronoSimulation;
-import engine.utilitaire.GenerateurNom;
+import engine.error.*;
+import engine.interaction.PersonnageInteractionVisitor;
+import engine.displacement.Displacement;
+import engine.map.Cell;
+import engine.map.Position;
+import engine.mouvement.MovementStatus;
+import engine.util.Either;
+import engine.vision.Vision;
 
 /**
- * Personnage est une classe abstraite représentant un personnage dans la grille
+ * Représente un personnage dans le jeu.
+ * Chaque personnage possède une position, un mécanisme de déplacement (Displacement),
+ * une vision (Vision) et une liste de personnages cibles (Targets).
  * 
- * @author GLP_19
- * @see Gardien
- * @see Intrus
- * @see Coordonnee
- * @see Deplacement
- * 
+ * @author AirSoks
+ * @since 2025-05-02
+ * @version 1.0
  */
 public abstract class Personnage {
-	
-	/**
-	 * La coordonnée du personnage
-	 */
-	private Coordonnee coordonnee;
-	
-	/**
-	 * Le nom du personnage
-	 */
-	private String name;
 
-	/**
-	 * Le temps d'incocation du personnage
-	 */
-	private long tempsInvocation;
-	
-    /**
-     * Le déplacement du personnage
+    /** 
+     * La position actuelle du personnage 
      */
-    private Deplacement deplacement;
+    private Position position;
+    
+    /** 
+     * Le mécanisme de déplacement du personnage 
+     */
+    private Displacement displacement;
+    
+    /** 
+     * Le mécanisme de vision du personnage 
+     */
+    private Vision vision;
+    
+    /** 
+     * Set des personnages cibles 
+     */
+    protected final Set<Personnage> targets = new HashSet<>();
+
+    /**
+     * Constructeur pour initialiser le personnage avec une position donnée.
+     * 
+     * @param position La position initiale du personnage
+     */
+    public Personnage(Position position) {
+        this.position = position;
+    }
+
+    /**
+     * Déplace le personnage en utilisant son mécanisme de déplacement.
+     * 
+     * @return Le statut du mouvement (succès ou échec)
+     */
+    public MovementStatus move() {
+        if (displacement == null) {
+            return MovementStatus.failure(new NullClassError(Displacement.class));
+        }
+        return displacement.move(this);
+    }
     
     /**
-     * La vision du personnage
+     * Permet au personnage de voir les cellules autour de lui grâce à sa vision.
+     * 
+     * @return Soit une erreur de message si la vision est nulle, soit une carte des positions et cellules visibles
      */
-	private Vision vision;
+    public Either<MessageError, Map<Position, Cell>> see() {
+        if (vision == null) {
+            return Either.left(new NullClassError(Vision.class));
+        }
+        return vision.see(this);
+    }
 
     /**
-     * Les informations pour l'animation du personnage
+     * Récupère la position actuelle du personnage.
+     * 
+     * @return La position du personnage
      */
-	private PersonnageAnimation animation;
-    
-	/**
-     * La direction de son prochain déplacement
+    public Position getPosition() {
+        return position;
+    }
+
+    /**
+     * Modifie la position du personnage.
+     * 
+     * @param position La nouvelle position du personnage
      */
-    private Direction direction;
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    /**
+     * Récupère le Set des personnages cibles du personnage.
+     * 
+     * @return Un Set des personnages cibles
+     */
+    public Set<Personnage> getTargets() {
+        return Collections.unmodifiableSet(targets);
+    }
+
+    /**
+     * Ajoute un personnage au Set des cibles du personnage.
+     * Chaque sous-classe doit définir sa propre logique pour déterminer qui peut être une cible valide.
+     *
+     * @param target Le personnage à ajouter au Set des cibles
+     */
+    public abstract void addTarget(Personnage target);
+
+    /**
+     * Retire un personnage du Set des cibles du personnage.
+     * 
+     * @param target Le personnage à retirer du Set des cibles
+     */
+    public void removeTarget(Personnage target) {
+        if (target != null) {
+            targets.remove(target);
+        }
+    }
     
     /**
-     * Les coordonnées visibles pas le personnage
+     * Méthode abstraite pour obtenir la cible suivante.
+     * 
+     * @return La cible suivante
      */
-    private List<Coordonnee> coordonneesVu;
+    public abstract Personnage getTarget();
 
-	public Personnage(Coordonnee coordonnee) {
-		this.coordonnee = coordonnee;
-		this.name = GenerateurNom.genererNom();
-		this.tempsInvocation = ChronoSimulation.getInstance().getSimulationSecond();
-		this.animation = new PersonnageAnimation(this);
-	}
-	
-	public PersonnageAnimation getAnimation() {
-		return animation;
-	}
+    /**
+     * Déclenche une interaction entre ce personnage et un autre personnage.
+     * Utilise le pattern Visitor pour centraliser la logique d'interaction.
+     *
+     * @param other Le personnage avec lequel interagir
+     */
+    public abstract void interact(Personnage other);
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-        if (direction != null ) {
-			this.animation.setDerniereDirection(direction);
-		}
-    }
-	
-	public Coordonnee getCoordonnee() {
-		return coordonnee;
-	}
-
-	public void setCoordonnee(Coordonnee coordonnee) {
-		this.coordonnee = coordonnee;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public long getTempsInvocation() {
-		return tempsInvocation;
-	}
-
-	public Deplacement getDeplacement() {
-		return deplacement;
-	}
-
-	public void setDeplacement(Deplacement deplacement) {
-		this.deplacement = deplacement;
-	}
-	
-	public void setVision(Vision vision) {
-		this.vision = vision;
-	}
-
-	public Vision getVision() {
-		return vision;
-	}
-
-	public List<Coordonnee> getCoordonneesVu() {
-		return coordonneesVu;
-	}
-
-	public void setCoordonneesVu(List<Coordonnee> coordonneesVu) {
-		this.coordonneesVu = coordonneesVu;
-	}
-
-	public void deplacer() {
-		if (deplacement != null) {
-			deplacement.deplacer(this);
-		}
-    }
-	
-	public List<Personnage> observer() {
-		if (vision != null) {
-			return vision.observer(this);
-		}
-		return null;
-    }
-
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
-	}
-	
-	@Override
-	public String toString() {
-	    return "[Name=" + name + "]";
-	}
-	
+    /**
+     * Accepte un visiteur d'interaction.
+     * Appelle la méthode appropriée du visiteur en fonction du type de ce personnage.
+     *
+     * @param visitor Le visiteur à accepter
+     */
+    public abstract void accept(PersonnageInteractionVisitor visitor);
 }

@@ -1,9 +1,11 @@
 package engine.map;
 
 import engine.error.*;
+import engine.map.Position.PositionPair;
+import engine.message.MessageError;
 import engine.mouvement.MovementRule;
-import engine.mouvement.MovementStatus;
 import engine.personnage.Personnage;
+import engine.util.Outcome;
 import engine.util.Either;
 import engine.util.Unit;
 
@@ -113,7 +115,7 @@ public class Grid {
      * @param personnage Le personnage à vérifier.
      * @return Un {@code Either} contenant un message d'erreur si la position du personnage est incohérente, sinon {@code Void}.
      */
-    public Either<MessageError, Void> verifyPersonnagePositionCoherence(Personnage p) {
+    public Either<MessageError, Unit> verifyPersonnagePositionCoherence(Personnage p) {
     	if (p == null) {
             return Either.left(new NullClassError(Personnage.class));
         }
@@ -124,7 +126,7 @@ public class Grid {
         if (cellOpt.isRight()) {
             Cell cell = cellOpt.getRight();
             if (cell.getPersonnages().contains(p)) {
-                return Either.right(null);
+                return Either.right(Unit.get());
             } else {
                 return Either.left(new PersonnageError(p, cell));
             }
@@ -168,22 +170,27 @@ public class Grid {
      *
      * @param p Le personnage à déplacer.
      * @param to La position cible du mouvement.
-     * @return Un {@code MovementStatus} représentant l'acceptation ou le rejet du mouvement.
+     * @return Un {@link Outcome} représentant l'acceptation ou le rejet du mouvement.
      */
-    public MovementStatus isMoveAccepted(Personnage p, Position to) {
+    public Outcome<PositionPair> isMoveAccepted(Personnage p, Position to) {
     	if (p == null) {
-            return MovementStatus.failure(new NullClassError(Personnage.class));
-        } if (to == null) {
-            return MovementStatus.failure(new NullClassError(Position.class));
-        }
+            return Outcome.failure(new NullClassError(Personnage.class));
+        } 
     	Position from = p.getPosition();
+    	if (from == null) {
+            return Outcome.failure(new NullClassError(Position.class).with(() -> "parameter: from"));
+        }if (to == null) {
+            return Outcome.failure(new NullClassError(Position.class).with(() -> "parameter: toCell"));
+        }
+    	PositionPair pPaire = new PositionPair(from, to);
+    	
         Either<MessageError, Cell> fromCellEither = getCell(from);
         Either<MessageError, Cell> toCellEither = getCell(to);
 
         if (fromCellEither.isLeft()) {
-            return MovementStatus.failure(fromCellEither.getLeft());
+            return Outcome.failure(pPaire, fromCellEither.getLeft());
         } if (toCellEither.isLeft()) {
-            return MovementStatus.failure(toCellEither.getLeft());
+            return Outcome.failure(pPaire, toCellEither.getLeft());
         }
 
         Cell fromCell = fromCellEither.getRight();
@@ -198,45 +205,47 @@ public class Grid {
      *
      * @param p Le personnage à déplacer.
      * @param to La position cible du mouvement.
-     * @return Un {@code MovementStatus} représentant le résultat du déplacement (succès ou échec).
+     * @return Un {@link Outcome} représentant le résultat du déplacement (succès ou échec).
      */
-    public MovementStatus movePersonnage(Personnage p, Position to) {
+    public Outcome<PositionPair> movePersonnage(Personnage p, Position to) {
         if (p == null) {
-            return MovementStatus.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(new NullClassError(Personnage.class));
         } if (to == null) {
-            return MovementStatus.failure(new NullClassError(Position.class));
+            return Outcome.failure(new NullClassError(Position.class));
         }
 
-        Either<MessageError, Void> personnageCoherent = verifyPersonnagePositionCoherence(p);
+        Either<MessageError, Unit> personnageCoherent = verifyPersonnagePositionCoherence(p);
         if (personnageCoherent.isLeft()) {
-            return MovementStatus.failure(personnageCoherent.getLeft());
+            return Outcome.failure(personnageCoherent.getLeft());
         }
 
-        MovementStatus moveStatus = isMoveAccepted(p, to);
-        if (moveStatus.isFailure()) {
-            return moveStatus;
+        Outcome<PositionPair> isMoveAccepted = isMoveAccepted(p, to);
+        if (isMoveAccepted.isFailure()) {
+            return isMoveAccepted;
         }
+        
+        PositionPair posPair = isMoveAccepted.getResult();
 
         Either<MessageError, Cell> fromCellEither = getCell(p.getPosition());
         Either<MessageError, Cell> toCellEither = getCell(to);
 
         if (fromCellEither.isLeft()) {
-            return MovementStatus.failure(fromCellEither.getLeft());
+            return Outcome.failure(posPair, fromCellEither.getLeft());
         } if (toCellEither.isLeft()) {
-            return MovementStatus.failure(toCellEither.getLeft());
+            return Outcome.failure(posPair, toCellEither.getLeft());
         }
 
         Cell fromCell = fromCellEither.getRight();
         Cell toCell = toCellEither.getRight();
         
-        if (!moveStatus.isBlockingCell()) {
-        	Either<MessageError, Unit> transfer = Cell.transferPersonnage(p, toCell, fromCell);
-            if (transfer.isLeft()) {
-                return MovementStatus.failure(transfer.getLeft());
-            }
-            p.setPosition(to);
+    	Either<MessageError, Unit> transfer = Cell.transferPersonnage(p, toCell, fromCell);
+        if (transfer.isLeft()) {
+            return Outcome.failure(posPair, transfer.getLeft());
         }
-        return moveStatus;
+        
+        p.setPosition(to);
+        
+        return isMoveAccepted;
     }
     
     /**
@@ -245,18 +254,18 @@ public class Grid {
      *
      * @param p Le personnage à déplacer.
      * @param direction La direction du mouvement.
-     * @return Un {@code MovementStatus} représentant le résultat du déplacement (succès ou échec).
+     * @return Un {@link Outcome} représentant le résultat du déplacement (succès ou échec).
      */
-    public MovementStatus movePersonnage(Personnage p, Direction direction) {
+    public Outcome<PositionPair> movePersonnage(Personnage p, Direction direction) {
     	if (p == null) {
-            return MovementStatus.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(new NullClassError(Personnage.class));
         } if (direction == null) {
-            return MovementStatus.failure(new NullClassError(Direction.class));
+            return Outcome.failure(new NullClassError(Direction.class));
         }
         
         Either<MessageError, Position> positionEither = p.getPosition().move(direction);
         if (positionEither.isLeft()) {
-        	return MovementStatus.failure(positionEither.getLeft());
+        	return Outcome.failure(positionEither.getLeft());
         } else {
             return movePersonnage(p, positionEither.getRight());
         }

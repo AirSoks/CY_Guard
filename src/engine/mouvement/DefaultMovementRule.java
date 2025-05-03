@@ -3,45 +3,45 @@ package engine.mouvement;
 import engine.error.*;
 import engine.map.Cell;
 import engine.map.Position;
+import engine.map.Position.PositionPair;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
+import engine.util.Outcome;
 
 /**
- * Implémentation par défaut de {@link MovementRule}.
+ * Implémentation par défaut de la règle de mouvement {@link MovementRule}.
  * <p>
- * Cette règle vérifie :
+ * Cette règle vérifie les conditions préalables au déplacement d'un personnage d'une position à une autre :
  * <ul>
- *     <li>Que tous les paramètres sont non-nuls (personnage, positions, cellules) ;</li>
- *     <li>Que la cellule de départ ou d'arrivée ne bloque pas le mouvement (via {@link Cell#blocksMovement()}).</li>
+ *     <li>Validation des paramètres d'entrée pour s'assurer qu'ils ne sont pas nuls (personnage, positions, cellules).</li>
+ *     <li>Vérification que les cellules de départ et d'arrivée ne bloquent pas le mouvement (via {@link Cell#blocksMovement()}).</li>
  * </ul>
- * Elle retourne :
- * <ul>
- *     <li>un {@link MovementStatus#failure(MessageError)} si une erreur est détectée (paramètre manquant) ;</li>
- *     <li>un {@link MovementStatus#blocking(MessageError)} si une des cellules bloque le mouvement ;</li>
- *     <li>un {@link MovementStatus#success()} si tout est valide.</li>
- * </ul>
- * 
+ * En fonction de l'état des vérifications, cette règle retourne :
+ * Un {@link Outcome} contenant la paire {@link PositionPair} avec le succès ou l'échec détaillé.
+ *
  * @author AirSoks
  * @since 2025-05-02
  * @version 1.0
  */
 public class DefaultMovementRule implements MovementRule {
 
-    /**
-     * Vérifie les conditions pour autoriser un déplacement :
-     * <ul>
-     *     <li>Validation des paramètres (null-check) ;</li>
-     *     <li>Vérification des blocages des cellules.</li>
-     * </ul>
-     *
-     * @param p         Le personnage qui tente de se déplacer.
-     * @param from      La position de départ.
-     * @param to        La position d'arrivée.
-     * @param fromCell  La cellule source.
-     * @param toCell    La cellule destination.
-     * @return Un {@link MovementStatus} reflétant la validité du déplacement.
-     */
+	/**
+	 * Vérifie les conditions pour autoriser un déplacement :
+	 * <ul>
+	 *     <li>Validation des paramètres (null-check) ;</li>
+	 *     <li>Vérification des blocages des cellules.</li>
+	 * </ul>
+	 *
+	 * @param p         Le personnage qui tente de se déplacer.
+	 * @param from      La position de départ.
+	 * @param to        La position d'arrivée.
+	 * @param fromCell  La cellule source.
+	 * @param toCell    La cellule destination.
+	 * @return Un {@link Outcome} contenant toujours la paire {@link PositionPair}
+	 *         avec le succès ou l'échec détaillé.
+	 */
     @Override
-    public MovementStatus isMoveAccepted(Personnage p, Position from, Position to, Cell fromCell, Cell toCell) {
+    public Outcome<PositionPair> isMoveAccepted(Personnage p, Position from, Position to, Cell fromCell, Cell toCell) {
         MessageError error = null;
 
         if (p == null) {
@@ -59,17 +59,19 @@ public class DefaultMovementRule implements MovementRule {
             MessageError e = new NullClassError(Cell.class).with(() -> "parameter: toCell");
             error = (error == null) ? e : error.and(e);
         }
+        
+        PositionPair pPaire = (from != null && to != null) ? new PositionPair(from, to) : null;
 
         if (error != null) {
-            return MovementStatus.failure(error);
+            return Outcome.failure(pPaire, error);
         }
 
         if (fromCell.blocksMovement()) {
-            return MovementStatus.blocking(CellError.blocksMovement(fromCell));
+            return Outcome.failure(pPaire, CellError.blocksMovement(fromCell));
         } if (toCell.blocksMovement()) {
-            return MovementStatus.blocking(CellError.blocksMovement(toCell));
+            return Outcome.failure(pPaire, CellError.blocksMovement(toCell));
         }
 
-        return MovementStatus.success();
+        return Outcome.success(pPaire);
     }
 }

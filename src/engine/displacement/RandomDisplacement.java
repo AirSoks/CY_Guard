@@ -8,6 +8,7 @@ import engine.error.*;
 import engine.map.Direction;
 import engine.map.Grid;
 import engine.map.Position;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
 
@@ -36,9 +37,13 @@ public class RandomDisplacement extends AbstractDisplacement {
      * Calcule un mouvement aléatoire : sélectionne une direction au hasard et retourne
      * la nouvelle position qui en découle (si valide).
      *
+     * Ce mouvement est un déplacement d'une seule case, basé sur une direction choisie aléatoirement.
+     *
      * @param p le personnage concerné
      * @return un {@code Either} contenant la liste d'une seule position (le prochain point),
-     *         ou une erreur si le calcul échoue
+     *         ou une erreur si le calcul échoue.
+     *         - En cas de succès, renvoie une liste contenant une position valide.
+     *         - En cas d'erreur, renvoie une erreur liée à la direction ou à la position du personnage.
      */
     @Override
     public Either<MessageError, List<Position>> calculateMove(Personnage p) {

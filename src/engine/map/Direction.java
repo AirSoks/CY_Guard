@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import engine.error.*;
+import engine.message.MessageError;
 import engine.util.Either;
 
 /**
@@ -89,7 +90,7 @@ public enum Direction {
      *             <li>{@link PositionError#nonAdjacent(Position, Position)} si les positions ne sont pas adjacentes</li>
      *         </ul>
      */
-    public static Either<MessageError, Direction> between(Position from, Position to) {
+    public static Either<MessageError, Direction> adjacentDirection(Position from, Position to) {
         if (from == null) {
             return Either.left(new NullClassError(Position.class).with(() -> "parameter: from"));
         } if (to == null) {
@@ -109,6 +110,49 @@ public enum Direction {
             }
         }
         return Either.left(PositionError.nonAdjacent(from, to));
+    }
+    
+    /**
+     * Donne la direction principale pour aller d'une position à une autre, même si elles ne sont pas adjacentes.
+     *
+     * @param from la position de départ
+     * @param to la position d'arrivée
+     * @return un {@code Either} contenant la direction si trouvée,
+     *         sinon un message d'erreur approprié :
+     *         <ul>
+     *             <li>{@link NullClassError} si un des paramètres est {@code null}</li>
+     *             <li>{@link PositionError#samePosition(Position)} si les deux positions sont identiques</li>
+     *         </ul>
+     */
+    public static Either<MessageError, Direction> mainDirectionTo(Position from, Position to) {
+        if (from == null) {
+            return Either.left(new NullClassError(Position.class).with(() -> "parameter: from"));
+        }
+        if (to == null) {
+            return Either.left(new NullClassError(Position.class).with(() -> "parameter: to"));
+        }
+        if (from == to) {
+            return Either.left(PositionError.samePosition(from));
+        }
+
+        int dx = to.x() - from.x();
+        int dy = to.y() - from.y();
+
+        if (Math.abs(dx) >= Math.abs(dy)) {
+            // Déplacement principal horizontal
+            if (dx > 0) {
+                return Either.right(Direction.RIGHT);
+            } else {
+                return Either.right(Direction.LEFT);
+            }
+        } else {
+            // Déplacement principal vertical
+            if (dy > 0) {
+                return Either.right(Direction.DOWN);
+            } else {
+                return Either.right(Direction.UP);
+            }
+        }
     }
 
     /**

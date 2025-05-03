@@ -6,6 +6,7 @@ import engine.error.*;
 import engine.map.Cell;
 import engine.map.Grid;
 import engine.map.Position;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
 

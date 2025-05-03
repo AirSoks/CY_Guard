@@ -5,6 +5,7 @@ import java.util.Map;
 import engine.error.*;
 import engine.map.Cell;
 import engine.map.Position;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
 

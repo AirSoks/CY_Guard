@@ -10,7 +10,9 @@ import engine.interaction.PersonnageInteractionVisitor;
 import engine.displacement.Displacement;
 import engine.map.Cell;
 import engine.map.Position;
-import engine.mouvement.MovementStatus;
+import engine.map.Position.PositionPair;
+import engine.message.MessageError;
+import engine.util.Outcome;
 import engine.util.Either;
 import engine.vision.Vision;
 
@@ -59,9 +61,9 @@ public abstract class Personnage {
      * 
      * @return Le statut du mouvement (succès ou échec)
      */
-    public MovementStatus move() {
+    public Outcome<PositionPair> move() {
         if (displacement == null) {
-            return MovementStatus.failure(new NullClassError(Displacement.class));
+            return Outcome.failure(new NullClassError(Displacement.class));
         }
         return displacement.move(this);
     }

@@ -1,4 +1,4 @@
-package engine.error;
+package engine.message.error;
 
 import java.util.Collections;
 import java.util.List;

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import engine.error.*;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
 import engine.util.Unit;

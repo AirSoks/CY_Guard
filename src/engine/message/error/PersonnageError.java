@@ -1,4 +1,4 @@
-package engine.error;
+package engine.message.error;
 
 import engine.map.Cell;
 import engine.message.MessageError;

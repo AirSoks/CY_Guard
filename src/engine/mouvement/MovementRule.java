@@ -2,7 +2,9 @@ package engine.mouvement;
 
 import engine.map.Cell;
 import engine.map.Position;
+import engine.map.Position.PositionPair;
 import engine.personnage.Personnage;
+import engine.util.Outcome;
 
 /**
  * Interface représentant une règle de déplacement pour les personnages sur la grille.
@@ -25,8 +27,8 @@ public interface MovementRule {
      * @param to       la position d'arrivée
      * @param fromCell la cellule source correspondant à la position de départ
      * @param toCell   la cellule destination correspondant à la position d'arrivée
-     * @return {@link MovementStatus} indiquant si le déplacement est autorisé ou refusé,
-     *         et éventuellement la raison en cas d'échec
+     * @return Un {@link Outcome} contenant toujours la paire {@link PositionPair}
+	 *         avec le succès ou l'échec détaillé.
      */
-    MovementStatus isMoveAccepted(Personnage p, Position from, Position to, Cell fromCell, Cell toCell);
+	Outcome<PositionPair> isMoveAccepted(Personnage p, Position from, Position to, Cell fromCell, Cell toCell);
 }

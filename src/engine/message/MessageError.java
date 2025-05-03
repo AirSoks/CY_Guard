@@ -1,22 +1,13 @@
-package engine.error;
+package engine.message;
 
 /**
  * Interface représentant un message d'erreur dans le moteur.
- * <p>
- * Fournit également des méthodes utilitaires pour combiner plusieurs erreurs sous forme lisible.
  * 
  * @author AirSoks
  * @since 2025-05-02
  * @version 1.0
  */
-public interface MessageError {
-
-    /**
-     * Retourne le message d'erreur sous forme de chaîne.
-     *
-     * @return le message d'erreur.
-     */
-    String getMessage();
+public interface MessageError extends Message{
     
     /**
      * Combine cette erreur avec une autre en les séparant par une virgule.

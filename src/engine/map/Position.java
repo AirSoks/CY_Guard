@@ -3,6 +3,7 @@ package engine.map;
 import java.util.Objects;
 
 import engine.error.*;
+import engine.message.MessageError;
 import engine.util.Either;
 
 /**
@@ -132,5 +133,100 @@ public final class Position {
     @Override
     public String toString() {
         return "Position{" + "x=" + x + ", y=" + y + '}';
+    }
+    
+    /**
+     * Représente une paire de positions sur une grille 2D.
+     * 
+     * <p>Cette classe permet de regrouper deux positions distinctes, par exemple pour représenter une 
+     * relation ou une transition entre deux points.</p>
+     * 
+     * <p>Elle fournit des méthodes d'accès aux deux positions, ainsi qu'une surcharge de {@code equals},
+     * {@code hashCode} et {@code toString} pour une utilisation fiable en collection ou en débogage.</p>
+     * 
+     * @author AirSoks
+     * @since 2025-05-03
+     * @version 1.0
+     */
+    public static final class PositionPair {
+
+        /**
+         * La première position de la paire.
+         */
+        private final Position first;
+
+        /**
+         * La seconde position de la paire.
+         */
+        private final Position second;
+
+        /**
+         * Construit une nouvelle paire avec les positions spécifiées.
+         *
+         * @param first la première position
+         * @param second la seconde position
+         */
+        public PositionPair(Position first, Position second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        /**
+         * Retourne la première position.
+         *
+         * @return la première position
+         */
+        public Position first() {
+            return first;
+        }
+
+        /**
+         * Retourne la seconde position.
+         *
+         * @return la seconde position
+         */
+        public Position second() {
+            return second;
+        }
+
+        /**
+         * Calcule le code de hachage basé sur les deux positions.
+         *
+         * @return le code de hachage
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+
+        /**
+         * Vérifie l'égalité avec un autre objet.
+         * Deux paires sont égales si elles ont les mêmes positions (dans le même ordre).
+         *
+         * @param obj l'objet à comparer
+         * @return {@code true} si les paires sont identiques, {@code false} sinon
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            PositionPair other = (PositionPair) obj;
+            return first.equals(other.first) && second.equals(other.second);
+        }
+
+        /**
+         * Retourne une représentation sous forme de chaîne de caractères de cette paire.
+         *
+         * @return une chaîne sous la forme {@code PositionPair{first=..., second=...}}
+         */
+        @Override
+        public String toString() {
+            return "PositionPair{" +
+                    "first=" + first +
+                    ", second=" + second +
+                    '}';
+        }
     }
 }

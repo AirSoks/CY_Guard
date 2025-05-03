@@ -8,9 +8,12 @@ import engine.error.*;
 import engine.map.Direction;
 import engine.map.Grid;
 import engine.map.Position;
-import engine.mouvement.MovementStatus;
+import engine.map.Position.PositionPair;
+import engine.message.MessageError;
 import engine.personnage.Personnage;
+import engine.util.Outcome;
 import engine.util.Either;
+import engine.util.Unit;
 
 /**
  * Classe abstraite fournissant une base pour les déplacements de personnages dans une grille.
@@ -45,29 +48,34 @@ public abstract class AbstractDisplacement implements Displacement {
     /**
      * Vérifie si un chemin existe déjà ; sinon, demande à {@link #calculateMove(Personnage)} d'en générer un.
      *
+     * Cette méthode vérifie si un chemin est déjà défini pour le personnage. Si ce n'est pas le cas, elle tente
+     * de calculer un chemin valide pour ce dernier.
+     *
      * @param p le personnage concerné par le déplacement
-     * @return un {@code MovementStatus} indiquant le succès ou l'échec de l'initialisation du chemin
+     * @return un {@code Outcome} indiquant le succès ou l'échec de l'initialisation du chemin.
+     *         - Si un chemin valide est calculé, renvoie un succès avec la mise à jour du chemin.
+     *         - Si le calcul échoue, renvoie un échec avec l'erreur associée.
      */
-    private MovementStatus checkOrUpdatePath(Personnage p) {
+    private Outcome<Unit> checkOrUpdatePath(Personnage p) {
         if (p == null) {
-            return MovementStatus.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(new NullClassError(Personnage.class));
         }
         
         if (path == null || path.isEmpty()) {
             Either<MessageError, List<Position>> isNewMoveValide = calculateMove(p);
 
             if (isNewMoveValide.isLeft()) {
-                return MovementStatus.failure(isNewMoveValide.getLeft());
+                return Outcome.failure(isNewMoveValide.getLeft());
             }
 
             List<Position> newPath = isNewMoveValide.getRight();
             if (newPath == null || newPath.isEmpty()) {
-                return MovementStatus.failure(PathError.emptyPath());
+                return Outcome.failure(PathError.emptyPath());
             }
             path = new ArrayList<>(newPath);
         }
         
-        return MovementStatus.success();
+        return Outcome.success(Unit.get());
     }
 
     /**
@@ -75,22 +83,24 @@ public abstract class AbstractDisplacement implements Displacement {
      * Si aucun chemin n'est défini, tente d'en calculer un avant le déplacement.
      *
      * @param p le personnage à déplacer
-     * @return un {@code MovementStatus} représentant le résultat du déplacement
+     * @return un {@link Outcome} indiquant le résultat du déplacement.
+     *         - Si le mouvement échoue (par exemple, si la direction n'est pas valide), renvoie un échec avec l'erreur.
+     *         - Si le mouvement réussit, renvoie un succès avec la nouvelle position du personnage.
      */
     @Override
-    public MovementStatus move(Personnage p) {
-        MovementStatus checkStatus = checkOrUpdatePath(p);
+    public Outcome<PositionPair> move(Personnage p) {
+    	Outcome<Unit> checkStatus = checkOrUpdatePath(p);
         if (checkStatus.isFailure()) {
-            return checkStatus;
+            return Outcome.failure(checkStatus.getErrorMessage());
         }
 
-        Either<MessageError, Direction> isDirBetween = Direction.between(p.getPosition(), path.get(0));
-        if (isDirBetween.isLeft()) {
+        Either<MessageError, Direction> isDirAdjacent = Direction.adjacentDirection(p.getPosition(), path.get(0));
+        if (isDirAdjacent.isLeft()) {
             this.path = new ArrayList<>();
-            return MovementStatus.failure(isDirBetween.getLeft());
+            return Outcome.failure(isDirAdjacent.getLeft());
         }
 
-        MovementStatus status = grid.movePersonnage(p, isDirBetween.getRight());
+        Outcome<PositionPair> status = grid.movePersonnage(p, isDirAdjacent.getRight());
         if (!status.isFailure()) {
             path.remove(0);
         }
@@ -101,7 +111,8 @@ public abstract class AbstractDisplacement implements Displacement {
      * Renvoie le chemin actuellement mémorisé.
      *
      * @return un {@code Either} contenant la liste des positions du chemin actuel,
-     *         ou une erreur si aucun chemin n'est défini
+     *         ou une erreur si aucun chemin n'est défini.
+     *         - Si le chemin est vide ou inexistant, renvoie une erreur {@link PathError.emptyPath()}.
      */
     @Override
     public Either<MessageError, List<Position>> getPath() {

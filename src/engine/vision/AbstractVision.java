@@ -1,14 +1,15 @@
 package engine.vision;
 
+import java.util.List;
 import java.util.Map;
 
-import engine.error.*;
 import engine.map.Cell;
 import engine.map.Grid;
 import engine.map.Position;
 import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
+import engine.util.Outcome;
 
 public class AbstractVision implements Vision {
 	
@@ -21,7 +22,12 @@ public class AbstractVision implements Vision {
 	}
 
 	@Override
-	public Either<MessageError, Map<Position, Cell>> see(Personnage personnage) {
+	public Outcome<Map<Position, Cell>> see(Personnage personnage) {
+		return null;
+	}
+
+	@Override
+	public Either<MessageError, List<Position>> getVision() {
 		return null;
 	}
 

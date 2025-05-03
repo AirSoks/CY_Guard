@@ -12,6 +12,7 @@ import engine.map.Cell;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
+import engine.message.error.MoveError;
 import engine.util.Outcome;
 import engine.util.Either;
 import engine.vision.Vision;
@@ -63,7 +64,7 @@ public abstract class Personnage {
      */
     public Outcome<PositionPair> move() {
         if (displacement == null) {
-            return Outcome.failure(new NullClassError(Displacement.class));
+            return Outcome.failure(null, new MoveError(null).with(new NullClassError(Displacement.class)));
         }
         return displacement.move(this);
     }
@@ -73,9 +74,9 @@ public abstract class Personnage {
      * 
      * @return Soit une erreur de message si la vision est nulle, soit une carte des positions et cellules visibles
      */
-    public Either<MessageError, Map<Position, Cell>> see() {
+    public Outcome<Map<Position, Cell>> see() {
         if (vision == null) {
-            return Either.left(new NullClassError(Vision.class));
+            return Outcome.failure(null, new NullClassError(Vision.class));
         }
         return vision.see(this);
     }

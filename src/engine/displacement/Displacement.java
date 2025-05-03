@@ -38,7 +38,7 @@ public interface Displacement {
      *             <li>Un {@link MessageError} décrivant la cause de l'échec (par exemple : personnage nul, impossibilité de calculer un chemin) en cas d'erreur.</li>
      *         </ul>
      */
-    Either<MessageError, List<Position>> calculateMove(Personnage p);
+	public Either<MessageError, List<Position>> calculateMove(Personnage p);
 
     /**
      * Exécute le déplacement du personnage selon la logique propre à l'implémentation.
@@ -52,7 +52,7 @@ public interface Displacement {
      *             <li>En cas d'échec : la paire peut refléter la tentative de déplacement même si celui-ci est bloqué, accompagnée d'une erreur décrivant la raison.</li>
      *         </ul>
      */
-    Outcome<PositionPair> move(Personnage p);
+	public Outcome<PositionPair> move(Personnage p);
 
     /**
      * Retourne le chemin actuellement stocké ou calculé pour le déplacement.
@@ -65,5 +65,5 @@ public interface Displacement {
      *             <li>Un {@link MessageError} si aucun chemin n'a été défini ou si une erreur est survenue.</li>
      *         </ul>
      */
-    Either<MessageError, List<Position>> getPath();
+	public Either<MessageError, List<Position>> getPath();
 }

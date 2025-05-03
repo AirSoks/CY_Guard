@@ -7,7 +7,7 @@ package engine.message;
  * @since 2025-05-02
  * @version 1.0
  */
-public interface MessageError extends Message{
+public interface MessageError extends Message {
     
     /**
      * Combine cette erreur avec une autre en les séparant par une virgule.

@@ -3,6 +3,7 @@ package engine.map;
 import engine.error.*;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
+import engine.message.success.MoveSuccess;
 import engine.mouvement.MovementRule;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
@@ -174,13 +175,13 @@ public class Grid {
      */
     public Outcome<PositionPair> isMoveAccepted(Personnage p, Position to) {
     	if (p == null) {
-            return Outcome.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(null, new NullClassError(Personnage.class));
         } 
     	Position from = p.getPosition();
     	if (from == null) {
-            return Outcome.failure(new NullClassError(Position.class).with(() -> "parameter: from"));
+            return Outcome.failure(null, new NullClassError(Position.class).with(() -> "parameter: from"));
         }if (to == null) {
-            return Outcome.failure(new NullClassError(Position.class).with(() -> "parameter: toCell"));
+            return Outcome.failure(null, new NullClassError(Position.class).with(() -> "parameter: toCell"));
         }
     	PositionPair pPaire = new PositionPair(from, to);
     	
@@ -209,14 +210,18 @@ public class Grid {
      */
     public Outcome<PositionPair> movePersonnage(Personnage p, Position to) {
         if (p == null) {
-            return Outcome.failure(new NullClassError(Personnage.class));
-        } if (to == null) {
-            return Outcome.failure(new NullClassError(Position.class));
+            return Outcome.failure(null, new NullClassError(Personnage.class));
+        }
+        Position from = p.getPosition();
+    	if (from == null) {
+            return Outcome.failure(null, new NullClassError(Position.class).with(() -> "parameter: from"));
+        }if (to == null) {
+            return Outcome.failure(null, new NullClassError(Position.class).with(() -> "parameter: to"));
         }
 
         Either<MessageError, Unit> personnageCoherent = verifyPersonnagePositionCoherence(p);
         if (personnageCoherent.isLeft()) {
-            return Outcome.failure(personnageCoherent.getLeft());
+            return Outcome.failure(null, personnageCoherent.getLeft());
         }
 
         Outcome<PositionPair> isMoveAccepted = isMoveAccepted(p, to);
@@ -226,7 +231,7 @@ public class Grid {
         
         PositionPair posPair = isMoveAccepted.getResult();
 
-        Either<MessageError, Cell> fromCellEither = getCell(p.getPosition());
+        Either<MessageError, Cell> fromCellEither = getCell(from);
         Either<MessageError, Cell> toCellEither = getCell(to);
 
         if (fromCellEither.isLeft()) {
@@ -245,7 +250,7 @@ public class Grid {
         
         p.setPosition(to);
         
-        return isMoveAccepted;
+        return Outcome.success(posPair, MoveSuccess.success(posPair));
     }
     
     /**
@@ -258,14 +263,17 @@ public class Grid {
      */
     public Outcome<PositionPair> movePersonnage(Personnage p, Direction direction) {
     	if (p == null) {
-            return Outcome.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(null, new NullClassError(Personnage.class));
+        }Position from = p.getPosition();
+    	if (from == null) {
+            return Outcome.failure(null, new NullClassError(Position.class).with(() -> "parameter: from"));
         } if (direction == null) {
-            return Outcome.failure(new NullClassError(Direction.class));
+            return Outcome.failure(null, new NullClassError(Direction.class));
         }
         
-        Either<MessageError, Position> positionEither = p.getPosition().move(direction);
+        Either<MessageError, Position> positionEither = from.move(direction);
         if (positionEither.isLeft()) {
-        	return Outcome.failure(positionEither.getLeft());
+        	return Outcome.failure(null, positionEither.getLeft());
         } else {
             return movePersonnage(p, positionEither.getRight());
         }

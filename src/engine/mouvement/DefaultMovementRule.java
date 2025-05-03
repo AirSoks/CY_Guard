@@ -1,10 +1,11 @@
 package engine.mouvement;
 
-import engine.error.*;
 import engine.map.Cell;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
-import engine.message.MessageError;
+import engine.message.*;
+import engine.message.error.*;
+import engine.message.success.*;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
 
@@ -72,6 +73,6 @@ public class DefaultMovementRule implements MovementRule {
             return Outcome.failure(pPaire, CellError.blocksMovement(toCell));
         }
 
-        return Outcome.success(pPaire);
+        return Outcome.success(pPaire, MoveSuccess.validation(pPaire));
     }
 }

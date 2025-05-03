@@ -153,12 +153,12 @@ public final class Position {
         /**
          * La première position de la paire.
          */
-        private final Position first;
+        private final Position from;
 
         /**
          * La seconde position de la paire.
          */
-        private final Position second;
+        private final Position to;
 
         /**
          * Construit une nouvelle paire avec les positions spécifiées.
@@ -166,9 +166,9 @@ public final class Position {
          * @param first la première position
          * @param second la seconde position
          */
-        public PositionPair(Position first, Position second) {
-            this.first = first;
-            this.second = second;
+        public PositionPair(Position from, Position to) {
+            this.from = from;
+            this.to = to;
         }
 
         /**
@@ -176,8 +176,8 @@ public final class Position {
          *
          * @return la première position
          */
-        public Position first() {
-            return first;
+        public Position getFrom() {
+            return from;
         }
 
         /**
@@ -185,8 +185,8 @@ public final class Position {
          *
          * @return la seconde position
          */
-        public Position second() {
-            return second;
+        public Position getTo() {
+            return to;
         }
 
         /**
@@ -196,7 +196,7 @@ public final class Position {
          */
         @Override
         public int hashCode() {
-            return Objects.hash(first, second);
+            return Objects.hash(from, to);
         }
 
         /**
@@ -213,7 +213,7 @@ public final class Position {
             if (obj == null || getClass() != obj.getClass())
                 return false;
             PositionPair other = (PositionPair) obj;
-            return first.equals(other.first) && second.equals(other.second);
+            return from.equals(other.from) && to.equals(other.to);
         }
 
         /**
@@ -224,8 +224,8 @@ public final class Position {
         @Override
         public String toString() {
             return "PositionPair{" +
-                    "first=" + first +
-                    ", second=" + second +
+                    "first=" + from +
+                    ", second=" + to +
                     '}';
         }
     }

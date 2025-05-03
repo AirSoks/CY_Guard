@@ -10,6 +10,7 @@ import engine.map.Grid;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
+import engine.message.error.MoveError;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
 import engine.util.Either;
@@ -58,24 +59,24 @@ public abstract class AbstractDisplacement implements Displacement {
      */
     private Outcome<Unit> checkOrUpdatePath(Personnage p) {
         if (p == null) {
-            return Outcome.failure(new NullClassError(Personnage.class));
+            return Outcome.failure(null, new NullClassError(Personnage.class));
         }
         
         if (path == null || path.isEmpty()) {
             Either<MessageError, List<Position>> isNewMoveValide = calculateMove(p);
 
             if (isNewMoveValide.isLeft()) {
-                return Outcome.failure(isNewMoveValide.getLeft());
+                return Outcome.failure(null, isNewMoveValide.getLeft());
             }
 
             List<Position> newPath = isNewMoveValide.getRight();
             if (newPath == null || newPath.isEmpty()) {
-                return Outcome.failure(PathError.emptyPath());
+                return Outcome.failure(null, PathError.emptyPath());
             }
             path = new ArrayList<>(newPath);
         }
         
-        return Outcome.success(Unit.get());
+        return Outcome.success(Unit.get(), null);
     }
 
     /**
@@ -89,22 +90,24 @@ public abstract class AbstractDisplacement implements Displacement {
      */
     @Override
     public Outcome<PositionPair> move(Personnage p) {
-    	Outcome<Unit> checkStatus = checkOrUpdatePath(p);
-        if (checkStatus.isFailure()) {
-            return Outcome.failure(checkStatus.getErrorMessage());
+    	Outcome<Unit> checkPath = checkOrUpdatePath(p);
+        if (checkPath.isFailure()) {
+            return Outcome.failure(null, new MoveError(null).then(checkPath.getMessageError()));
         }
 
         Either<MessageError, Direction> isDirAdjacent = Direction.adjacentDirection(p.getPosition(), path.get(0));
         if (isDirAdjacent.isLeft()) {
             this.path = new ArrayList<>();
-            return Outcome.failure(isDirAdjacent.getLeft());
+            return Outcome.failure(null, new MoveError(null).then(isDirAdjacent.getLeft()));
         }
 
-        Outcome<PositionPair> status = grid.movePersonnage(p, isDirAdjacent.getRight());
-        if (!status.isFailure()) {
+        Outcome<PositionPair> isMoveValide = grid.movePersonnage(p, isDirAdjacent.getRight());
+        if (!isMoveValide.isFailure()) {
             path.remove(0);
+        } else {
+        	return Outcome.failure(isMoveValide.getResult(), new MoveError(null).then(isMoveValide.getMessageError()));
         }
-        return status;
+        return isMoveValide;
     }
 
     /**

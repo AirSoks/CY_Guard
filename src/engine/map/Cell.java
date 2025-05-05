@@ -152,7 +152,7 @@ public class Cell {
      * @since 2025-05-05
      * @version 1.0
      */
-    public class CellPersonnageManager extends AbstractPersonnageManager {
+    public static class CellPersonnageManager extends AbstractPersonnageManager {
 
         /**
          * Crée un gestionnaire pour la cellule avec un {@link HashSet} vide.

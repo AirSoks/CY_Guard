@@ -1,21 +1,17 @@
 package engine.personnage;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
-import engine.error.*;
 import engine.interaction.PersonnageInteractionVisitor;
-import engine.displacement.Displacement;
-import engine.map.Cell;
+import engine.listManager.TargetManager;
+import engine.action.displacement.Displacement;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
-import engine.message.error.MoveError;
-import engine.util.Outcome;
+import engine.message.error.*;
 import engine.util.Either;
-import engine.vision.Vision;
+import engine.util.Outcome;
+import engine.action.vision.Vision;
 
 /**
  * Représente un personnage dans le jeu.
@@ -34,6 +30,11 @@ public abstract class Personnage {
     private Position position;
     
     /** 
+     * Le mécanisme de ciblages du personnage 
+     */
+    private TargetManager targetManager;
+    
+    /** 
      * Le mécanisme de déplacement du personnage 
      */
     private Displacement displacement;
@@ -43,20 +44,30 @@ public abstract class Personnage {
      */
     private Vision vision;
     
-    /** 
-     * Set des personnages cibles 
+    /**
+     * Constructeur pour initialiser le personnage avec une position, des cibles, un déplacement et une vision.
+     * 
+     * @param position La position initiale du personnage
+     * @param TargetManager Les cibles du personnage
+     * @param Displacement Le déplacement initiale du personnage
+     * @param Vision La vision initiale du personnage
      */
-    protected final Set<Personnage> targets = new HashSet<>();
-
+    public Personnage(Position position, TargetManager targetManager, Displacement displacement, Vision vision) {
+    	this.position = position;
+    	this.targetManager = targetManager;
+    	this.displacement = displacement;
+    	this.vision = vision;
+    }
+    
     /**
      * Constructeur pour initialiser le personnage avec une position donnée.
      * 
      * @param position La position initiale du personnage
      */
     public Personnage(Position position) {
-        this.position = position;
+    	this(position, null, null, null);
     }
-
+    
     /**
      * Déplace le personnage en utilisant son mécanisme de déplacement.
      * 
@@ -66,7 +77,7 @@ public abstract class Personnage {
         if (displacement == null) {
             return Outcome.failure(null, new MoveError(null).with(new NullClassError(Displacement.class)));
         }
-        return displacement.move(this);
+        return displacement.execute(this);
     }
     
     /**
@@ -74,65 +85,44 @@ public abstract class Personnage {
      * 
      * @return Soit une erreur de message si la vision est nulle, soit une carte des positions et cellules visibles
      */
-    public Outcome<Map<Position, Cell>> see() {
+    public Either<MessageError, List<Position>> see() {
         if (vision == null) {
-            return Outcome.failure(null, new NullClassError(Vision.class));
+            return Either.left(new NullClassError(Vision.class));
         }
-        return vision.see(this);
+        return vision.calculate(this);
     }
-
-    /**
-     * Récupère la position actuelle du personnage.
-     * 
-     * @return La position du personnage
-     */
+    
     public Position getPosition() {
         return position;
     }
-
-    /**
-     * Modifie la position du personnage.
-     * 
-     * @param position La nouvelle position du personnage
-     */
+    
     public void setPosition(Position position) {
         this.position = position;
     }
-
-    /**
-     * Récupère le Set des personnages cibles du personnage.
-     * 
-     * @return Un Set des personnages cibles
-     */
-    public Set<Personnage> getTargets() {
-        return Collections.unmodifiableSet(targets);
-    }
-
-    /**
-     * Ajoute un personnage au Set des cibles du personnage.
-     * Chaque sous-classe doit définir sa propre logique pour déterminer qui peut être une cible valide.
-     *
-     * @param target Le personnage à ajouter au Set des cibles
-     */
-    public abstract void addTarget(Personnage target);
-
-    /**
-     * Retire un personnage du Set des cibles du personnage.
-     * 
-     * @param target Le personnage à retirer du Set des cibles
-     */
-    public void removeTarget(Personnage target) {
-        if (target != null) {
-            targets.remove(target);
-        }
+    
+    public TargetManager getTargetManager() {
+        return targetManager;
     }
     
-    /**
-     * Méthode abstraite pour obtenir la cible suivante.
-     * 
-     * @return La cible suivante
-     */
-    public abstract Personnage getTarget();
+    public void setTargetManager(TargetManager targetManager) {
+		this.targetManager = targetManager;
+	}
+
+	public Displacement getDisplacement() {
+		return displacement;
+	}
+
+	public void setDisplacement(Displacement displacement) {
+		this.displacement = displacement;
+	}
+
+	public Vision getVision() {
+		return vision;
+	}
+
+	public void setVision(Vision vision) {
+		this.vision = vision;
+	}
 
     /**
      * Déclenche une interaction entre ce personnage et un autre personnage.

@@ -16,7 +16,7 @@ public interface PersonnageInteractionVisitor {
     /**
      * Visite un gardien.
      *
-     * @param guardian Le gardien à visiter
+     * @param guardian Le gardien à visiter 
      */
     void visitGuardian(Guardian guardian);
 

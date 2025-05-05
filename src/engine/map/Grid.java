@@ -1,6 +1,6 @@
 package engine.map;
 
-import engine.error.*;
+import engine.message.error.*;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
 import engine.message.success.MoveSuccess;
@@ -30,7 +30,6 @@ public class Grid {
     private int width;
     private int height;
     private Cell[][] cells;
-
     
     /**
      * Constructeur pour créer une grille avec une largeur, une hauteur et une règle de mouvement spécifiques.
@@ -126,7 +125,7 @@ public class Grid {
 
         if (cellOpt.isRight()) {
             Cell cell = cellOpt.getRight();
-            if (cell.getPersonnages().contains(p)) {
+            if (cell.getPersonnageManager().getPersonnages().contains(p)) {
                 return Either.right(Unit.get());
             } else {
                 return Either.left(new PersonnageError(p, cell));
@@ -146,9 +145,8 @@ public class Grid {
     public Either<MessageError, Personnage> addPersonnage(Personnage p) {
     	if (p == null) {
             return Either.left(new NullClassError(Personnage.class));
-        }
-
-        Position position = p.getPosition();
+        } 
+    	Position position = p.getPosition();
         Either<MessageError, Unit> isValideResult = isInBounds(position);
         if (isValideResult.isLeft()) {
             return Either.left(isValideResult.getLeft());
@@ -160,7 +158,7 @@ public class Grid {
         }
 
         Cell cell = cellEither.getRight();
-        cell.addPersonnage(p);
+        cell.getPersonnageManager().addPersonnage(p);
 
         return Either.right(p);
     }

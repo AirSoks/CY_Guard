@@ -2,7 +2,7 @@ package engine.map;
 
 import java.util.Objects;
 
-import engine.error.*;
+import engine.message.error.*;
 import engine.message.MessageError;
 import engine.util.Either;
 

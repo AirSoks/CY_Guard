@@ -1,11 +1,10 @@
 package engine.map;
 
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 
-import engine.error.*;
+import engine.message.error.*;
+import engine.listManager.AbstractPersonnageManager;
+import engine.listManager.PersonnageManager;
 import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
@@ -13,11 +12,18 @@ import engine.util.Unit;
 
 /**
  * Représente une cellule dans une carte, pouvant contenir des personnages et un type d'obstacle.
- * <p>Chaque cellule peut avoir un obstacle qui bloque soit le mouvement, soit la vision, ou les deux. Les personnages peuvent être ajoutés ou retirés d'une cellule.</p>
+ * <p>
+ * Chaque cellule peut avoir un obstacle qui bloque soit le mouvement, soit la vision, ou les deux.
+ * Les personnages peuvent être ajoutés ou retirés d'une cellule via un gestionnaire dédié.
+ * </p>
+ * <p>
+ * Cette classe fournit également une méthode statique pour transférer un personnage d'une cellule à une autre,
+ * tout en gérant les cas d'erreurs (paramètres nuls, personnage absent...).
+ * </p>
  * 
  * @author AirSoks
  * @since 2025-05-02
- * @version 1.0
+ * @version 1.1
  */
 public class Cell {
     
@@ -27,14 +33,9 @@ public class Cell {
     private final ObstacleType obstacle;
     
     /**
-     * Liste des personnages présents dans la cellule.
+     * Gestionnaire des personnages présents dans la cellule.
      */
-    private final List<Personnage> personnages;
-    
-    /**
-     * Verrou pour garantir un accès thread-safe aux personnages.
-     */
-    private final ReentrantLock lock = new ReentrantLock();
+    private final CellPersonnageManager personnageManager;
 
     /**
      * Construit une cellule avec le type d'obstacle spécifié.
@@ -43,7 +44,7 @@ public class Cell {
      */
     public Cell(ObstacleType obstacle) {
         this.obstacle = obstacle;
-        this.personnages = new ArrayList<>();
+        this.personnageManager = new CellPersonnageManager();
     }
 
     /**
@@ -56,111 +57,18 @@ public class Cell {
     }
 
     /**
-     * Retourne une liste non modifiable des personnages présents dans la cellule.
+     * Retourne le gestionnaire des personnages de la cellule.
      *
-     * @return Liste des personnages dans la cellule
+     * @return Le gestionnaire des personnages
      */
-    public List<Personnage> getPersonnages() {
-        return Collections.unmodifiableList(personnages);
-    }
-
-    /**
-     * Retourne une liste des personnages d'un type spécifique dans la cellule.
-     *
-     * @param type Le type de personnage à filtrer
-     * @param <T> Le sous-type de {@link Personnage}
-     * @return Liste non modifiable des personnages du type spécifié
-     */
-    public <T extends Personnage> List<T> getPersonnagesOfType(Class<T> type) {
-        lock.lock();
-        try {
-            List<T> filtered = new ArrayList<>();
-            for (Personnage p : personnages) {
-                if (type.isInstance(p)) {
-                    filtered.add(type.cast(p));
-                }
-            }
-            return Collections.unmodifiableList(filtered);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Ajoute un personnage à la cellule.
-     *
-     * @param personnage Le personnage à ajouter
-     */
-    public void addPersonnage(Personnage personnage) {
-        lock.lock();
-        try {
-            personnages.add(personnage);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Ajoute une liste de personnages à la cellule.
-     *
-     * @param personnages La liste des personnages à ajouter
-     */
-    public void addPersonnages(List<Personnage> personnages) {
-        lock.lock();
-        try {
-            this.personnages.addAll(personnages);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Supprime un personnage de la cellule.
-     *
-     * @param personnage Le personnage à supprimer
-     */
-    public void removePersonnage(Personnage personnage) {
-        lock.lock();
-        try {
-            personnages.remove(personnage);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Supprime une liste de personnages de la cellule.
-     *
-     * @param personnages La liste des personnages à supprimer
-     */
-    public void removePersonnages(List<Personnage> personnages) {
-        lock.lock();
-        try {
-            this.personnages.removeAll(personnages);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Supprime tous les personnages d'un type donné de la cellule.
-     *
-     * @param type Le type de personnage à supprimer
-     * @param <T> Le sous-type de {@link Personnage}
-     */
-    public <T extends Personnage> void removePersonnagesOfType(Class<T> type) {
-        lock.lock();
-        try {
-            personnages.removeIf(p -> type.isInstance(p));
-        } finally {
-            lock.unlock();
-        }
+    public PersonnageManager getPersonnageManager() {
+        return personnageManager;
     }
 
     /**
      * Indique si l'obstacle de la cellule bloque la vision.
      *
-     * @return true si la vision est bloquée, false sinon
+     * @return {@code true} si la vision est bloquée ; {@code false} sinon
      */
     public boolean blocksVision() {
         return obstacle.blocksVision();
@@ -169,35 +77,44 @@ public class Cell {
     /**
      * Indique si l'obstacle de la cellule bloque le déplacement.
      *
-     * @return true si le déplacement est bloqué, false sinon
+     * @return {@code true} si le déplacement est bloqué ; {@code false} sinon
      */
     public boolean blocksMovement() {
         return obstacle.blocksMovement();
     }
     
     /**
-     * Tente de transférer un personnage d'une cellule à une autre. 
-     * Le transfert échoue si le personnage n'est pas présent dans la cellule de départ.
+     * Tente de transférer un personnage d'une cellule à une autre.
+     * <p>
+     * Le transfert échoue si l'un des paramètres est {@code null} ou si le personnage n'est pas présent dans la cellule source.
+     * La méthode est thread-safe grâce à la synchronisation des cellules source et destination.
+     * </p>
      *
-     * @param from La cellule d'origine
-     * @param to La cellule de destination
-     * @param p Le personnage à transférer
-     * @return Un {@link Either} contenant une erreur ou un objet {@link Unit} si le transfert est réussi
+     * @param p    Le personnage à transférer
+     * @param from La cellule source d'où retirer le personnage
+     * @param to   La cellule destination où ajouter le personnage
+     * @return Un {@link Either} contenant :
+     * <ul>
+     *     <li>à gauche : un {@link MessageError} en cas d'erreur (paramètre null ou personnage absent) ;</li>
+     *     <li>à droite : un objet {@link Unit} si le transfert est réussi.</li>
+     * </ul>
      */
-    public static Either<MessageError,Unit> transferPersonnage(Personnage p, Cell from, Cell to) {
-    	MessageError error = null;
-    	
+    public static Either<MessageError, Unit> transferPersonnage(Personnage p, Cell from, Cell to) {
+        MessageError error = null;
+
         if (from == null) {
-        	MessageError e = new NullClassError(Cell.class).with(() -> "parameter: from");
-        	error = (error == null) ? e : error.and(e);
-        } if (to == null) {
-        	MessageError e = new NullClassError(Cell.class).with(() -> "parameter: to");
-        	error = (error == null) ? e : error.and(e);
-        } if (p == null) {
-        	MessageError e = new NullClassError(Personnage.class);
-        	error = (error == null) ? e : error.and(e);
+            MessageError e = new NullClassError(Cell.class).with(() -> "parameter: from");
+            error = (error == null) ? e : error.and(e);
         }
-        
+        if (to == null) {
+            MessageError e = new NullClassError(Cell.class).with(() -> "parameter: to");
+            error = (error == null) ? e : error.and(e);
+        }
+        if (p == null) {
+            MessageError e = new NullClassError(Personnage.class);
+            error = (error == null) ? e : error.and(e);
+        }
+
         if (error != null) {
             return Either.left(error);
         }
@@ -206,24 +123,56 @@ public class Cell {
             return Either.right(Unit.get());
         }
 
-        int hashFrom = System.identityHashCode(from);
-        int hashTo = System.identityHashCode(to);
+        synchronized (from) {
+            synchronized (to) {
+                PersonnageManager fromManager = from.getPersonnageManager();
+                PersonnageManager toManager = to.getPersonnageManager();
 
-        Cell first = hashFrom < hashTo ? from : to;
-        Cell second = from == first ? to : from;
-
-        first.lock.lock();
-        second.lock.lock();
-        try {
-            if (from.personnages.remove(p)) {
-                to.personnages.add(p);
-            } else {
-                return Either.left(new PersonnageError(p, from));
+                if (fromManager.getPersonnages().contains(p)) {
+                    fromManager.removePersonnage(p);
+                    toManager.addPersonnage(p);
+                } else {
+                    return Either.left(new PersonnageError(p, from));
+                }
             }
-        } finally {
-            second.lock.unlock();
-            first.lock.unlock();
         }
         return Either.right(Unit.get());
+    }
+    
+    /**
+     * Implémentation concrète de {@link AbstractPersonnageManager} pour gérer les personnages dans une cellule.
+     * <p>
+     * Cette implémentation accepte tous les personnages sans restriction particulière
+     * (tout personnage non nul est accepté).
+     * </p>
+     * Utilise un {@link HashSet} pour stocker les personnages, garantissant l'unicité
+     * des éléments.
+     * 
+     * @author AirSoks
+     * @since 2025-05-05
+     * @version 1.0
+     */
+    public class CellPersonnageManager extends AbstractPersonnageManager {
+
+        /**
+         * Crée un gestionnaire pour la cellule avec un {@link HashSet} vide.
+         */
+        public CellPersonnageManager() {
+            super(new HashSet<>());
+        }
+
+        /**
+         * Vérifie si le personnage fourni est valide pour être ajouté à la cellule.
+         * <p>
+         * Ici, tout personnage non nul est considéré comme valide.
+         * </p>
+         *
+         * @param personnage Le personnage à vérifier
+         * @return {@code true} si le personnage est non nul ; {@code false} sinon
+         */
+        @Override
+        protected boolean isValidTarget(Personnage personnage) {
+            return personnage != null;
+        }
     }
 }

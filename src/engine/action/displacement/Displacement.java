@@ -1,7 +1,8 @@
-package engine.displacement;
+package engine.action.displacement;
 
 import java.util.List;
 
+import engine.action.ActiveAction;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.message.MessageError;
@@ -24,9 +25,9 @@ import engine.util.Either;
  * 
  * @author AirSoks
  * @since 2025-05-02
- * @version 1.0
+ * @version 1.1
  */
-public interface Displacement {
+public interface Displacement extends ActiveAction<Personnage, Either<MessageError, List<Position>>, Outcome<PositionPair>> {
 
     /**
      * Calcule un chemin que doit suivre le personnage spécifié.
@@ -38,7 +39,8 @@ public interface Displacement {
      *             <li>Un {@link MessageError} décrivant la cause de l'échec (par exemple : personnage nul, impossibilité de calculer un chemin) en cas d'erreur.</li>
      *         </ul>
      */
-	public Either<MessageError, List<Position>> calculateMove(Personnage p);
+	@Override
+    Either<MessageError, List<Position>> calculate(Personnage personnage);
 
     /**
      * Exécute le déplacement du personnage selon la logique propre à l'implémentation.
@@ -52,7 +54,8 @@ public interface Displacement {
      *             <li>En cas d'échec : la paire peut refléter la tentative de déplacement même si celui-ci est bloqué, accompagnée d'une erreur décrivant la raison.</li>
      *         </ul>
      */
-	public Outcome<PositionPair> move(Personnage p);
+	@Override
+    Outcome<PositionPair> execute(Personnage personnage);
 
     /**
      * Retourne le chemin actuellement stocké ou calculé pour le déplacement.
@@ -65,5 +68,6 @@ public interface Displacement {
      *             <li>Un {@link MessageError} si aucun chemin n'a été défini ou si une erreur est survenue.</li>
      *         </ul>
      */
-	public Either<MessageError, List<Position>> getPath();
+	@Override
+    Either<MessageError, List<Position>> getCurrent();
 }

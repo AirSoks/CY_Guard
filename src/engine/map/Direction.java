@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import engine.error.*;
+import engine.message.error.*;
 import engine.message.MessageError;
 import engine.util.Either;
 

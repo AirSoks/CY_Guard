@@ -31,8 +31,8 @@ public class IntruderInteraction implements PersonnageInteractionVisitor {
      */
     @Override
     public void visitGuardian(Guardian target) {
-        // Exemple : évasion
-        if (source.getTarget() instanceof Guardian) {
+        // On ajoute la position de l'intrus pour l'évasion
+        if (source.getTargetManager().getTarget() instanceof Guardian) {
             // source.cooperate(target);
         }
     }
@@ -45,7 +45,6 @@ public class IntruderInteraction implements PersonnageInteractionVisitor {
      */
     @Override
     public void visitIntruder(Intruder target) {
-        // Exemple : coopération
-        // source.cooperate(target);
+        // On récupère les gardiens vu de l'autre intrus.
     }
 }

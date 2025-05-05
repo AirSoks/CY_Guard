@@ -1,10 +1,10 @@
-package engine.displacement;
+package engine.action.displacement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import engine.error.*;
+import engine.message.error.*;
 import engine.map.Direction;
 import engine.map.Grid;
 import engine.map.Position;
@@ -46,7 +46,7 @@ public class RandomDisplacement extends AbstractDisplacement {
      *         - En cas d'erreur, renvoie une erreur liée à la direction ou à la position du personnage.
      */
     @Override
-    public Either<MessageError, List<Position>> calculateMove(Personnage p) {
+    public Either<MessageError, List<Position>> calculate(Personnage p) {
         if (p == null) {
             return Either.left(new NullClassError(Personnage.class));
         } Position position = p.getPosition();
@@ -60,7 +60,7 @@ public class RandomDisplacement extends AbstractDisplacement {
             return Either.left(positionEither.getLeft());
         }
 
-        List<Position> list = new ArrayList<>(Arrays.asList(positionEither.getRight()));
-        return Either.right(list);
+        this.path = new ArrayList<>(Arrays.asList(positionEither.getRight()));
+        return Either.right(path);
     }
 }

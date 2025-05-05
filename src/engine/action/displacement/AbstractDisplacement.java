@@ -1,16 +1,15 @@
-package engine.displacement;
+package engine.action.displacement;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import engine.error.*;
+import engine.message.MessageError;
+import engine.message.error.*;
 import engine.map.Direction;
 import engine.map.Grid;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
-import engine.message.MessageError;
-import engine.message.error.MoveError;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
 import engine.util.Either;
@@ -33,8 +32,8 @@ import engine.util.Unit;
  */
 public abstract class AbstractDisplacement implements Displacement {
 
-    private final Grid grid;
-    private List<Position> path;
+	protected final Grid grid;
+	protected List<Position> path;
 
     /**
      * Crée une instance abstraite de déplacement liée à une grille spécifique.
@@ -63,7 +62,7 @@ public abstract class AbstractDisplacement implements Displacement {
         }
         
         if (path == null || path.isEmpty()) {
-            Either<MessageError, List<Position>> isNewMoveValide = calculateMove(p);
+            Either<MessageError, List<Position>> isNewMoveValide = calculate(p);
 
             if (isNewMoveValide.isLeft()) {
                 return Outcome.failure(null, isNewMoveValide.getLeft());
@@ -89,7 +88,7 @@ public abstract class AbstractDisplacement implements Displacement {
      *         - Si le mouvement réussit, renvoie un succès avec la nouvelle position du personnage.
      */
     @Override
-    public Outcome<PositionPair> move(Personnage p) {
+    public Outcome<PositionPair> execute(Personnage p) {
     	Outcome<Unit> checkPath = checkOrUpdatePath(p);
         if (checkPath.isFailure()) {
             return Outcome.failure(null, new MoveError(null).then(checkPath.getMessageError()));
@@ -118,7 +117,7 @@ public abstract class AbstractDisplacement implements Displacement {
      *         - Si le chemin est vide ou inexistant, renvoie une erreur {@link PathError.emptyPath()}.
      */
     @Override
-    public Either<MessageError, List<Position>> getPath() {
+    public Either<MessageError, List<Position>> getCurrent() {
         if (path == null || path.isEmpty()) {
             return Either.left(PathError.emptyPath());
         }

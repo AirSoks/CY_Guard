@@ -6,7 +6,6 @@ import java.util.List;
 
 import engine.message.error.*;
 import engine.map.Direction;
-import engine.map.Grid;
 import engine.map.Position;
 import engine.message.MessageError;
 import engine.personnage.Personnage;
@@ -29,8 +28,8 @@ public class RandomDisplacement extends AbstractDisplacement {
      *
      * @param grid la grille où le personnage se déplace
      */
-    public RandomDisplacement(Grid grid) {
-        super(grid);
+    public RandomDisplacement() {
+        super();
     }
 
     /**

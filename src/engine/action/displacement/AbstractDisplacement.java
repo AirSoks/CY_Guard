@@ -7,7 +7,7 @@ import java.util.List;
 import engine.message.MessageError;
 import engine.message.error.*;
 import engine.map.Direction;
-import engine.map.Grid;
+import engine.map.GridService;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.personnage.Personnage;
@@ -16,7 +16,7 @@ import engine.util.Either;
 import engine.util.Unit;
 
 /**
- * Classe abstraite fournissant une base pour les déplacements de personnages dans une grille.
+ * Classe abstraite fournissant une base pour les déplacements de abstractPersonnages dans une grille.
  *
  * Cette implémentation gère :
  * - La mémorisation du chemin calculé ;
@@ -31,8 +31,9 @@ import engine.util.Unit;
  * @version 1.0
  */
 public abstract class AbstractDisplacement implements Displacement {
+	
+    private final GridService gridService;
 
-	protected final Grid grid;
 	protected List<Position> path;
 
     /**
@@ -40,9 +41,9 @@ public abstract class AbstractDisplacement implements Displacement {
      *
      * @param grid la grille de jeu où les déplacements ont lieu
      */
-    public AbstractDisplacement(Grid grid) {
-        this.grid = grid;
+    public AbstractDisplacement() {
         this.path = new ArrayList<>();
+        this.gridService = GridService.getInstance();
     }
 
     /**
@@ -88,7 +89,7 @@ public abstract class AbstractDisplacement implements Displacement {
      *         - Si le mouvement réussit, renvoie un succès avec la nouvelle position du personnage.
      */
     @Override
-    public Outcome<PositionPair> execute(Personnage p) {
+    public final Outcome<PositionPair> execute(Personnage p) {
     	Outcome<Unit> checkPath = checkOrUpdatePath(p);
         if (checkPath.isFailure()) {
             return Outcome.failure(null, new MoveError(null).then(checkPath.getMessageError()));
@@ -100,7 +101,7 @@ public abstract class AbstractDisplacement implements Displacement {
             return Outcome.failure(null, new MoveError(null).then(isDirAdjacent.getLeft()));
         }
 
-        Outcome<PositionPair> isMoveValide = grid.movePersonnage(p, isDirAdjacent.getRight());
+        Outcome<PositionPair> isMoveValide = gridService.movePersonnage(p, isDirAdjacent.getRight());
         if (!isMoveValide.isFailure()) {
             path.remove(0);
         } else {
@@ -117,7 +118,7 @@ public abstract class AbstractDisplacement implements Displacement {
      *         - Si le chemin est vide ou inexistant, renvoie une erreur {@link PathError.emptyPath()}.
      */
     @Override
-    public Either<MessageError, List<Position>> getCurrent() {
+    public final Either<MessageError, List<Position>> getCurrent() {
         if (path == null || path.isEmpty()) {
             return Either.left(PathError.emptyPath());
         }

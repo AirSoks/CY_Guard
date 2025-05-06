@@ -148,7 +148,7 @@ public final class Position {
      * @since 2025-05-03
      * @version 1.0
      */
-    public static final class PositionPair {
+    public static class PositionPair {
 
         /**
          * La première position de la paire.

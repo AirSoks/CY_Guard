@@ -1,12 +1,12 @@
 package engine.personnage;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import engine.action.displacement.Displacement;
+import engine.action.displacement.*;
 import engine.action.vision.Vision;
 import engine.interaction.GuardianInteraction;
 import engine.interaction.PersonnageInteractionVisitor;
-import engine.listManager.TargetManager;
 import engine.map.Position;
 
 /**
@@ -45,11 +45,15 @@ public class Guardian extends Personnage {
     	this.setTargetManager(new GuardianTargetManager());
     }
     
+	@Override
+	public void interact(Collection<Personnage> personnages) {
+		for (Personnage p : personnages) {
+	        interact(p);
+	    }
+	}
+	
     /**
-     * Déclenche une interaction entre Guardian et un autre personnage.
-     * Utilise le pattern Visitor pour centraliser la logique d'interaction.
-     *
-     * @param other Le personnage avec lequel interagir
+     * {@inheritDoc}
      */
     @Override
     public void interact(Personnage other) {
@@ -57,10 +61,7 @@ public class Guardian extends Personnage {
     }
 
     /**
-     * Accepte un visiteur d'interaction.
-     * Appelle la méthode appropriée du visiteur en fonction de Guardian.
-     *
-     * @param visitor Le visiteur à accepter
+     * {@inheritDoc}
      */
     @Override
     public void accept(PersonnageInteractionVisitor visitor) {
@@ -68,50 +69,71 @@ public class Guardian extends Personnage {
     }
     
     /**
-     * Implémentation concrète de {@link TargetManager} pour gérer les cibles d'un {@link Guardian}.
+     * {@inheritDoc}
+     */
+    @Override
+    public void adaptBehavior() {
+    	Personnage target = getTargetManager().getTarget();
+        if (target != null) {
+        	setDisplacement(new PursuitDisplacement(target));
+        } else {
+        	setDisplacement(new RandomDisplacement());
+        }
+    }
+    
+    /**
+     * Implémentation concrète de {@link TargetManager} spécifique à un {@link Guardian}.
      * <p>
-     * Utilise un {@link LinkedHashSet} pour préserver l'ordre d'insertion des cibles.
-     * Ce gestionnaire permet à un gardien de maintenir une collection ordonnée de personnages,
-     * et sélectionne la première cible disponible de manière séquentielle.
+     * Cette classe gère la collection de cibles d'un gardien, en permettant d'ajouter, de vérifier et de récupérer les cibles de manière ordonnée.
+     * Le gestionnaire utilise un {@link LinkedHashSet} pour préserver l'ordre d'insertion des cibles.
+     * Le gardien sélectionne la première cible disponible de manière séquentielle.
+     * </p>
+     * 
+     * <p>
+     * Le gestionnaire permet au gardien de cibler uniquement des intrus, en s'assurant que seules les instances de {@link Intruder} 
+     * peuvent être ajoutées à la liste des cibles.
      * </p>
      * 
      * @author AirSoks
      * @since 2025-05-05
      * @version 1.0
      */
-    public static class GuardianTargetManager extends TargetManager {
+    private final static class GuardianTargetManager extends TargetManager {
 
         /**
-         * Crée un gestionnaire de cibles pour un gardien, utilisant un {@link LinkedHashSet}.
+         * Constructeur de {@link GuardianTargetManager}.
+         * Utilise un {@link LinkedHashSet} pour maintenir l'ordre d'insertion des cibles.
+         * 
+         * @implNote L'utilisation de {@link LinkedHashSet} garantit que les cibles sont parcourues dans l'ordre dans lequel elles ont été ajoutées.
          */
         public GuardianTargetManager() {
             super(new LinkedHashSet<>());
         }
 
         /**
-         * Vérifie si le personnage fourni est une cible valide (seulement un {@link Intruder}).
-         *
+         * Vérifie si un personnage est valide pour être ajouté comme cible.
+         * Dans le cas d'un gardien, seules les instances d' {@link Intruder} sont considérées comme valides.
+         * 
          * @param personnage Le personnage à vérifier
-         * @return {@code true} si le personnage est un {@link Intruder}, {@code false} sinon
+         * @return {@code true} si le personnage est un intrus, {@code false} sinon
          */
         @Override
-        protected boolean isValidTarget(Personnage personnage) {
-            return personnage instanceof Intruder;
+        protected boolean isValid(Personnage personnage) {
+            return (personnage != null && personnage instanceof Intruder);
         }
 
         /**
-         * Récupère la première cible présente dans le gestionnaire.
-         * Le comportement est basé sur l'ordre d'insertion dans le {@link LinkedHashSet}.
-         *
-         * @return La première cible ou {@code null} si aucune cible n'est présente.
+         * Récupère la première cible dans le gestionnaire, en fonction de l'ordre d'insertion dans le {@link LinkedHashSet}.
+         * Si aucune cible n'est présente, cette méthode retourne {@code null}.
+         * 
+         * @return La première cible ajoutée ou {@code null} si aucune cible n'est disponible
          */
         @Override
         public Personnage getTarget() {
-            if (!personnages.isEmpty()) {
-                return personnages.iterator().next();
+            if (!elements.isEmpty()) {
+                return elements.iterator().next();
             }
             return null;
         }
     }
-
 }

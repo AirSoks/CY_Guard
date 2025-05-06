@@ -1,12 +1,12 @@
 package engine.personnage;
 
+import java.util.Collection;
 import java.util.HashSet;
 
-import engine.action.displacement.Displacement;
+import engine.action.displacement.*;
 import engine.action.vision.Vision;
 import engine.interaction.IntruderInteraction;
 import engine.interaction.PersonnageInteractionVisitor;
-import engine.listManager.TargetManager;
 import engine.map.Position;
 
 /**
@@ -25,7 +25,7 @@ public class Intruder extends Personnage {
      * @param startPosition La position de départ de l'intrus
      */
     public Intruder(Position startPosition) {
-        super(startPosition);
+    	super(startPosition);
     }
     
     /**
@@ -45,63 +45,84 @@ public class Intruder extends Personnage {
     	this.setTargetManager(new IntruderTargetManager(this));
     }
     
+    @Override
+	public void interact(Collection<Personnage> personnages) {
+    	getTargetManager().clear();
+		for (Personnage p : personnages) {
+			interact(p);
+		}
+	}
+    
     /**
-     * Déclenche une interaction entre Intruder et un autre personnage.
-     * Utilise le pattern Visitor pour centraliser la logique d'interaction.
-     *
-     * @param other Le personnage avec lequel interagir
+     * {@inheritDoc}
      */
     @Override
     public void interact(Personnage other) {
-        other.accept(new IntruderInteraction(this));
+    	other.accept(new IntruderInteraction(this));
     }
 
     /**
-     * Accepte un visiteur d'interaction.
-     * Appelle la méthode appropriée du visiteur en fonction d'Intruder.
-     *
-     * @param visitor Le visiteur à accepter
+     * {@inheritDoc}
      */
     @Override
     public void accept(PersonnageInteractionVisitor visitor) {
-        visitor.visitIntruder(this);
+    	visitor.visitIntruder(this);
     }
     
     /**
-     * Implémentation concrète de {@link TargetManager} pour gérer les cibles d'un {@link Intruder}.
+     * {@inheritDoc}
+     */
+    @Override
+    public void adaptBehavior() {
+    	Personnage target = getTargetManager().getTarget();
+    	if (target != null) {
+        	setDisplacement(new EscapeDisplacement(target));
+    	} else {
+    		setDisplacement(new RandomDisplacement());
+    	}
+    }
+    
+    /**
+     * Implémentation concrète de {@link TargetManager} spécifique à un {@link Intruder}.
      * <p>
-     * Utilise un {@link HashSet} pour stocker les cibles, mais peut être personnalisé pour d'autres
-     * structures de données si nécessaire. Ce gestionnaire choisit la cible la plus proche
-     * parmi les gardiens dans la liste des cibles.
+     * Cette classe gère la collection de cibles d'un intrus, en permettant d'ajouter, de vérifier et de récupérer les cibles 
+     * de manière ordonnée. Le gestionnaire utilise un {@link HashSet} pour stocker les cibles, mais peut être personnalisé pour
+     * d'autres structures de données si nécessaire.
+     * </p>
+     * <p>
+     * Le gestionnaire permet à l'intrus de cibler uniquement les gardiens, en s'assurant que seules les instances de {@link Guardian}
+     * peuvent être ajoutées à la liste des cibles. Lorsqu'une cible est demandée, l'intrus choisit le gardien le plus proche de sa position.
      * </p>
      * 
      * @author AirSoks
      * @since 2025-05-05
      * @version 1.0
      */
-    public static class IntruderTargetManager extends TargetManager {
+    private final static class IntruderTargetManager extends TargetManager {
 
-    	private final Intruder intruder;
-    	
-    	/**
+        /** Référence à l'intrus pour qui ce gestionnaire de cibles est créé. */
+        private final Intruder intruder;
+
+        /**
          * Crée un gestionnaire de cibles pour un intrus avec une position de départ.
          * 
          * @param intruder L'intrus pour lequel le gestionnaire de cibles est créé
          */
         public IntruderTargetManager(Intruder intruder) {
-            super(new HashSet<>());
-            this.intruder = intruder;
+        	super(new HashSet<>());
+        	this.intruder = intruder;
         }
 
         /**
-         * Vérifie si le personnage est un gardien valide pour être une cible pour l'intrus.
-         *
+         * Vérifie si un personnage est valide pour être ajouté comme cible.
+         * Dans le cas d'un intrus, seules les instances de {@link Guardian} sont considérées comme valides.
+         * 
          * @param personnage Le personnage à vérifier
-         * @return {@code true} si le personnage est un {@link Guardian}, {@code false} sinon
+         * @return {@code true} si le personnage est un gardien, {@code false} sinon
          */
         @Override
-        protected boolean isValidTarget(Personnage personnage) {
-            return personnage instanceof Guardian;
+        protected boolean isValid(Personnage personnage) {
+        	return (personnage != null && personnage instanceof Guardian);
         }
 
         /**
@@ -109,27 +130,25 @@ public class Intruder extends Personnage {
          * <p>
          * Si aucun gardien n'est présent dans la liste, la méthode retourne {@code null}.
          * Le choix de la cible se fait en fonction de la distance entre l'intrus et chaque gardien.
+         * L'intrus sélectionne le gardien le plus proche afin de l'éviter.
          * </p>
          *
          * @return Le gardien le plus proche ou {@code null} si aucun gardien n'est présent.
          */
         @Override
         public Personnage getTarget() {
-            Personnage closestGuardian = null;
-            double minDistance = Double.MAX_VALUE;
+        	Personnage closestGuardian = null;
+        	double minDistance = Double.MAX_VALUE;
 
-            for (Personnage target : personnages) {
-                if (target instanceof Guardian) {
-                    double distance = intruder.getPosition().distanceTo(target.getPosition());
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestGuardian = target;
-                    }
+         	// Parcours des cibles pour trouver le gardien le plus proche
+        	for (Personnage target : elements) {
+                double distance = intruder.getPosition().distanceTo(target.getPosition());
+                if (distance < minDistance) {
+                	minDistance = distance;
+                    closestGuardian = target;
                 }
-            }
-
-            return closestGuardian;
+         	}
+        	return closestGuardian;
         }
     }
-
 }

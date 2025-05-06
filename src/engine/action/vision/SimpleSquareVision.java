@@ -1,11 +1,9 @@
 package engine.action.vision;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import engine.message.error.*;
-import engine.map.Grid;
+import engine.map.GridService;
 import engine.map.Position;
+import engine.map.Zone;
 import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
@@ -23,6 +21,8 @@ import engine.util.Unit;
  * @version 1.0
  */
 public class SimpleSquareVision extends AbstractVision {
+	
+    private final GridService gridService;
 
     private final int distance;
 
@@ -32,13 +32,14 @@ public class SimpleSquareVision extends AbstractVision {
      * @param grid La grille de jeu.
      * @param distance La distance de vision (nombre de cases autour du personnage).
      */
-    public SimpleSquareVision(Grid grid, int distance) {
-        super(grid);
+    public SimpleSquareVision(int distance) {
+    	super();
         this.distance = distance;
+        this.gridService = GridService.getInstance();
     }
 
     @Override
-    public Either<MessageError, List<Position>> calculate(Personnage p) {
+    public Either<MessageError, Zone> calculate(Personnage p) {
     	if (p == null) {
             return Either.left(new NullClassError(Personnage.class));
         } Position pos = p.getPosition();
@@ -46,7 +47,7 @@ public class SimpleSquareVision extends AbstractVision {
             return Either.left(new NullClassError(Position.class));
         }
     	
-        List<Position> visiblePositions = new ArrayList<>();
+    	Zone visiblePositions = new Zone();
 
         for (int dx = -distance; dx <= distance; dx++) {
             for (int dy = -distance; dy <= distance; dy++) {
@@ -54,11 +55,11 @@ public class SimpleSquareVision extends AbstractVision {
                 int y = pos.y() + dy;
                 
                 Position newPos = new Position(x, y);
-                Either<MessageError, Unit> boundsCheck = grid.isInBounds(pos);
+                Either<MessageError, Unit> boundsCheck = gridService.isInBounds(pos);
                 if (boundsCheck.isLeft()) {
                     return Either.left(boundsCheck.getLeft());
                 }
-                visiblePositions.add(newPos);
+                visiblePositions.addPosition(newPos);
             }
         }
         

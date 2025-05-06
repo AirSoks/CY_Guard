@@ -7,11 +7,11 @@ import engine.personnage.Personnage;
 import engine.util.Outcome;
 
 /**
- * Interface représentant une règle de déplacement pour les personnages sur la grille.
+ * Interface représentant une règle de déplacement pour les abstractPersonnages sur la grille.
  * <p>
  * Chaque implémentation peut définir ses propres critères pour autoriser ou refuser un déplacement.
  * Cela permet de rendre le moteur flexible : on peut par exemple avoir des règles différentes
- * pour des personnages volants, rampants, ou soumis à des conditions spéciales.
+ * pour des abstractPersonnages volants, rampants, ou soumis à des conditions spéciales.
  * 
  * @author AirSoks
  * @since 2025-05-02

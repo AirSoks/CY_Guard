@@ -130,8 +130,7 @@ public enum Direction {
         }
         if (to == null) {
             return Either.left(new NullClassError(Position.class).with(() -> "parameter: to"));
-        }
-        if (from == to) {
+        } if (from == to) {
             return Either.left(PositionError.samePosition(from));
         }
 

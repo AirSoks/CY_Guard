@@ -1,4 +1,4 @@
-package engine.message;
+package engine.util.message;
 
 /**
  * Interface représentant un message de succès dans le moteur.

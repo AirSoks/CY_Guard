@@ -3,9 +3,9 @@ package engine.util;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import engine.message.Message;
-import engine.message.MessageError;
-import engine.message.MessageSuccess;
+import engine.util.message.Message;
+import engine.util.message.MessageError;
+import engine.util.message.MessageSuccess;
 
 /**
  * Représente le résultat d'une opération métier sous forme de succès ou d'échec, 

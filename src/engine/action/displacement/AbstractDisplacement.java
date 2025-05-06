@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import engine.message.MessageError;
-import engine.message.error.*;
 import engine.map.Direction;
 import engine.map.GridService;
 import engine.map.Position;
@@ -14,6 +12,10 @@ import engine.personnage.Personnage;
 import engine.util.Outcome;
 import engine.util.Either;
 import engine.util.Unit;
+import engine.util.message.MessageError;
+import engine.util.message.error.MoveError;
+import engine.util.message.error.NullClassError;
+import engine.util.message.error.PathError;
 
 /**
  * Classe abstraite fournissant une base pour les déplacements de abstractPersonnages dans une grille.

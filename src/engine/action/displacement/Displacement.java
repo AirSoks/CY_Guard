@@ -5,9 +5,9 @@ import java.util.List;
 import engine.action.ActiveAction;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
-import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
+import engine.util.message.MessageError;
 import engine.util.Either;
 
 /**

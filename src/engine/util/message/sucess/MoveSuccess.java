@@ -1,7 +1,7 @@
-package engine.message.success;
+package engine.util.message.sucess;
 
 import engine.map.Position.PositionPair;
-import engine.message.MessageSuccess;
+import engine.util.message.MessageSuccess;
 
 /**
  * Représente un message de succès pour un mouvement, qui peut être validé ou totalement réussi.

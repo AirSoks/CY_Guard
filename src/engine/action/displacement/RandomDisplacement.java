@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import engine.message.error.*;
 import engine.map.Direction;
 import engine.map.Position;
-import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
+import engine.util.message.MessageError;
+import engine.util.message.error.NullClassError;
 
 /**
  * Implémentation concrète de {@link AbstractDisplacement} qui calcule un déplacement aléatoire.

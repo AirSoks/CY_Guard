@@ -1,13 +1,15 @@
 package engine.map;
 
-import engine.message.MessageError;
-import engine.message.error.*;
-import engine.message.success.MoveSuccess;
-import engine.mouvement.MovementRule;
 import engine.personnage.Personnage;
+import engine.personnage.mouvement.MovementRule;
 import engine.util.Either;
 import engine.util.Outcome;
 import engine.util.Unit;
+import engine.util.message.MessageError;
+import engine.util.message.error.NullClassError;
+import engine.util.message.error.PersonnageError;
+import engine.util.message.error.PositionError;
+import engine.util.message.sucess.MoveSuccess;
 
 import java.util.ArrayList;
 import java.util.Collection;

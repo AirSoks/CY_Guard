@@ -1,10 +1,10 @@
-package engine.message.error;
+package engine.util.message.error;
 
 import java.util.Collections;
 import java.util.List;
 
 import engine.map.Position;
-import engine.message.MessageError;
+import engine.util.message.MessageError;
 
 /**
  * Représente des erreurs spécifiques liées à un chemin ({@link List} de {@link Position}),

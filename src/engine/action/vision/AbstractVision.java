@@ -1,9 +1,9 @@
 package engine.action.vision;
 
-import engine.message.error.*;
 import engine.map.Zone;
-import engine.message.MessageError;
 import engine.util.Either;
+import engine.util.message.MessageError;
+import engine.util.message.error.PathError;
 
 public abstract class AbstractVision implements Vision {
 	

@@ -1,4 +1,4 @@
-package engine.message;
+package engine.util.message;
 
 /**
  * Interface de base représentant un message dans le moteur.

@@ -1,8 +1,8 @@
-package engine.message.error;
+package engine.util.message.error;
 
 import engine.map.Cell;
 import engine.map.Position;
-import engine.message.MessageError;
+import engine.util.message.MessageError;
 
 /**
  * Représente différentes erreurs liées à une {@link Cell} sur la carte,

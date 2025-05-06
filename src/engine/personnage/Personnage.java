@@ -3,15 +3,16 @@ package engine.personnage;
 import java.util.Collection;
 import java.util.HashSet;
 
-import engine.interaction.PersonnageInteractionVisitor;
 import engine.action.displacement.Displacement;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
 import engine.map.Zone;
-import engine.message.MessageError;
-import engine.message.error.*;
+import engine.personnage.interaction.PersonnageInteractionVisitor;
 import engine.util.Either;
 import engine.util.Outcome;
+import engine.util.message.MessageError;
+import engine.util.message.error.MoveError;
+import engine.util.message.error.NullClassError;
 import engine.action.vision.Vision;
 
 /**

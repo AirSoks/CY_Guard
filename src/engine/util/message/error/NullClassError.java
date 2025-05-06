@@ -1,6 +1,6 @@
-package engine.message.error;
+package engine.util.message.error;
 
-import engine.message.MessageError;
+import engine.util.message.MessageError;
 
 /**
  * Représente une erreur indiquant qu'un objet d'une certaine classe ne doit pas être {@code null}.

@@ -5,9 +5,9 @@ import java.util.LinkedHashSet;
 
 import engine.action.displacement.*;
 import engine.action.vision.Vision;
-import engine.interaction.GuardianInteraction;
-import engine.interaction.PersonnageInteractionVisitor;
 import engine.map.Position;
+import engine.personnage.interaction.GuardianInteraction;
+import engine.personnage.interaction.PersonnageInteractionVisitor;
 
 /**
  * Représente un gardien dans le jeu qui implémente {@link Personnage}.

@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import engine.message.error.*;
-import engine.message.MessageError;
 import engine.util.Either;
+import engine.util.message.MessageError;
+import engine.util.message.error.NullClassError;
+import engine.util.message.error.PositionError;
 
 /**
  * Représente les quatre directions cardinales possibles sur une grille : HAUT, BAS, GAUCHE, DROITE.

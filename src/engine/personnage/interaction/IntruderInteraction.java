@@ -1,4 +1,4 @@
-package engine.interaction;
+package engine.personnage.interaction;
 
 import engine.personnage.Guardian;
 import engine.personnage.Intruder;

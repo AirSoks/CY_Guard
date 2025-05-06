@@ -1,4 +1,4 @@
-package engine.mouvement;
+package engine.personnage.mouvement;
 
 import engine.map.Cell;
 import engine.map.Position;

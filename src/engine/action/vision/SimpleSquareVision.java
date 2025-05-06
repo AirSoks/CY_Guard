@@ -1,13 +1,13 @@
 package engine.action.vision;
 
-import engine.message.error.*;
 import engine.map.GridService;
 import engine.map.Position;
 import engine.map.Zone;
-import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
 import engine.util.Unit;
+import engine.util.message.MessageError;
+import engine.util.message.error.NullClassError;
 
 /**
  * Implémentation basique de la vision : le personnage voit dans un carré autour de lui,

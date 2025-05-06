@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 import engine.action.displacement.*;
 import engine.action.vision.Vision;
-import engine.interaction.IntruderInteraction;
-import engine.interaction.PersonnageInteractionVisitor;
 import engine.map.Position;
+import engine.personnage.interaction.IntruderInteraction;
+import engine.personnage.interaction.PersonnageInteractionVisitor;
 
 /**
  * Représente un intrus dans le jeu qui implémente {@link Personnage}.

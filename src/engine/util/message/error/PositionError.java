@@ -1,7 +1,7 @@
-package engine.message.error;
+package engine.util.message.error;
 
 import engine.map.Position;
-import engine.message.MessageError;
+import engine.util.message.MessageError;
 
 /**
  * Représente une erreur liée à une position, avec différents types d'erreurs de position.

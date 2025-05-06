@@ -2,9 +2,10 @@ package engine.map;
 
 import java.util.Objects;
 
-import engine.message.error.*;
-import engine.message.MessageError;
 import engine.util.Either;
+import engine.util.message.MessageError;
+import engine.util.message.error.NullClassError;
+import engine.util.message.error.PositionError;
 
 /**
  * Représente une position immuable sur une grille 2D, définie par des coordonnées (x, y).

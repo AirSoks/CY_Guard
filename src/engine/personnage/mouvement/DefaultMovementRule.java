@@ -1,13 +1,14 @@
-package engine.mouvement;
+package engine.personnage.mouvement;
 
 import engine.map.Cell;
 import engine.map.Position;
 import engine.map.Position.PositionPair;
-import engine.message.*;
-import engine.message.error.*;
-import engine.message.success.*;
 import engine.personnage.Personnage;
 import engine.util.Outcome;
+import engine.util.message.MessageError;
+import engine.util.message.error.CellError;
+import engine.util.message.error.NullClassError;
+import engine.util.message.sucess.MoveSuccess;
 
 /**
  * Implémentation par défaut de la règle de mouvement {@link MovementRule}.

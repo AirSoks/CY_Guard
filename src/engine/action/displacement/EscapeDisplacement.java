@@ -3,9 +3,9 @@ package engine.action.displacement;
 import java.util.List;
 
 import engine.map.Position;
-import engine.message.MessageError;
 import engine.personnage.Personnage;
 import engine.util.Either;
+import engine.util.message.MessageError;
 
 public class EscapeDisplacement extends AbstractDisplacement{
 

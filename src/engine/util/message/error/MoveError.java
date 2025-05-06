@@ -1,7 +1,7 @@
-package engine.message.error;
+package engine.util.message.error;
 
 import engine.map.Position.PositionPair;
-import engine.message.MessageError;
+import engine.util.message.MessageError;
 
 /**
  * Représente un message d'erreur indiquant qu'un mouvement n'a pas été validé.

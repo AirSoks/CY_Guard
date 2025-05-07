@@ -56,6 +56,10 @@ public class Grid {
     public int getHeight() {
         return height;
     }
+    
+    public Cell[][] getCells() {
+    	return cells;
+    }
 
     /**
      * Retourne la cellule située à une position donnée.

@@ -1,6 +1,7 @@
 package engine.map;
 
 import engine.personnage.Personnage;
+import engine.personnage.mouvement.DefaultMovementRule;
 import engine.personnage.mouvement.MovementRule;
 import engine.util.Either;
 import engine.util.Outcome;
@@ -39,7 +40,7 @@ public class GridService {
      * @param grid La grille à manipuler.
      * @param movementRule La règle définissant les mouvements autorisés.
      */
-    private GridService(Grid grid, MovementRule movementRule) {
+    public GridService(Grid grid, MovementRule movementRule) {
         this.grid = grid;
         this.movementRule = movementRule;
         this.personnageManager = new GridPersonnageManager();
@@ -47,6 +48,10 @@ public class GridService {
 
     public static void initialize(Grid grid, MovementRule rule) {
         instance = new GridService(grid, rule);
+    }
+    
+    public static void initialize(Grid grid) {
+        instance = new GridService(grid, new DefaultMovementRule());
     }
 
     public static GridService getInstance() {
